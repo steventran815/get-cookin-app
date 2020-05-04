@@ -16,6 +16,19 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+ALTER TABLE ONLY public.users DROP CONSTRAINT users_pkey;
+ALTER TABLE ONLY public.recipes DROP CONSTRAINT recipes_pkey;
+ALTER TABLE ONLY public.ingredients DROP CONSTRAINT ingredients_pkey;
+ALTER TABLE public.users ALTER COLUMN "userId" DROP DEFAULT;
+ALTER TABLE public.recipes ALTER COLUMN "recipeId" DROP DEFAULT;
+ALTER TABLE public.ingredients ALTER COLUMN "ingredientId" DROP DEFAULT;
+DROP SEQUENCE public."users_userId_seq";
+DROP TABLE public.users;
+DROP TABLE public."userIngredients";
+DROP SEQUENCE public."recipes_recipeId_seq";
+DROP TABLE public.recipes;
+DROP SEQUENCE public."ingredients_ingredientId_seq";
+DROP TABLE public.ingredients;
 DROP EXTENSION plpgsql;
 DROP SCHEMA public;
 --
@@ -44,6 +57,213 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: ingredients; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ingredients (
+    "ingredientId" integer NOT NULL,
+    name text
+);
+
+
+--
+-- Name: ingredients_ingredientId_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public."ingredients_ingredientId_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ingredients_ingredientId_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public."ingredients_ingredientId_seq" OWNED BY public.ingredients."ingredientId";
+
+
+--
+-- Name: recipes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.recipes (
+    "recipeId" integer NOT NULL,
+    "recipeTitle" text NOT NULL,
+    "recipeImage" text NOT NULL,
+    "recipePrepTime" integer NOT NULL,
+    "recipeIngredients" text NOT NULL,
+    "recipeInstructions" text NOT NULL,
+    "ingredientId" integer NOT NULL
+);
+
+
+--
+-- Name: recipes_recipeId_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public."recipes_recipeId_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: recipes_recipeId_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public."recipes_recipeId_seq" OWNED BY public.recipes."recipeId";
+
+
+--
+-- Name: userIngredients; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."userIngredients" (
+    "userId" integer NOT NULL,
+    "ingredientId" integer NOT NULL
+);
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.users (
+    "userId" integer NOT NULL
+);
+
+
+--
+-- Name: users_userId_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public."users_userId_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: users_userId_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public."users_userId_seq" OWNED BY public.users."userId";
+
+
+--
+-- Name: ingredients ingredientId; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ingredients ALTER COLUMN "ingredientId" SET DEFAULT nextval('public."ingredients_ingredientId_seq"'::regclass);
+
+
+--
+-- Name: recipes recipeId; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.recipes ALTER COLUMN "recipeId" SET DEFAULT nextval('public."recipes_recipeId_seq"'::regclass);
+
+
+--
+-- Name: users userId; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN "userId" SET DEFAULT nextval('public."users_userId_seq"'::regclass);
+
+
+--
+-- Data for Name: ingredients; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.ingredients ("ingredientId", name) FROM stdin;
+\.
+
+
+--
+-- Data for Name: recipes; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.recipes ("recipeId", "recipeTitle", "recipeImage", "recipePrepTime", "recipeIngredients", "recipeInstructions", "ingredientId") FROM stdin;
+\.
+
+
+--
+-- Data for Name: userIngredients; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public."userIngredients" ("userId", "ingredientId") FROM stdin;
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.users ("userId") FROM stdin;
+1
+\.
+
+
+--
+-- Name: ingredients_ingredientId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public."ingredients_ingredientId_seq"', 1, false);
+
+
+--
+-- Name: recipes_recipeId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public."recipes_recipeId_seq"', 1, false);
+
+
+--
+-- Name: users_userId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public."users_userId_seq"', 1, false);
+
+
+--
+-- Name: ingredients ingredients_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ingredients
+    ADD CONSTRAINT ingredients_pkey PRIMARY KEY ("ingredientId");
+
+
+--
+-- Name: recipes recipes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.recipes
+    ADD CONSTRAINT recipes_pkey PRIMARY KEY ("recipeId");
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY ("userId");
 
 
 --
