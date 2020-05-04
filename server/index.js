@@ -26,8 +26,7 @@ app.get('/api/users', (req, res, next) => {
   db.query(sql)
     .then(result => {
       const ingredients = result.rows;
-      // eslint-disable-next-line no-console
-      console.log(ingredients);
+      res.status(200).json(ingredients);
     });
 });
 
