@@ -14,7 +14,9 @@ app.use(sessionMiddleware);
 app.use(express.json());
 
 // GET Endpoint for view user's fridge/ingredients
-app.get('/api/users', (req, res, next) => {
+app.get('/api/users/:userId', (req, res, next) => {
+  const { userId } = req.params;
+
   const sql = `
     select "u"."userId",
       "i"."ingredientId",
@@ -22,8 +24,10 @@ app.get('/api/users', (req, res, next) => {
     from "users" as "u"
     join "userIngredients" using ("userId")
     join "ingredients" as "i" using ("ingredientId")
+    where "userId" = $1
   `;
-  db.query(sql)
+
+  db.query(sql, [userId])
     .then(result => {
       const ingredients = result.rows;
       res.status(200).json(ingredients);
