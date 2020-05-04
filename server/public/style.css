@@ -1,5 +1,6 @@
 *{
   box-sizing: border-box;
+  margin:0
 }
 
 body{
@@ -12,6 +13,7 @@ header{
   padding:10px 0px;
   width:100%;
   height:90px;
+  position:relative;
 }
 
 .headerContent{
@@ -19,7 +21,10 @@ header{
   display:flex;
   justify-content:space-around;
   align-items: center;
+  position:absolute;
+  bottom:10px;
 }
+
 .headerContent > img{
   max-height:35px;
 }
@@ -48,10 +53,9 @@ footer{
   padding:10px 0px;
   position:absolute;
   bottom:0px;
-  left:0px;
   width:100%;
 }
 
-footer > img{
+.footerIcon{
   max-height:35px;
 }
