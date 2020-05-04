@@ -13,10 +13,22 @@ app.use(sessionMiddleware);
 
 app.use(express.json());
 
-app.get('/api/health-check', (req, res, next) => {
-  db.query('select \'successfully connected\' as "message"')
-    .then(result => res.json(result.rows[0]))
-    .catch(err => next(err));
+// GET Endpoint for view user's fridge/ingredients
+app.get('/api/users', (req, res, next) => {
+  const sql = `
+    select "u"."userId",
+      "i"."ingredientId",
+      "i"."name"
+    from "users" as "u"
+    join "userIngredients" using ("userId")
+    join "ingredients" as "i" using ("ingredientId")
+  `;
+  db.query(sql)
+    .then(result => {
+      const ingredients = result.rows;
+      // eslint-disable-next-line no-console
+      console.log(ingredients);
+    });
 });
 
 app.use('/api', (req, res, next) => {
