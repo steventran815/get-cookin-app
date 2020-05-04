@@ -34,29 +34,43 @@ app.use((err, req, res, next) => {
   }
 });
 
-app.post('/api/ingedients', (req, res, next) => {
-  const params = [req.body.name];
-  const sql = (`insert into "ingredients" ("ingredientId", "name")
-                values (default, $1)
-                returning "name";`, params);
-  db.query(`select *
-              from "ingredients";`)
-    .then(response => {
-      db.query(sql, params)
-        .then(data => {
-          for (let i = 0; i < data; i++) {
-            if (response.rows[i].name === data) {
-              return db.query(`insert into "userIngredients"("userId", "ingredientId")
-                            values (1, default);`);
-            } else {
-              const ingredientId = [response.rows[i].ingredientId];
-              return db.query(`insert into "userIngredients"("userId", "ingredientId")
-                            values (1, $1);`, ingredientId);
-            }
-          }
-        });
-    });
-});
+// app.get('/api/users', (req, res, next) => {
+//   const sql = `
+//     select "u"."userId",
+//       "i"."ingredientId",
+//       "i"."name"
+//     from "users" as "u"
+//     join "userIngredients" using ("userId")
+//     join "ingredients" as "i" using ("ingredientId")
+//   `;
+//   db.query(sql)
+//     .then(result => console.log(result));
+// }
+// );
+
+// app.post('/api/ingedients', (req, res, next) => {
+//   const params = [req.body.name];
+//   const sql = (`insert into "ingredients" ("ingredientId", "name")
+//                 values (default, $1)
+//                 returning "name";`, params);
+//   db.query(`select *
+//               from "ingredients";`)
+//     .then(response => {
+//       db.query(sql, params)
+//         .then(data => {
+//           for (let i = 0; i < data; i++) {
+//             if (response.rows[i].name === data) {
+//               return db.query(`insert into "userIngredients"("userId", "ingredientId")
+//                             values (1, default);`);
+//             } else {
+//               const ingredientId = [response.rows[i].ingredientId];
+//               return db.query(`insert into "userIngredients"("userId", "ingredientId")
+//                             values (1, $1);`, ingredientId);
+//             }
+//           }
+//         });
+//     });
+// });
 
 app.listen(process.env.PORT, () => {
   // eslint-disable-next-line no-console
