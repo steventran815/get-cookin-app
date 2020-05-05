@@ -49,8 +49,11 @@ export default class RecipeList extends React.Component {
 
     return (
       <div className="container">
-        <div className="form my-3 px-3">
-          <input className="form-control" type="text" placeholder="Default input"/>
+        <div className="input-group my-3 px-2">
+          <input className="form-control" type="text" placeholder="Add To Your Fridge"/>
+          <div className="input-group-append">
+            <button className="btn btn-outline-secondary" type="button">Button</button>
+          </div>
         </div>
         <ul className="list-group list-group-flush">
           {ingredients}
