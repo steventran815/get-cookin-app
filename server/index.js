@@ -153,7 +153,8 @@ app.post('/api/ingredients', (req, res, next) => {
         return db.query(`insert into "userIngredients"("userId", "ingredientId")
                         values (1, $1)
                         returning *`, [result.ingredientId])
-          .then(response => res.status(201).send('Your ingredient has been successfully added!'));
+          .then(response => res.status(201).send({ ingredientId: result.ingredientId, name: ingredient, userId: 1 })
+          );
       }
     });
 });

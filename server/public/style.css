@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 * {
   box-sizing: border-box;
@@ -117,6 +118,13 @@ footer{
 .noMoreRecipes{
   color: #6c6c6c;
   text-align:center;
+}
+
+.noMoreIngredients{
+  color: #6c6c6c;
+  text-align:center;
+  height: 50px;
+  margin: 5px, 0, 0, 0;
 }
 
 .background {
