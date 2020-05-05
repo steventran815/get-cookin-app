@@ -17,6 +17,10 @@ app.use(express.json());
 app.get('/api/users/:userId', (req, res, next) => {
   const { userId } = req.params;
 
+  if (!parseInt(userId, 10) || userId < 0) {
+    return next(new ClientError('"userId" must be a positive integer', 400));
+  }
+
   const sql = `
     select "u"."userId",
       "i"."ingredientId",
@@ -32,7 +36,8 @@ app.get('/api/users/:userId', (req, res, next) => {
     .then(result => {
       const ingredients = result.rows;
       res.status(200).json(ingredients);
-    });
+    })
+    .catch(err => next(err));
 });
 
 app.get('/api/recipes', (req, res, next) => {
@@ -44,6 +49,8 @@ app.get('/api/recipes', (req, res, next) => {
     .then(result => res.json(result.rows))
     .catch(err => next(err));
 });
+
+app.delete('/api/');
 
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));
