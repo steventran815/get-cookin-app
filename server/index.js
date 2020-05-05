@@ -19,6 +19,64 @@ app.get('/api/health-check', (req, res, next) => {
     .catch(err => next(err));
 });
 
+const checkIngredients = (database, ingredient) => {
+  for (let i = 0; i < database.rows.length; i++) {
+    if (database.rows[i].name === ingredient) {
+      return { ingredient: database.rows[i].name, ingredientId: database.rows[i].ingredientId };
+    }
+  }
+};
+
+const checkIngredientId = (database, ingredientId) => {
+  for (let i = 0; i < database.rows.length; i++) {
+    if (database.rows[i].ingredientId === ingredientId) {
+      return { userId: database.rows[i].userId, ingredientId: ingredientId };
+    }
+  }
+};
+
+app.post('/api/ingredients', (req, res, next) => {
+  const ingredient = req.body.name;
+  const params = [ingredient];
+  const sql = `insert into "ingredients" ("ingredientId", "name")
+                values (default, $1)
+                returning "ingredientId";`;
+  db.query(`select *
+              from "ingredients";`)
+    .then(response => {
+      return checkIngredients(response, ingredient);
+    })
+    .then(data => {
+      if (data === undefined) {
+        return db.query(sql, params)
+          .then(response => response.rows[0])
+          .catch(err => next(err));
+      } else {
+        return db.query(`select *
+                          from "userIngredients";`)
+          .then(response => checkIngredientId(response, data.ingredientId))
+          .then(result => {
+            if (result === undefined) {
+              return db.query(`insert into "userIngredients"("userId", "ingredientId")
+                             values (1, $1)
+                             returning *`, [data.ingredientId]);
+            }
+          })
+          .catch(err => next(err));
+      }
+    })
+    .then(result => {
+      if (!result) {
+        return res.status(500).send('The ingredient you are trying to add already exists!');
+      } else {
+        return db.query(`insert into "userIngredients"("userId", "ingredientId")
+                        values (1, $1)
+                        returning *`, [result.ingredientId])
+          .then(response => res.status(201).send('Your ingredient has been successfully added!'));
+      }
+    });
+});
+
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));
 });
@@ -33,44 +91,6 @@ app.use((err, req, res, next) => {
     });
   }
 });
-
-// app.get('/api/users', (req, res, next) => {
-//   const sql = `
-//     select "u"."userId",
-//       "i"."ingredientId",
-//       "i"."name"
-//     from "users" as "u"
-//     join "userIngredients" using ("userId")
-//     join "ingredients" as "i" using ("ingredientId")
-//   `;
-//   db.query(sql)
-//     .then(result => console.log(result));
-// }
-// );
-
-// app.post('/api/ingedients', (req, res, next) => {
-//   const params = [req.body.name];
-//   const sql = (`insert into "ingredients" ("ingredientId", "name")
-//                 values (default, $1)
-//                 returning "name";`, params);
-//   db.query(`select *
-//               from "ingredients";`)
-//     .then(response => {
-//       db.query(sql, params)
-//         .then(data => {
-//           for (let i = 0; i < data; i++) {
-//             if (response.rows[i].name === data) {
-//               return db.query(`insert into "userIngredients"("userId", "ingredientId")
-//                             values (1, default);`);
-//             } else {
-//               const ingredientId = [response.rows[i].ingredientId];
-//               return db.query(`insert into "userIngredients"("userId", "ingredientId")
-//                             values (1, $1);`, ingredientId);
-//             }
-//           }
-//         });
-//     });
-// });
 
 app.listen(process.env.PORT, () => {
   // eslint-disable-next-line no-console
