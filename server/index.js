@@ -13,10 +13,26 @@ app.use(sessionMiddleware);
 
 app.use(express.json());
 
-app.get('/api/health-check', (req, res, next) => {
-  db.query('select \'successfully connected\' as "message"')
-    .then(result => res.json(result.rows[0]))
-    .catch(err => next(err));
+// GET Endpoint for view user's fridge/ingredients
+app.get('/api/users/:userId', (req, res, next) => {
+  const { userId } = req.params;
+
+  const sql = `
+    select "u"."userId",
+      "i"."ingredientId",
+      "i"."name"
+    from "users" as "u"
+    join "userIngredients" using ("userId")
+    join "ingredients" as "i" using ("ingredientId")
+    where "userId" = $1
+    order by "name";
+  `;
+
+  db.query(sql, [userId])
+    .then(result => {
+      const ingredients = result.rows;
+      res.status(200).json(ingredients);
+    });
 });
 
 app.use('/api', (req, res, next) => {
