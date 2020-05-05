@@ -23,9 +23,19 @@ export default class RecipeList extends React.Component {
       .catch(err => console.error(err));
   }
 
-  deleteIngredient(id) {
-    // eslint-disable-next-line no-console
-    console.log(id);
+  deleteIngredient(ingredientId) {
+    const { ingredients } = this.state;
+    const req = {
+      method: 'DELETE'
+    };
+    fetch(`/api/userIngredients/${ingredientId}`, req)
+      .then(() => {
+        const filtered = ingredients.filter(ingredient => ingredient.ingredientId !== ingredientId);
+        this.setState({
+          ingredients: filtered
+        });
+      })
+      .catch(err => console.error(err));
   }
 
   render() {

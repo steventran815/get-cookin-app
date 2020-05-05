@@ -27,7 +27,6 @@ DROP TABLE public.users;
 DROP TABLE public."userIngredients";
 DROP SEQUENCE public."recipes_recipeId_seq";
 DROP TABLE public.recipes;
-DROP TABLE public."recipeIngredients";
 DROP SEQUENCE public."ingredients_ingredientId_seq";
 DROP TABLE public.ingredients;
 DROP EXTENSION plpgsql;
@@ -95,16 +94,6 @@ ALTER SEQUENCE public."ingredients_ingredientId_seq" OWNED BY public.ingredients
 
 
 --
--- Name: recipeIngredients; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public."recipeIngredients" (
-    "recipeId" integer NOT NULL,
-    "ingredientsId" integer NOT NULL
-);
-
-
---
 -- Name: recipes; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -114,7 +103,8 @@ CREATE TABLE public.recipes (
     "recipeImage" text NOT NULL,
     "recipePrepTime" integer NOT NULL,
     "recipeIngredients" text NOT NULL,
-    "recipeInstructions" text NOT NULL
+    "recipeInstructions" text NOT NULL,
+    "ingredientId" integer NOT NULL
 );
 
 
@@ -203,16 +193,22 @@ ALTER TABLE ONLY public.users ALTER COLUMN "userId" SET DEFAULT nextval('public.
 --
 
 COPY public.ingredients ("ingredientId", name) FROM stdin;
-1	beef
-\.
-
-
---
--- Data for Name: recipeIngredients; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY public."recipeIngredients" ("recipeId", "ingredientsId") FROM stdin;
-1	1
+1	chicken
+2	beef
+3	pork
+4	onion
+5	carrot
+6	cilantro
+7	shrimp
+8	bread
+9	eggs
+10	cheese
+11	apple
+12	blueberry
+13	butter
+14	milk
+15	spinach
+16	lettuce
 \.
 
 
@@ -220,9 +216,7 @@ COPY public."recipeIngredients" ("recipeId", "ingredientsId") FROM stdin;
 -- Data for Name: recipes; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.recipes ("recipeId", "recipeTitle", "recipeImage", "recipePrepTime", "recipeIngredients", "recipeInstructions") FROM stdin;
-1	Swedish Meatballs	meatballs.jpg	120	meat	cook meat
-2	Smothered Pork Chops	pork-chops.jpg	90	pork	cook pork
+COPY public.recipes ("recipeId", "recipeTitle", "recipeImage", "recipePrepTime", "recipeIngredients", "recipeInstructions", "ingredientId") FROM stdin;
 \.
 
 
@@ -232,6 +226,20 @@ COPY public.recipes ("recipeId", "recipeTitle", "recipeImage", "recipePrepTime",
 
 COPY public."userIngredients" ("userId", "ingredientId") FROM stdin;
 1	1
+1	2
+1	4
+1	5
+1	3
+1	7
+1	8
+1	9
+1	10
+1	6
+1	11
+1	12
+1	13
+1	14
+1	15
 \.
 
 
@@ -248,14 +256,14 @@ COPY public.users ("userId") FROM stdin;
 -- Name: ingredients_ingredientId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."ingredients_ingredientId_seq"', 1, true);
+SELECT pg_catalog.setval('public."ingredients_ingredientId_seq"', 16, true);
 
 
 --
 -- Name: recipes_recipeId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."recipes_recipeId_seq"', 2, true);
+SELECT pg_catalog.setval('public."recipes_recipeId_seq"', 1, false);
 
 
 --
