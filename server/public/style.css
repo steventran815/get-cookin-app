@@ -46,8 +46,8 @@ header{
 }
 
 .profilePic{
-   width:30px;
-   height:30px;
+   width:35px;
+   height:35px;
    background-color:white;
    border-radius:100%;
 }
@@ -61,7 +61,7 @@ footer{
   display:flex;
   justify-content:space-evenly;
   padding:10px 0px;
-  position:absolute;
+  position:fixed;
   bottom:0px;
   width:100%;
 }
@@ -93,7 +93,7 @@ footer{
 .prepTime{
   color: #FF5758;
   font-weight:400;
-  font-size:1.35rem;
+  font-size:1.15rem;
 }
 
 .favoriteIcon{
@@ -106,7 +106,14 @@ footer{
   display:flex;
   justify-content:center;
   align-items:center;
+
 }
 .recipeImage{
   width:90%;
+  object-fit: contain
+}
+
+.noMoreRecipes{
+  color: #6c6c6c;
+  text-align:center;
 }

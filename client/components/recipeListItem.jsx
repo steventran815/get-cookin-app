@@ -3,19 +3,25 @@ import React from 'react';
 export default class RecipeListItem extends React.Component {
 
   render() {
+    const recipe = this.props.recipe;
+    const recipeTitle = recipe.recipeTitle;
+    const recipePrepTime = recipe.recipePrepTime;
+    const recipeImage = recipe.recipeImage;
     return (
       <div>
-        <h2 className="recipeTitle p-2 pt-3">Chicken Sandwich</h2>
-        <center>
-          <div className="recipeImageDiv">
-            <img className="recipeImage" src="images/friedChickenImage.png" />
+        <div>
+          <h2 className="recipeTitle p-2 pt-3">{recipeTitle}</h2>
+          <center>
+            <div className="recipeImageDiv">
+              <img className="recipeImage" src={recipeImage} />
+            </div>
+          </center>
+          <div className="recipeFooter">
+            <h2><span className="prepTime">Prep Time: {recipePrepTime}</span></h2>
+            <div><span className="favoriteIcon"> <i className="fa fa-heart"></i> </span></div>
           </div>
-        </center>
-        <div className="recipeFooter">
-          <h2><span className="prepTime">Prep Time: 60</span></h2>
-          <div><span className="favoriteIcon"> <i className="fa fa-heart"></i> </span></div>
+          <hr className="recipeDivider"></hr>
         </div>
-        <hr className="recipeDivider"></hr>
       </div>
     );
   }
