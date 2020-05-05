@@ -45,6 +45,26 @@ app.get('/api/recipes', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.get('/api/recipes/:recipeId', (req, res, next) => {
+  const recipeId = parseInt(req.params.recipeId);
+  const sql = `
+    select *
+    from "recipes"
+    where "recipeId" = $1
+  ;`;
+  const params = [recipeId];
+
+  if (Math.sign(recipeId) === -1 || Number.isNaN(recipeId)) {
+    return res.status(400).json({
+      error: 'recipeId must be a positive integer'
+    });
+  }
+
+  db.query(sql, params)
+    .then(result => res.json(result.rows[0]))
+    .catch(err => next(err));
+});
+
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));
 });

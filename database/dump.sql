@@ -222,6 +222,7 @@ COPY public."recipeIngredients" ("recipeId", "ingredientsId") FROM stdin;
 
 COPY public.recipes ("recipeId", "recipeTitle", "recipeImage", "recipePrepTime", "recipeIngredients", "recipeInstructions") FROM stdin;
 1	Swedish Meatballs	meatballs.jpg	120	meat	cook meat
+2	Smothered Pork Chops	pork-chops.jpg	90	pork	cook pork
 \.
 
 
@@ -254,7 +255,7 @@ SELECT pg_catalog.setval('public."ingredients_ingredientId_seq"', 1, true);
 -- Name: recipes_recipeId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."recipes_recipeId_seq"', 1, true);
+SELECT pg_catalog.setval('public."recipes_recipeId_seq"', 2, true);
 
 
 --
