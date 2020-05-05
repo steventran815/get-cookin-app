@@ -9,6 +9,8 @@ export default class RecipeList extends React.Component {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.deleteIngredient = this.deleteIngredient.bind(this);
+
   }
 
   componentDidMount() {
@@ -23,6 +25,7 @@ export default class RecipeList extends React.Component {
       }))
       .catch(err => console.error(err));
   }
+
 
   addIngredients(newIngredient) {
     fetch('/api/ingredients', {
@@ -51,6 +54,22 @@ export default class RecipeList extends React.Component {
     };
     this.addIngredients(newIngredient);
   }
+  
+  deleteIngredient(ingredientId) {
+    const { ingredients } = this.state;
+    const req = {
+      method: 'DELETE'
+    };
+    fetch(`/api/userIngredients/${ingredientId}`, req)
+      .then(() => {
+        const filtered = ingredients.filter(ingredient => ingredient.ingredientId !== ingredientId);
+        this.setState({
+          ingredients: filtered
+        });
+      })
+      .catch(err => console.error(err));
+
+  }
 
   render() {
     const { ingredients } = this.state;
@@ -60,6 +79,7 @@ export default class RecipeList extends React.Component {
         <Ingredient
           key={ingredient.ingredientId}
           ingredient={ingredient}
+          deleteIngredient={this.deleteIngredient}
         />
       );
     });

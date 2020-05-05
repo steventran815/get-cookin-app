@@ -14,7 +14,11 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       message: null,
-      isLoading: true
+      isLoading: true,
+      user: {
+        userId: 1, // hard coded userId to pass as props
+        userName: ''
+      }
     };
   }
 

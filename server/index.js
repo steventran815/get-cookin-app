@@ -17,6 +17,10 @@ app.use(express.json());
 app.get('/api/users/:userId', (req, res, next) => {
   const { userId } = req.params;
 
+  if (isNaN(userId) || userId < 0) {
+    return next(new ClientError('"userId" must be a positive integer', 400));
+  }
+
   const sql = `
     select "u"."userId",
       "i"."ingredientId",
@@ -32,7 +36,8 @@ app.get('/api/users/:userId', (req, res, next) => {
     .then(result => {
       const ingredients = result.rows;
       res.status(200).json(ingredients);
-    });
+    })
+    .catch(err => next(err));
 });
 
 app.get('/api/recipes', (req, res, next) => {
@@ -42,6 +47,36 @@ app.get('/api/recipes', (req, res, next) => {
   ;`;
   db.query(sql)
     .then(result => res.json(result.rows))
+    .catch(err => next(err));
+});
+
+
+app.delete('/api/userIngredients/:ingredientId', (req, res, next) => {
+  const { ingredientId } = req.params;
+
+  if (isNaN(ingredientId) || ingredientId < 0) {
+    return next(new ClientError('"ingredientId" must be a positive integer', 400));
+  }
+
+  // sql query with hard coded value for userId, to be revisited when more there is more than 1 user
+  const sql = `
+    delete from "userIngredients"
+    where "userId" = 1
+    and "ingredientId" = $1
+    returning *;
+  `;
+
+  const values = [ingredientId];
+
+  db.query(sql, values)
+    .then(result => {
+      const deletedIngredient = result.rows[0];
+      if (!deletedIngredient) {
+        return next(new ClientError(`Cannot find ingredient with id ${ingredientId}`, 404));
+      } else {
+        res.status(204).json(deletedIngredient);
+      }
+    })
     .catch(err => next(err));
 });
 
