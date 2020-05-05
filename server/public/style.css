@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
 *{
   box-sizing: border-box;
-  margin:0
+  margin:0;
+  font-family:roboto;
 }
 
 body{
@@ -24,21 +27,28 @@ header{
   align-items: center;
   position:absolute;
   bottom:10px;
+  padding:0% 5%;
+}
+
+.headerContent > p{
+  margin:0;
+  padding:0;
 }
 
 .headerContent > img{
-  max-height:35px;
+  max-height:35px
 }
 
 .logo{
   font-family: anton;
   color:white;
   font-size:1.75rem;
+  font-weight:normal;
 }
 
 .profilePic{
-   width:30px;
-   height:30px;
+   width:35px;
+   height:35px;
    background-color:white;
    border-radius:100%;
 }
@@ -52,13 +62,61 @@ footer{
   display:flex;
   justify-content:space-evenly;
   padding:10px 0px;
-  position:absolute;
+  position:fixed;
   bottom:0px;
   width:100%;
 }
 
 .footerIcon{
   max-height:35px;
+}
+
+.recipeTitle{
+  color:#4c4c4c;
+  font-size:1.35rem;
+  margin-left:2.5%;
+}
+
+.recipeFooter{
+  display:flex;
+  justify-content:space-between;
+  align-items: center;
+  padding:6px 5%;
+}
+
+.recipeDivider{
+  text-align:center;
+  background-color:#C5C5C5;
+  opacity:.85;
+  margin:0 1rem 1rem 1rem;
+}
+
+.prepTime{
+  color: #FF5758;
+  font-weight:400;
+  font-size:1.15rem;
+}
+
+.favoriteIcon{
+  right:5%;
+  font-size:1.75rem;
+  color:#FF5758
+}
+
+.recipeImageDiv{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+}
+.recipeImage{
+  width:90%;
+  object-fit: contain
+}
+
+.noMoreRecipes{
+  color: #6c6c6c;
+  text-align:center;
 }
 
 .background {
@@ -73,4 +131,5 @@ footer{
 .add-input {
   border-radius: 34px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2)
+
 }
