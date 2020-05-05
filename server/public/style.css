@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
 *{
   box-sizing: border-box;
-  margin:0
+  margin:0;
+  font-family:roboto;
 }
 
 body{
@@ -19,20 +22,27 @@ header{
 .headerContent{
   width:100%;
   display:flex;
-  justify-content:space-around;
+  justify-content:space-between;
   align-items: center;
   position:absolute;
   bottom:10px;
+  padding:0% 5%;
+}
+
+.headerContent > p{
+  margin:0;
+  padding:0;
 }
 
 .headerContent > img{
-  max-height:35px;
+  max-height:35px
 }
 
 .logo{
   font-family: anton;
   color:white;
   font-size:1.75rem;
+  font-weight:normal;
 }
 
 .profilePic{
@@ -58,4 +68,45 @@ footer{
 
 .footerIcon{
   max-height:35px;
+}
+
+.recipeTitle{
+  color:#4c4c4c;
+  font-size:1.35rem;
+  margin-left:2.5%;
+}
+
+.recipeFooter{
+  display:flex;
+  justify-content:space-between;
+  align-items: center;
+  padding:6px 5%;
+}
+
+.recipeDivider{
+  text-align:center;
+  background-color:#C5C5C5;
+  opacity:.85;
+  margin:0 1rem 1rem 1rem;
+}
+
+.prepTime{
+  color: #FF5758;
+  font-weight:400;
+  font-size:1.35rem;
+}
+
+.favoriteIcon{
+  right:5%;
+  font-size:1.75rem;
+  color:#FF5758
+}
+
+.recipeImageDiv{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.recipeImage{
+  width:90%;
 }
