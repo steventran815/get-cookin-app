@@ -37,9 +37,9 @@ export default class RecipeList extends React.Component {
     return (
       <div className="container">
         <div className="input-group my-3 px-2">
-          <input className="form-control" type="text" placeholder="Add To Your Fridge"/>
+          <input className="form-control add-input" type="text" placeholder="Add an Ingredient" maxLength="20"/>
           <div className="input-group-append">
-            <button className="btn btn-outline-secondary" type="button">Button</button>
+            <button className="btn btn-info add-input pr-3" type="button"><i className="fas fa-plus"></i></button>
           </div>
         </div>
         <ul className="list-group list-group-flush">
