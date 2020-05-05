@@ -7,6 +7,7 @@ export default class RecipeList extends React.Component {
     this.state = {
       ingredients: []
     };
+    this.deleteIngredient = this.deleteIngredient.bind(this);
   }
 
   componentDidMount() {
@@ -22,6 +23,11 @@ export default class RecipeList extends React.Component {
       .catch(err => console.error(err));
   }
 
+  deleteIngredient() {
+    // eslint-disable-next-line no-console
+    console.log('hello');
+  }
+
   render() {
     const { ingredients } = this.state;
 
@@ -30,6 +36,7 @@ export default class RecipeList extends React.Component {
         <Ingredient
           key={ingredient.ingredientId}
           ingredient={ingredient}
+          deleteIngredient={this.deleteIngredient}
         />
       );
     });

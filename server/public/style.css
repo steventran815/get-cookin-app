@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 
-*{
+* {
   box-sizing: border-box;
   margin:0;
-  font-family:roboto;
+  font-family: roboto;
 }
 
 body{
@@ -131,5 +131,8 @@ footer{
 .add-input {
   border-radius: 34px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2)
+}
 
+.pointer {
+  cursor: pointer;
 }
