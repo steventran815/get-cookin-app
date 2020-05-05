@@ -23,9 +23,9 @@ export default class RecipeList extends React.Component {
       .catch(err => console.error(err));
   }
 
-  deleteIngredient() {
+  deleteIngredient(id) {
     // eslint-disable-next-line no-console
-    console.log('hello');
+    console.log(id);
   }
 
   render() {

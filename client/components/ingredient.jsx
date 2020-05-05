@@ -9,7 +9,7 @@ export default class Ingredient extends React.Component {
         {ingredient.name.toUpperCase()}
         <i
           className="fas fa-minus-square red pointer"
-          onClick={() => deleteIngredient()}
+          onClick={() => deleteIngredient(ingredient.ingredientId)}
         />
       </li>
     );
