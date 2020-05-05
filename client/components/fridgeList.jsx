@@ -9,6 +9,15 @@ export default class RecipeList extends React.Component {
     };
   }
 
+  getIngredients() {
+    fetch('/api/users')
+      .then(res => res.json())
+      .then(ingredients => this.setState({
+        ingredients: ingredients
+      }))
+      .catch(err => console.error(err));
+  }
+
   render() {
     const dummy = [
       {
