@@ -14,16 +14,15 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       message: null,
-      isLoading: true
+      isLoading: true,
+      user: {
+        userId: 1, // hard coded userId to pass as props
+        userName: ''
+      }
     };
   }
 
   componentDidMount() {
-    fetch('/api/health-check')
-      .then(res => res.json())
-      .then(data => this.setState({ message: data.message || data.error }))
-      .catch(err => this.setState({ message: err.message }))
-      .finally(() => this.setState({ isLoading: false }));
   }
 
   render() {
