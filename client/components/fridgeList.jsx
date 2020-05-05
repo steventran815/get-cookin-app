@@ -23,35 +23,9 @@ export default class RecipeList extends React.Component {
   }
 
   render() {
-    const dummy = [
-      {
-        ingredientId: 1,
-        name: 'chicken',
-        userId: 1
-      },
-      {
-        ingredientId: 2,
-        name: 'beef',
-        userId: 1
-      },
-      {
-        ingredientId: 3,
-        name: 'pork',
-        userId: 1
-      },
-      {
-        ingredientId: 4,
-        name: 'onion',
-        userId: 1
-      },
-      {
-        ingredientId: 5,
-        name: 'carrot',
-        userId: 1
-      }
-    ];
+    const { ingredients } = this.state;
 
-    const ingredients = dummy.map(ingredient => {
+    const userIngredients = ingredients.map(ingredient => {
       return (
         <Ingredient
           key={ingredient.ingredientId}
@@ -69,7 +43,7 @@ export default class RecipeList extends React.Component {
           </div>
         </div>
         <ul className="list-group list-group-flush">
-          {ingredients}
+          {userIngredients}
         </ul>
       </div>
     );
