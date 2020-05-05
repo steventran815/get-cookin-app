@@ -27,6 +27,7 @@ DROP TABLE public.users;
 DROP TABLE public."userIngredients";
 DROP SEQUENCE public."recipes_recipeId_seq";
 DROP TABLE public.recipes;
+DROP TABLE public."recipeIngredients";
 DROP SEQUENCE public."ingredients_ingredientId_seq";
 DROP TABLE public.ingredients;
 DROP EXTENSION plpgsql;
@@ -94,6 +95,16 @@ ALTER SEQUENCE public."ingredients_ingredientId_seq" OWNED BY public.ingredients
 
 
 --
+-- Name: recipeIngredients; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."recipeIngredients" (
+    "recipeId" integer NOT NULL,
+    "ingredientsId" integer NOT NULL
+);
+
+
+--
 -- Name: recipes; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -103,8 +114,7 @@ CREATE TABLE public.recipes (
     "recipeImage" text NOT NULL,
     "recipePrepTime" integer NOT NULL,
     "recipeIngredients" text NOT NULL,
-    "recipeInstructions" text NOT NULL,
-    "ingredientId" integer NOT NULL
+    "recipeInstructions" text NOT NULL
 );
 
 
@@ -193,6 +203,16 @@ ALTER TABLE ONLY public.users ALTER COLUMN "userId" SET DEFAULT nextval('public.
 --
 
 COPY public.ingredients ("ingredientId", name) FROM stdin;
+1	beef
+\.
+
+
+--
+-- Data for Name: recipeIngredients; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public."recipeIngredients" ("recipeId", "ingredientsId") FROM stdin;
+1	1
 \.
 
 
@@ -200,7 +220,8 @@ COPY public.ingredients ("ingredientId", name) FROM stdin;
 -- Data for Name: recipes; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.recipes ("recipeId", "recipeTitle", "recipeImage", "recipePrepTime", "recipeIngredients", "recipeInstructions", "ingredientId") FROM stdin;
+COPY public.recipes ("recipeId", "recipeTitle", "recipeImage", "recipePrepTime", "recipeIngredients", "recipeInstructions") FROM stdin;
+1	Swedish Meatballs	meatballs.jpg	120	meat	cook meat
 \.
 
 
@@ -209,6 +230,7 @@ COPY public.recipes ("recipeId", "recipeTitle", "recipeImage", "recipePrepTime",
 --
 
 COPY public."userIngredients" ("userId", "ingredientId") FROM stdin;
+1	1
 \.
 
 
@@ -225,14 +247,14 @@ COPY public.users ("userId") FROM stdin;
 -- Name: ingredients_ingredientId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."ingredients_ingredientId_seq"', 1, false);
+SELECT pg_catalog.setval('public."ingredients_ingredientId_seq"', 1, true);
 
 
 --
 -- Name: recipes_recipeId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."recipes_recipeId_seq"', 1, false);
+SELECT pg_catalog.setval('public."recipes_recipeId_seq"', 1, true);
 
 
 --
