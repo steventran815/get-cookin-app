@@ -9,8 +9,12 @@ export default class RecipeList extends React.Component {
     };
   }
 
-  getIngredients() {
-    fetch('/api/users')
+  componentDidMount() {
+    this.getIngredients(1);
+  }
+
+  getIngredients(userId) {
+    fetch(`/api/users/${userId}`)
       .then(res => res.json())
       .then(ingredients => this.setState({
         ingredients: ingredients
