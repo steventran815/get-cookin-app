@@ -25,6 +25,7 @@ app.get('/api/users/:userId', (req, res, next) => {
     join "userIngredients" using ("userId")
     join "ingredients" as "i" using ("ingredientId")
     where "userId" = $1
+    order by "name";
   `;
 
   db.query(sql, [userId])
