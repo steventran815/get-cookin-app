@@ -13,8 +13,54 @@ app.use(sessionMiddleware);
 
 app.use(express.json());
 
-app.get('/api/health-check', (req, res, next) => {
-  db.query('select \'successfully connected\' as "message"')
+// GET Endpoint for view user's fridge/ingredients
+app.get('/api/users/:userId', (req, res, next) => {
+  const { userId } = req.params;
+
+  const sql = `
+    select "u"."userId",
+      "i"."ingredientId",
+      "i"."name"
+    from "users" as "u"
+    join "userIngredients" using ("userId")
+    join "ingredients" as "i" using ("ingredientId")
+    where "userId" = $1
+    order by "name";
+  `;
+
+  db.query(sql, [userId])
+    .then(result => {
+      const ingredients = result.rows;
+      res.status(200).json(ingredients);
+    });
+});
+
+app.get('/api/recipes', (req, res, next) => {
+  const sql = `
+    select *
+    from "recipes"
+  ;`;
+  db.query(sql)
+    .then(result => res.json(result.rows))
+    .catch(err => next(err));
+});
+
+app.get('/api/recipes/:recipeId', (req, res, next) => {
+  const recipeId = parseInt(req.params.recipeId);
+  const sql = `
+    select *
+    from "recipes"
+    where "recipeId" = $1
+  ;`;
+  const params = [recipeId];
+
+  if (Math.sign(recipeId) === -1 || Number.isNaN(recipeId)) {
+    return res.status(400).json({
+      error: 'recipeId must be a positive integer'
+    });
+  }
+
+  db.query(sql, params)
     .then(result => res.json(result.rows[0]))
     .catch(err => next(err));
 });

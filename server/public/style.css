@@ -23,6 +23,7 @@ header{
   width:100%;
   display:flex;
   justify-content:space-between;
+  padding: 0 5%;
   align-items: center;
   position:absolute;
   bottom:10px;
@@ -116,4 +117,18 @@ footer{
 .noMoreRecipes{
   color: #6c6c6c;
   text-align:center;
+
+.background {
+  background-color: #f8f8f8
+}
+
+.red {
+  color: #FF5758;
+  font-size: 20px;
+}
+
+.add-input {
+  border-radius: 34px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2)
+
 }
