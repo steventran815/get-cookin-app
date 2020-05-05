@@ -10,7 +10,7 @@ export default class RecipeList extends React.Component {
   }
 
   componentDidMount() {
-    this.getIngredients(1);
+    this.getIngredients(1); // hard coded userID; to be changed in the future with new users
   }
 
   getIngredients(userId) {
