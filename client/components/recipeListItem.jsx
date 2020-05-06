@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default class RecipeListItem extends React.Component {
 
@@ -7,13 +8,16 @@ export default class RecipeListItem extends React.Component {
     const recipeTitle = recipe.recipeTitle;
     const recipePrepTime = recipe.recipePrepTime;
     const recipeImage = recipe.recipeImage;
+    const recipeId = recipe.recipeId;
     return (
       <div>
         <div>
-          <h2 className="recipeTitle p-2 pt-3">{recipeTitle}</h2>
+          <h2 className="recipeTitle pt-3 pb-1"><strong>{recipeTitle}</strong></h2>
           <center>
             <div className="recipeImageDiv">
-              <img className="recipeImage" src={recipeImage} />
+              <Link to={`/recipeList/${recipeId}`}>
+                <img className="recipeImage" src={recipeImage} />
+              </Link>
             </div>
           </center>
           <div className="recipeFooter">
@@ -26,5 +30,3 @@ export default class RecipeListItem extends React.Component {
     );
   }
 }
-
-// INSTALL BOOTSTRAP;

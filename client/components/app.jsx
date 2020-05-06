@@ -6,6 +6,7 @@ import FridgeList from './fridgeList';
 import Search from './search';
 import FavoritesList from './favorites';
 import ShoppingList from './shoppingList';
+import RecipeDetails from './recipeDetails';
 // eslint-disable-next-line no-unused-vars
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
@@ -18,19 +19,12 @@ export default class App extends React.Component {
     };
   }
 
-  componentDidMount() {
-    fetch('/api/health-check')
-      .then(res => res.json())
-      .then(data => this.setState({ message: data.message || data.error }))
-      .catch(err => this.setState({ message: err.message }))
-      .finally(() => this.setState({ isLoading: false }));
-  }
-
   render() {
     return (
       <Router>
         <Header />
-        <Route path="/recipeList" component={RecipeList}/>
+        <Route path="/recipeList" exact component={RecipeList}/>
+        <Route path="/recipeList/:id" component={RecipeDetails} />
         <Route path="/fridgeList" component={FridgeList} />
         <Route path="/favoritesList" component={FavoritesList} />
         <Route path="/search" component={Search} />
