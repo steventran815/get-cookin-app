@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;1,500&display=swap');
 
-*{
+* {
   box-sizing: border-box;
   margin:0;
-  font-family:roboto;
+  font-family: roboto;
 }
 
 body{
@@ -121,6 +121,13 @@ footer{
   text-align:center;
 }
 
+.noMoreIngredients{
+  color: #6c6c6c;
+  text-align:center;
+  height: 50px;
+  margin: 5px, 0, 0, 0;
+}
+
 .background {
   background-color: #f8f8f8
 }
@@ -147,3 +154,6 @@ footer{
   max-height:100px;
   object-fit:scale-down;
 }
+.pointer {
+  cursor: pointer;
+
