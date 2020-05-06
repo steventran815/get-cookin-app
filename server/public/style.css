@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;1,500&display=swap');
 
 * {
   box-sizing: border-box;
@@ -61,8 +61,8 @@ header{
 footer{
   background-color: #FF5758;
   display:flex;
-  justify-content:space-evenly;
-  padding:10px 0px;
+  justify-content:space-between;
+  padding:10px 5%;
   position:fixed;
   bottom:0px;
   width:100%;
@@ -75,7 +75,8 @@ footer{
 .recipeTitle{
   color:#4c4c4c;
   font-size:1.35rem;
-  margin-left:2.5%;
+  padding-left:5%;
+  font-weight:800;
 }
 
 .recipeFooter{
@@ -141,6 +142,18 @@ footer{
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2)
 }
 
+.recipeDetailsImageDiv{
+  width:100px;
+  height:100px;
+  background-position: cover;
+  display:inline-block;
+}
+
+.recipeDetailsImage{
+  width:100%;
+  max-height:100px;
+  object-fit:scale-down;
+}
 .pointer {
   cursor: pointer;
-}
+

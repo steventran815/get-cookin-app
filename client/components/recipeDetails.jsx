@@ -1,11 +1,10 @@
 import React from 'react';
-import RecipeListItem from './recipeListItem';
 
-export default class RecipeList extends React.Component {
+export default class RecipeDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      recipes: [
+      recipes:
         {
           recipeId: 1,
           recipeTitle: 'Smothered Pork Chops',
@@ -51,22 +50,29 @@ export default class RecipeList extends React.Component {
             }
           ]
         }
-      ]
     };
   }
 
   render() {
-    const { recipes } = this.state;
-    const recipesList = recipes.map(recipe => {
-      return (
-        <RecipeListItem key={recipe.recipeId} recipe={recipe} />
-      );
-    });
+    const recipeTitle = this.state.recipes.recipeTitle;
+    const recipeImage = this.state.recipes.recipeImage;
+    const recipePrepTime = this.state.recipes.recipePrepTime;
 
     return (
       <div>
-        {recipesList}
-        <h5 className="noMoreRecipes">End of Recipes List</h5>
+        <div className="container">
+          <div className="row">
+            <div className="col-md-1">
+              <div className="recipeDetailsImageDiv">
+                <img className="recipeDetailsImage" src={recipeImage}/>
+              </div>
+            </div>
+            <div className="col-md-1">
+              <h5>{recipeTitle}</h5>
+              <h3>Prep Time: {recipePrepTime}</h3>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
