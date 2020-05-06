@@ -293,7 +293,6 @@ COPY public."favoriteRecipes" ("userId", "recipeId") FROM stdin;
 --
 
 COPY public.ingredients ("ingredientId", name) FROM stdin;
-
 1	beef
 2	pork
 3	apple
@@ -366,6 +365,7 @@ COPY public.ingredients ("ingredientId", name) FROM stdin;
 70	red onion
 71	jalapeno
 72	cilantro
+73	mozzarella cheese
 \.
 
 
@@ -488,22 +488,6 @@ COPY public."shoppingListItems" ("userId", "ingredientId") FROM stdin;
 --
 
 COPY public."userIngredients" ("userId", "ingredientId") FROM stdin;
-
-1	1
-1	2
-1	4
-1	5
-1	3
-1	7
-1	8
-1	9
-1	10
-1	6
-1	11
-1	12
-1	13
-1	14
-1	15
 \.
 
 
@@ -522,6 +506,7 @@ COPY public.users ("userId") FROM stdin;
 
 SELECT pg_catalog.setval('public."ingredients_ingredientId_seq"', 72, true);
 
+
 --
 -- Name: instructions_instructionId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
@@ -529,11 +514,9 @@ SELECT pg_catalog.setval('public."ingredients_ingredientId_seq"', 72, true);
 SELECT pg_catalog.setval('public."instructions_instructionId_seq"', 15, true);
 
 
-
 --
 -- Name: recipes_recipeId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
-
 
 SELECT pg_catalog.setval('public."recipes_recipeId_seq"', 4, true);
 
@@ -667,4 +650,3 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 --
 -- PostgreSQL database dump complete
 --
-
