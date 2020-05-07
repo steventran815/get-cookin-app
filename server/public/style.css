@@ -154,6 +154,12 @@ footer{
   max-height:100px;
   object-fit:scale-down;
 }
+
 .pointer {
   cursor: pointer;
+}
 
+.closeButton{
+  font-size: 28px;
+  color: red
+}

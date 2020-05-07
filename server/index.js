@@ -50,7 +50,6 @@ app.get('/api/recipes', (req, res, next) => {
     .catch(err => next(err));
 });
 
-
 app.delete('/api/userIngredients/:ingredientId', (req, res, next) => {
   const { ingredientId } = req.params;
 
@@ -148,13 +147,14 @@ app.post('/api/ingredients', (req, res, next) => {
     })
     .then(result => {
       if (!result) {
-        return res.status(500).send('The ingredient you are trying to add already exists!');
+        return res.status(400).send({ message: 'The ingredient you are trying to add already exists!' });
       } else {
-        return db.query(`insert into "userIngredients"("userId", "ingredientId")
-                        values (1, $1)
-                        returning *`, [result.ingredientId])
-          .then(response => res.status(201).send({ ingredientId: result.ingredientId, name: ingredient, userId: 1 })
-          );
+        return res.status(201).send({ ingredientId: result.ingredientId, name: ingredient, userId: 1 });
+        // return db.query(`select "userIngredients"("userId", "ingredientId")
+        //                 values (1, $1)
+        //                 returning *`, [result.rows[0].ingredientId])
+        //   .then(response => res.status(201).send({ ingredientId: result.ingredientId, name: ingredient, userId: 1 })
+        //   );
       }
     });
 });
