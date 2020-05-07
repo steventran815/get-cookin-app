@@ -193,17 +193,22 @@ app.post('/api/johnny', (req, res, next) => {
     // RETURNS AN ITEM FROM THE INGREDIENTS TABLE, EITHER ADDED ON RETURNED
     .then(ingredientResult => {
       // Now we can check if the item is in the UI or not
-      // eslint-disable-next-line no-unused-vars
-      const { name, ingredientId } = ingredientResult;
+      const { ingredientId } = ingredientResult;
+
       const sql = `
-        select *
-        from "userIngredients"
+        insert into "userIngredients" ("userId", "ingredientId")
+        values (1, $1)
+        on conflict ("userId","ingredientId") do nothing
+        returning *;
       `;
-      db.query(sql)
-        .then(userIngredients => {
-          return checkIngredientId(userIngredients, ingredientId);
+      const values = [ingredientId];
+
+      return db.query(sql, values)
+        .then(addUserIngredientResult => {
+          return addUserIngredientResult.rows[0];
         });
     });
+
 });
 
 app.get('/api/availableRecipes', (req, res, next) => {
