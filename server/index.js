@@ -14,8 +14,8 @@ app.use(sessionMiddleware);
 app.use(express.json());
 
 // GET Endpoint for view user's fridge/ingredients
-app.get('/api/users/:userId', (req, res, next) => {
-  const { userId } = req.params;
+app.get('/api/userIngredients/:userId', (req, res, next) => {
+  const userId = parseInt(req.params.userId);
 
   if (isNaN(userId) || userId < 0) {
     return next(new ClientError('"userId" must be a positive integer', 400));
@@ -50,9 +50,8 @@ app.get('/api/recipes', (req, res, next) => {
     .catch(err => next(err));
 });
 
-
 app.delete('/api/userIngredients/:ingredientId', (req, res, next) => {
-  const { ingredientId } = req.params;
+  const ingredientId = parseInt(req.params.ingredientId);
 
   if (isNaN(ingredientId) || ingredientId < 0) {
     return next(new ClientError('"ingredientId" must be a positive integer', 400));
@@ -148,15 +147,57 @@ app.post('/api/ingredients', (req, res, next) => {
     })
     .then(result => {
       if (!result) {
-        return res.status(500).send('The ingredient you are trying to add already exists!');
+        return res.status(400).send({ message: 'The ingredient you are trying to add already exists!' });
       } else {
-        return db.query(`insert into "userIngredients"("userId", "ingredientId")
-                        values (1, $1)
-                        returning *`, [result.ingredientId])
-          .then(response => res.status(201).send({ ingredientId: result.ingredientId, name: ingredient, userId: 1 })
-          );
+        return res.status(201).send({ ingredientId: result.ingredientId, name: ingredient, userId: 1 });
+        // return db.query(`select "userIngredients"("userId", "ingredientId")
+        //                 values (1, $1)
+        //                 returning *`, [result.rows[0].ingredientId])
+        //   .then(response => res.status(201).send({ ingredientId: result.ingredientId, name: ingredient, userId: 1 })
+        //   );
       }
     });
+});
+
+app.get('/api/availableRecipes', (req, res, next) => {
+  const sql = `
+    with "ingredientsNeeded" as (
+      select "r"."recipeId",
+         "r"."recipeTitle",
+         "r"."recipeImage",
+         "r"."recipePrepTime",
+        count ("ri"."ingredientId") as "ingredientCount"
+      from recipes as "r"
+      join "recipeIngredients" as "ri" using("recipeId")
+      group by "r"."recipeId", "r"."recipeTitle"
+    ),
+    "ingredientsInFridge" as (
+      select "ui"."userId",
+        "r"."recipeId",
+        count("ui"."ingredientId") as "ingredientCount"
+      from "recipes" as "r"
+      join "recipeIngredients" as "ri" using ("recipeId")
+      join "userIngredients" as "ui" using ("ingredientId")
+      where "ui"."userId"=1
+      group by "r"."recipeId", "ui"."userId"
+    )
+    select "in"."recipeTitle",
+      "in"."recipeImage",
+      "in"."recipePrepTime",
+      "in"."recipeId"
+    from "ingredientsNeeded" as "in"
+    join "ingredientsInFridge" as "if" using("recipeId", "ingredientCount");
+  `;
+
+  db.query(sql)
+    .then(availableRecipes => {
+      if (!availableRecipes.rows[0]) {
+        throw new ClientError('There are no recipes available that match the ingredients in your fridge', 404);
+      } else {
+        res.status(200).json(availableRecipes.rows);
+      }
+    })
+    .catch(err => next(err));
 });
 
 app.use('/api', (req, res, next) => {
