@@ -114,73 +114,14 @@ const checkIngredients = (database, ingredient) => {
     returning *;
     `;
   const value = [ingredient];
-  db.query(sql, value)
+  return db.query(sql, value)
     .then(result => {
       const newIngredient = result.rows[0];
       return newIngredient;
     });
 };
 
-const checkIngredientId = (database, ingredientId) => {
-  for (let i = 0; i < database.rows.length; i++) {
-    if (database.rows[i].ingredientId === ingredientId) {
-      return {
-        userId: database.rows[i].userId,
-        ingredientId: ingredientId
-      };
-    }
-  }
-};
-
 app.post('/api/ingredients', (req, res, next) => {
-  const ingredient = req.body.name;
-  const params = [ingredient];
-  const sql = `insert into "ingredients" ("ingredientId", "name")
-                values (default, $1)
-                returning "ingredientId";`;
-  db.query(`select *
-              from "ingredients";`)
-    .then(response => {
-      return checkIngredients(response, ingredient);
-    })
-    .then(data => {
-      if (data === undefined) {
-        return db.query(sql, params)
-          .then(response => response.rows[0])
-          .catch(err => next(err));
-      } else {
-        return db.query(`select *
-                          from "userIngredients";`)
-          .then(response => checkIngredientId(response, data.ingredientId))
-          .then(result => {
-            if (result === undefined) {
-              return db.query(`insert into "userIngredients"("userId", "ingredientId")
-                             values (1, $1)
-                             returning *`, [data.ingredientId]);
-            }
-          })
-          .catch(err => next(err));
-      }
-    })
-    .then(result => {
-      if (!result) {
-        return res.status(400).send({ message: 'The ingredient you are trying to add already exists!' });
-      } else {
-        return res.status(201).send({
-          ingredientId: result.rows[0].ingredientId,
-          name: ingredient,
-          userId: 1
-        });
-        // return db.query(`select "userIngredients"("userId", "ingredientId")
-        //                 values (1, $1)
-        //                 returning *`, [result.rows[0].ingredientId])
-        //   .then(response => res.status(201).send({ ingredientId: result.ingredientId, name: ingredient, userId: 1 })
-        //   );
-      }
-    });
-});
-
-app.post('/api/johnny', (req, res, next) => {
   const ingredient = req.body.name;
   const sql = `
     select *
@@ -190,9 +131,7 @@ app.post('/api/johnny', (req, res, next) => {
     .then(allIngredients => {
       return checkIngredients(allIngredients, ingredient);
     })
-    // RETURNS AN ITEM FROM THE INGREDIENTS TABLE, EITHER ADDED ON RETURNED
     .then(ingredientResult => {
-      // Now we can check if the item is in the UI or not
       const { ingredientId } = ingredientResult;
 
       const sql = `
@@ -207,8 +146,21 @@ app.post('/api/johnny', (req, res, next) => {
         .then(addUserIngredientResult => {
           return addUserIngredientResult.rows[0];
         });
+    })
+    .then(newIngredient => {
+      if (!newIngredient) {
+        return res.status(400).send({
+          message: 'The ingredient you are trying to add already exists!'
+        });
+      } else {
+        const { userId, ingredientId } = newIngredient;
+        return res.status(201).send({
+          ingredientId: ingredientId,
+          name: ingredient,
+          userId: userId
+        });
+      }
     });
-
 });
 
 app.get('/api/availableRecipes', (req, res, next) => {
