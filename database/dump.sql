@@ -374,21 +374,21 @@ COPY public.ingredients ("ingredientId", name) FROM stdin;
 --
 
 COPY public.instructions ("instructionId", instruction) FROM stdin;
-1	In a large (12 to 14-inch) skillet set over medium-high heat, add the oil. While the oil is heating, sprinkle one side of the pork chops with salt and pepper. Place the chops into the hot pan, seasoned side down, and sear for 4 minutes, or until they are a dark, golden brown. While the first sides are searing, season the top side with more salt and pepper. Flip the chops over and cook for another 4 minutes. Transfer the chops from the pan to a platter. You may have to do this in batches for a good sear.\n
-2	Add the onion and garlic to the pan and cook them over medium heat, stirring frequently for 3-4 minutes or until they are softened and become a deep golden color.
-3	Once the onions and garlic are cooked down but still a little glossy, sprinkle flour over the veggies. If the onions aren’t glossy, add 1 tablespoon of oil before adding the flour. Cook the flour for one minute to remove the raw, starchy taste from it. Add 1/4 cup of beef stock to the pan and use your spoon to scrape up the browned bits from the bottom of the pan. The mixture will look like a very thick paste at this point.
-4	Combine the cream with the rest of the beef stock and pour this liquid into the pan. Add the rosemary sprigs and bring the mixture up to a gentle simmer, stirring frequently, until thickened.
-5	Nestle the pork chops into the simmering gravy, then cover the pan. Allow the chops to simmer in the thickened gravy for 10 minutes, or until their internal temperature reaches at least 145°F and no higher than 165°F.
-6	In a large nonstick skillet, heat olive oil over medium heat and add onions and garlic. Sauté until onions are translucent, about 4-5 minutes. Add celery and parsley and cook until soft, about 3-4 more minutes. Set aside to cool.
-7	In a large bowl, combine beef, turkey, egg, onion mixture, breadcrumbs, ¼ teaspoon salt, pepper and allspice. Mix well and form into 16 meatballs.
-8	Add beef stock to the pan and bring to a boil. Reduce the heat to medium-low and slowly drop meatballs into the broth. Cover and cook for about 20 minutes, until cooked through.
-9	Remove the meatballs with a slotted spoon and set aside in a serving dish. Strain the broth, transfer to a blender with cream cheese and blend until smooth. Return to the skillet with the meatballs and simmer
-10	Take the sausage meat out of the casings and crumble it into a skillet. Cook it over medium-high heat, stirring occasionally, until it's browned. Drain the fat and leave the sausage in the pan.
-11	In a large bowl, combine beef, turkey, egg, onion mixture, breadcrumbs, ¼ teaspoon salt, pepper and allspice. Mix well and form into 16 meatballs.
-12	Add the garlic, chicken broth, diced tomatoes, cream, and tortellini. Cook for 5-7 minutes or until the tortellini is cooked and the sauce has reduced to your liking. Cooking the tortellini in the sauce helps thicken it (it releases starch).
-13	Stir in the spinach and let it wilt. Season with salt & pepper as needed and serve with fresh parmesan sprinkled over top.
-14	In a large bowl, combine avocado, cauliflower, tomatoes, onion, jalapeno, garlic, cilantro, lime juice, salt and olive oil.
-15	Transfer to a serving bowl.  Serve with homemade pita chips.
+15	{"step": 2, "displayText": "Transfer to a serving bowl. Serve with homemade pita chips."}
+14	{"step": 1, "displayText": "In a large bowl, combine avocado, cauliflower, tomatoes, onion, jalapeno, garlic, cilantro, lime juice, salt and olive oil."}
+2	{"step": 2, "displayText": "Add the onion and garlic to the pan and cook them over medium heat, stirring frequently for 3-4 minutes or until they are softened and become a deep golden color."}
+1	{"step": 1, "displayText": "In a large (12 to 14-inch) skillet set over medium-high heat, add the oil. While the oil is heating, sprinkle one side of the pork chops with salt and pepper. Place the chops into the hot pan, seasoned side down, and sear for 4 minutes, or until they are a dark, golden brown. While the first sides are searing, season the top side with more salt and pepper. Flip the chops over and cook for another 4 minutes. Transfer the chops from the pan to a platter. You may have to do this in batches for a good sear."}
+13	{"step": 4, "displayText": "Stir in the spinach and let it wilt. Season with salt & pepper as needed and serve with fresh parmesan sprinkled over top."}
+12	{"step": 3, "displayText": "Add the garlic, chicken broth, diced tomatoes, cream, and tortellini. Cook for 5-7 minutes or until the tortellini is cooked and the sauce has reduced to your liking. Cooking the tortellini in the sauce helps thicken it (it releases starch)."}
+11	{"step": 2, "displayText": "In a large bowl, combine beef, turkey, egg, onion mixture, breadcrumbs, ¼ teaspoon salt, pepper and allspice. Mix well and form into 16 meatballs."}
+10	{"step": 1, "displayText": "Take the sausage meat out of the casings and crumble it into a skillet. Cook it over medium-high heat, stirring occasionally, until it's browned. Drain the fat and leave the sausage in the pan."}
+9	{"step": 4, "displayText": "Remove the meatballs with a slotted spoon and set aside in a serving dish. Strain the broth, transfer to a blender with cream cheese and blend until smooth. Return to the skillet with the meatballs and simmer."}
+8	{"step": 3, "displayText": "Add beef stock to the pan and bring to a boil. Reduce the heat to medium-low and slowly drop meatballs into the broth. Cover and cook for about 20 minutes, until cooked through."}
+7	{"step": 2, "displayText": "In a large bowl, combine beef, turkey, egg, onion mixture, breadcrumbs, ¼ teaspoon salt, pepper and allspice. Mix well and form into 16 meatballs."}
+6	{"step": 1, "displayText": "In a large nonstick skillet, heat olive oil over medium heat and add onions and garlic. Sauté until onions are translucent, about 4-5 minutes. Add celery and parsley and cook until soft, about 3-4 more minutes. Set aside to cool."}
+5	{"step": 5, "displayText": "Nestle the pork chops into the simmering gravy, then cover the pan. Allow the chops to simmer in the thickened gravy for 10 minutes, or until their internal temperature reaches at least 145°F and no higher than 165°F."}
+4	{"step": 4, "displayText": "Combine the cream with the rest of the beef stock and pour this liquid into the pan. Add the rosemary sprigs and bring the mixture up to a gentle simmer, stirring frequently, until thickened."}
+3	{"step": 3, "displayText": "Add the onion and garlic to the pan and cook them over medium heat, stirring frequently for 3-4 minutes or until they are softened and become a deep golden color."}
 \.
 
 
@@ -488,7 +488,29 @@ COPY public."shoppingListItems" ("userId", "ingredientId") FROM stdin;
 --
 
 COPY public."userIngredients" ("userId", "ingredientId") FROM stdin;
-1	3
+1	53
+1	2
+1	54
+1	55
+1	33
+1	22
+1	56
+1	7
+1	57
+1	58
+1	33
+1	22
+1	14
+1	59
+1	60
+1	61
+1	21
+1	62
+1	54
+1	55
+1	63
+1	8
+1	64
 \.
 
 
