@@ -26,7 +26,6 @@ ALTER TABLE ONLY public."recipeIngredients" DROP CONSTRAINT "recipeIngredients_r
 ALTER TABLE ONLY public."recipeIngredients" DROP CONSTRAINT "recipeIngredients_ingredientId_fkey";
 ALTER TABLE ONLY public."favoriteRecipes" DROP CONSTRAINT "favoriteRecipes_userId_fkey";
 ALTER TABLE ONLY public."favoriteRecipes" DROP CONSTRAINT "favoriteRecipes_recipeId_fkey";
-DROP INDEX public."userIngredients_userId_ingredientId";
 ALTER TABLE ONLY public.users DROP CONSTRAINT users_pkey;
 ALTER TABLE ONLY public.recipes DROP CONSTRAINT recipes_pkey;
 ALTER TABLE ONLY public.instructions DROP CONSTRAINT instructions_pkey;
@@ -219,8 +218,8 @@ CREATE TABLE public."shoppingListItems" (
 --
 
 CREATE TABLE public."userIngredients" (
-    "userId" integer,
-    "ingredientId" integer
+    "userId" integer NOT NULL,
+    "ingredientId" integer NOT NULL
 );
 
 
@@ -489,27 +488,7 @@ COPY public."shoppingListItems" ("userId", "ingredientId") FROM stdin;
 --
 
 COPY public."userIngredients" ("userId", "ingredientId") FROM stdin;
-1	53
-1	2
-1	54
-1	55
-1	33
-1	22
-1	56
-1	7
-1	57
-1	58
-1	14
-1	59
-1	60
-1	61
-1	21
-1	62
-1	63
-1	8
-1	64
-1	43
-1	\N
+1	3
 \.
 
 
@@ -580,13 +559,6 @@ ALTER TABLE ONLY public.recipes
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY ("userId");
-
-
---
--- Name: userIngredients_userId_ingredientId; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX "userIngredients_userId_ingredientId" ON public."userIngredients" USING btree ("userId", "ingredientId");
 
 
 --

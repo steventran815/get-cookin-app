@@ -18,14 +18,13 @@ export default class RecipeList extends React.Component {
   }
 
   getIngredients(userId) {
-    fetch(`/api/users/${userId}`)
+    fetch(`/api/userIngredients/${userId}`)
       .then(res => res.json())
       .then(ingredients => this.setState({
         ingredients: ingredients
       }))
       .catch(err => console.error(err));
   }
-
 
   addIngredients(newIngredient) {
     fetch('/api/ingredients', {
@@ -54,7 +53,7 @@ export default class RecipeList extends React.Component {
     };
     this.addIngredients(newIngredient);
   }
-  
+
   deleteIngredient(ingredientId) {
     const { ingredients } = this.state;
     const req = {
