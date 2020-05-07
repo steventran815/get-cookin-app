@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@600&display=swap');
 
 * {
   box-sizing: border-box;
@@ -223,9 +224,9 @@ footer{
   margin:10px;
   background-color:#30B6BE;
   color:white;
-  font-family:anton;
+  font-family:oswald;
   letter-spacing:0px;
-  font-weight:normal;
+  font-weight:600;
   font-size:1.25rem;
   padding:12px;
   width:80%;
@@ -287,10 +288,55 @@ footer{
   margin:10px;
   background-color:#30B6BE;
   color:white;
-  font-family:anton;
+  font-family:oswald;
   letter-spacing:0px;
-  font-weight:normal;
+  font-weight:600;
   font-size:1.25rem;
   padding:12px;
   width:95%;
+}
+
+.notEnoughIngredientsDiv{
+  display:flex;
+  height:80vh;
+  margin:auto 0;
+  justify-content:center;
+  align-items:center;
+}
+
+.notEnoughIngredientsContent{
+  height:100%;
+  margin:auto 0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+
+.notEnoughIngredienstTitle{
+  color:#444444;
+  font-size:1.50rem;
+}
+
+.notEnoughIngredientsImage{
+  height:125px;
+  margin:25px 0px;
+}
+
+.notEnoughIngredientsMessage{
+  color:#FF5758;
+  font-size:1.35rem;
+}
+
+.notEnoughIngredientsButton{
+  margin:10px 0px;
+  background-color:#30B6BE;
+  color:white;
+  font-family:oswald;
+  letter-spacing:0px;
+  font-weight:600;
+  font-size:1.25rem;
+  padding:10px;
+  width:100%;
+  border:none;
 }
