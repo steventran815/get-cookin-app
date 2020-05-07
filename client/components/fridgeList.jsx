@@ -19,7 +19,7 @@ export default class RecipeList extends React.Component {
   }
 
   getIngredients(userId) {
-    fetch(`/api/users/${userId}`)
+    fetch(`/api/userIngredients/${userId}`)
       .then(res => res.json())
       .then(ingredients => this.setState({
         ingredients: ingredients

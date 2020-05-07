@@ -14,8 +14,8 @@ app.use(sessionMiddleware);
 app.use(express.json());
 
 // GET Endpoint for view user's fridge/ingredients
-app.get('/api/users/:userId', (req, res, next) => {
-  const { userId } = req.params;
+app.get('/api/userIngredients/:userId', (req, res, next) => {
+  const userId = parseInt(req.params.userId);
 
   if (isNaN(userId) || userId < 0) {
     return next(new ClientError('"userId" must be a positive integer', 400));
@@ -51,7 +51,7 @@ app.get('/api/recipes', (req, res, next) => {
 });
 
 app.delete('/api/userIngredients/:ingredientId', (req, res, next) => {
-  const { ingredientId } = req.params;
+  const ingredientId = parseInt(req.params.ingredientId);
 
   if (isNaN(ingredientId) || ingredientId < 0) {
     return next(new ClientError('"ingredientId" must be a positive integer', 400));
@@ -157,6 +157,47 @@ app.post('/api/ingredients', (req, res, next) => {
         //   );
       }
     });
+});
+
+app.get('/api/availableRecipes', (req, res, next) => {
+  const sql = `
+    with "ingredientsNeeded" as (
+      select "r"."recipeId",
+         "r"."recipeTitle",
+         "r"."recipeImage",
+         "r"."recipePrepTime",
+        count ("ri"."ingredientId") as "ingredientCount"
+      from recipes as "r"
+      join "recipeIngredients" as "ri" using("recipeId")
+      group by "r"."recipeId", "r"."recipeTitle"
+    ),
+    "ingredientsInFridge" as (
+      select "ui"."userId",
+        "r"."recipeId",
+        count("ui"."ingredientId") as "ingredientCount"
+      from "recipes" as "r"
+      join "recipeIngredients" as "ri" using ("recipeId")
+      join "userIngredients" as "ui" using ("ingredientId")
+      where "ui"."userId"=1
+      group by "r"."recipeId", "ui"."userId"
+    )
+    select "in"."recipeTitle",
+      "in"."recipeImage",
+      "in"."recipePrepTime",
+      "in"."recipeId"
+    from "ingredientsNeeded" as "in"
+    join "ingredientsInFridge" as "if" using("recipeId", "ingredientCount");
+  `;
+
+  db.query(sql)
+    .then(availableRecipes => {
+      if (!availableRecipes.rows[0]) {
+        throw new ClientError('There are no recipes available that match the ingredients in your fridge', 404);
+      } else {
+        res.status(200).json(availableRecipes.rows);
+      }
+    })
+    .catch(err => next(err));
 });
 
 app.use('/api', (req, res, next) => {
