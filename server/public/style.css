@@ -233,3 +233,13 @@ footer{
   font-size: 28px;
   color: red
 }
+
+.doneCookingOpacity{
+  top:0;
+  right:0;
+  left:0;
+  bottom:0;
+  position:absolute;
+  background-color:rgba(0, 0, 0, 0.5);
+  height:100vh;
+}
