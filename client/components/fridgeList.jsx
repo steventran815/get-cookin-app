@@ -5,12 +5,13 @@ export default class RecipeList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      message: null,
       ingredients: []
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.deleteIngredient = this.deleteIngredient.bind(this);
-
+    this.closeAlert = this.closeAlert.bind(this);
   }
 
   componentDidMount() {
@@ -36,6 +37,9 @@ export default class RecipeList extends React.Component {
     })
       .then(res => res.json())
       .then(data => {
+        if (data.message) {
+          return this.setState(state => ({ message: data.message }));
+        }
         const newData = this.state.ingredients.concat(data);
         return this.setState(state => ({ ingredients: newData }));
       })
@@ -49,7 +53,7 @@ export default class RecipeList extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     const newIngredient = {
-      name: this.state.newIngredient
+      name: this.state.newIngredient.toLowerCase()
     };
     this.addIngredients(newIngredient);
   }
@@ -70,6 +74,10 @@ export default class RecipeList extends React.Component {
 
   }
 
+  closeAlert() {
+    this.setState({ message: null });
+  }
+
   render() {
     const { ingredients } = this.state;
 
@@ -82,20 +90,22 @@ export default class RecipeList extends React.Component {
         />
       );
     });
-
     return (
       <div className="container">
-        <div className="input-group my-3 px-2">
-          <input
-            className="form-control add-input"
-            type="text"
-            onChange={this.handleChange}
-            placeholder="Add an Ingredient"
-            maxLength="20"/>
-          <div className="input-group-append">
-            <button onClick={this.handleSubmit} className="btn btn-info add-input pr-3"><i className="fas fa-plus"></i></button>
+        {this.state.message
+          ? <div className='alert alert-warning flex'><div className="d-flex justify-content-end closeButton"><span onClick={this.closeAlert}>&times;</span></div><h5 className="row p-3 text-center">{this.state.message}</h5></div>
+          : <div className="input-group my-3 px-2">
+            <input
+              className="form-control add-input"
+              type="text"
+              onChange={this.handleChange}
+              placeholder="Add an Ingredient"
+              maxLength="20" />
+            <div className="input-group-append">
+              <button onClick={this.handleSubmit} className="btn btn-info add-input pr-3"><i className="fas fa-plus"></i></button>
+            </div>
           </div>
-        </div>
+        }
         <ul className="list-group list-group-flush">
           {userIngredients}
         </ul>
