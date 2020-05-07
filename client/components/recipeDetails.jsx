@@ -1,10 +1,12 @@
 import React from 'react';
 import RecipeIngredient from './recipeIngredients';
 import RecipeInstruction from './recipeInstructions';
+import DoneCooking from './doneCooking';
 
 export default class RecipeDetails extends React.Component {
   constructor(props) {
     super(props);
+    this.handleClick = this.handleClick.bind(this);
     this.state = {
       recipes:
         {
@@ -51,8 +53,15 @@ export default class RecipeDetails extends React.Component {
                 'Nestle the pork chops into the simmering gravy, then cover the pan. Allow the chops to simmer in the thickened gravy for 10 minutes, or until their internal temperature reaches at least 145°F and no higher than 165°F.'
             }
           ]
-        }
+        },
+      doneCooking: false
     };
+  }
+
+  handleClick() {
+    this.setState({
+      doneCooking: true
+    });
   }
 
   render() {
@@ -71,8 +80,16 @@ export default class RecipeDetails extends React.Component {
     const recipeImage = this.state.recipes.recipeImage;
     const recipePrepTime = this.state.recipes.recipePrepTime;
 
+    let doneCooking;
+    if (this.state.doneCooking === false) {
+      doneCooking = null;
+    } else {
+      doneCooking = <DoneCooking />;
+    }
+
     return (
       <div>
+        {doneCooking}
         <div className="recipeDetailsImageDiv">
           <img className="recipeDetailsImage" src={recipeImage}/>
         </div>
@@ -98,7 +115,7 @@ export default class RecipeDetails extends React.Component {
           </ul>
         </div>
         <div className="doneCookingDiv">
-          <button className="doneCookingButton">DONE COOKING</button>
+          <button onClick={this.handleClick} className="doneCookingButton">DONE COOKING</button>
         </div>
         <div><h1>END OF RECIPE</h1></div>
       </div>
