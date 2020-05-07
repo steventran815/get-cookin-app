@@ -99,6 +99,7 @@ export default class RecipeDetails extends React.Component {
         </div>
         <div className="doneCookingDiv">
           <button className="doneCookingButton">DONE COOKING</button>
+          <button className="doneCookingButton">DONE COOKING</button>
         </div>
         <div><h1>END OF RECIPE</h1></div>
       </div>
