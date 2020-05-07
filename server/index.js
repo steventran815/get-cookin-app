@@ -42,8 +42,33 @@ app.get('/api/userIngredients/:userId', (req, res, next) => {
 
 app.get('/api/recipes', (req, res, next) => {
   const sql = `
-    select *
-    from "recipes"
+    WITH "recipeIngredients" as (
+      SELECT
+      "r".*,
+      json_agg("i"."name") as "ingredients"
+      FROM "recipes" as "r"
+      JOIN "recipeIngredients" as "ri" using ("recipeId")
+      JOIN "ingredients" as "i" using ("ingredientId")
+      GROUP BY "r"."recipeId"
+    ),
+    "recipeInstructions" as (
+      SELECT
+      "r".*,
+      json_agg("i"."instruction") as "instructions"
+      FROM "recipes" as "r"
+      JOIN "recipeInstructions" as "rins" using ("recipeId")
+      JOIN "instructions" as "i" using ("instructionId")
+      GROUP BY "r"."recipeId"
+      )
+    SELECT
+    "ring"."recipeId",
+    "ring"."recipeTitle",
+    "ring"."recipeImage",
+    "ring"."ingredients" as "recipeIngredients",
+    "rins"."instructions" as "recipeInstructions"
+    FROM "recipeIngredients" as "ring"
+    JOIN "recipeInstructions" as "rins" using ("recipeId")
+    ORDER BY "recipeId" asc
   ;`;
   db.query(sql)
     .then(result => res.json(result.rows))
@@ -82,9 +107,34 @@ app.delete('/api/userIngredients/:ingredientId', (req, res, next) => {
 app.get('/api/recipes/:recipeId', (req, res, next) => {
   const recipeId = parseInt(req.params.recipeId);
   const sql = `
-    select *
-    from "recipes"
-    where "recipeId" = $1
+    WITH "recipeIngredients" as (
+      SELECT
+      "r".*,
+      json_agg("i"."name") as "ingredients"
+      FROM "recipes" as "r"
+      JOIN "recipeIngredients" as "ri" using ("recipeId")
+      JOIN "ingredients" as "i" using ("ingredientId")
+      GROUP BY "r"."recipeId"
+    ),
+    "recipeInstructions" as (
+      SELECT
+      "r".*,
+      json_agg("i"."instruction") as "instructions"
+      FROM "recipes" as "r"
+      JOIN "recipeInstructions" as "rins" using ("recipeId")
+      JOIN "instructions" as "i" using ("instructionId")
+      GROUP BY "r"."recipeId"
+    )
+    SELECT
+    "ring"."recipeId",
+    "ring"."recipeTitle",
+    "ring"."recipeImage",
+    "ring"."ingredients" as "recipeIngredients",
+    "rins"."instructions" as "recipeInstructions"
+    FROM "recipeIngredients" as "ring"
+    JOIN "recipeInstructions" as "rins" using ("recipeId")
+    WHERE "ring"."recipeId" = $1
+    ORDER BY "recipeId" asc
   ;`;
   const params = [recipeId];
 
@@ -95,7 +145,13 @@ app.get('/api/recipes/:recipeId', (req, res, next) => {
   }
 
   db.query(sql, params)
-    .then(result => res.json(result.rows[0]))
+    .then(result => {
+      if (!result.rows[0]) {
+        throw new ClientError('This recipeId does not exist', 400);
+      } else {
+        res.json(result.rows[0]);
+      }
+    })
     .catch(err => next(err));
 });
 
