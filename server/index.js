@@ -102,15 +102,32 @@ app.get('/api/recipes/:recipeId', (req, res, next) => {
 const checkIngredients = (database, ingredient) => {
   for (let i = 0; i < database.rows.length; i++) {
     if (database.rows[i].name === ingredient) {
-      return { ingredient: database.rows[i].name, ingredientId: database.rows[i].ingredientId };
+      return {
+        name: database.rows[i].name,
+        ingredientId: database.rows[i].ingredientId
+      };
     }
   }
+  const sql = `
+    insert into "ingredients" ("ingredientId", "name")
+    values (default, $1)
+    returning *;
+    `;
+  const value = [ingredient];
+  db.query(sql, value)
+    .then(result => {
+      const newIngredient = result.rows[0];
+      return newIngredient;
+    });
 };
 
 const checkIngredientId = (database, ingredientId) => {
   for (let i = 0; i < database.rows.length; i++) {
     if (database.rows[i].ingredientId === ingredientId) {
-      return { userId: database.rows[i].userId, ingredientId: ingredientId };
+      return {
+        userId: database.rows[i].userId,
+        ingredientId: ingredientId
+      };
     }
   }
 };
@@ -160,6 +177,32 @@ app.post('/api/ingredients', (req, res, next) => {
         //   .then(response => res.status(201).send({ ingredientId: result.ingredientId, name: ingredient, userId: 1 })
         //   );
       }
+    });
+});
+
+app.post('/api/johnny', (req, res, next) => {
+  const ingredient = req.body.name;
+  const sql = `
+    select *
+    from "ingredients";
+  `;
+  db.query(sql)
+    .then(allIngredients => {
+      return checkIngredients(allIngredients, ingredient);
+    })
+    // RETURNS AN ITEM FROM THE INGREDIENTS TABLE, EITHER ADDED ON RETURNED
+    .then(ingredientResult => {
+      // Now we can check if the item is in the UI or not
+      // eslint-disable-next-line no-unused-vars
+      const { name, ingredientId } = ingredientResult;
+      const sql = `
+        select *
+        from "userIngredients"
+      `;
+      db.query(sql)
+        .then(userIngredients => {
+          return checkIngredientId(userIngredients, ingredientId);
+        });
     });
 });
 
