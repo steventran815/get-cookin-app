@@ -5,6 +5,7 @@ export default class RecipeList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      newIngredient: '',
       message: null,
       ingredients: []
     };
@@ -53,9 +54,12 @@ export default class RecipeList extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     const newIngredient = {
-      name: this.state.newIngredient.toLowerCase()
+      name: this.state.newIngredient.toLowerCase(),
+      newIngredient: ''
     };
     this.addIngredients(newIngredient);
+    document.getElementById('addIngredient').value = '';
+
   }
 
   deleteIngredient(ingredientId) {
@@ -71,7 +75,6 @@ export default class RecipeList extends React.Component {
         });
       })
       .catch(err => console.error(err));
-
   }
 
   closeAlert() {
@@ -80,7 +83,6 @@ export default class RecipeList extends React.Component {
 
   render() {
     const { ingredients } = this.state;
-
     const userIngredients = ingredients.map(ingredient => {
       return (
         <Ingredient
@@ -96,6 +98,7 @@ export default class RecipeList extends React.Component {
           ? <div className='alert alert-warning flex'><div className="d-flex justify-content-end closeButton"><span onClick={this.closeAlert}>&times;</span></div><h5 className="row p-3 text-center">{this.state.message}</h5></div>
           : <div className="input-group my-3 px-2">
             <input
+              id="addIngredient"
               className="form-control add-input"
               type="text"
               onChange={this.handleChange}
@@ -109,7 +112,7 @@ export default class RecipeList extends React.Component {
         <ul className="list-group list-group-flush">
           {userIngredients}
         </ul>
-        <h5 className="noMoreIngredients">End of Ingredients List!</h5>
+        <div className="noMoreIngredients"></div>
       </div>
     );
   }
