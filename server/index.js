@@ -149,7 +149,11 @@ app.post('/api/ingredients', (req, res, next) => {
       if (!result) {
         return res.status(400).send({ message: 'The ingredient you are trying to add already exists!' });
       } else {
-        return res.status(201).send({ ingredientId: result.ingredientId, name: ingredient, userId: 1 });
+        return res.status(201).send({
+          ingredientId: result.rows[0].ingredientId,
+          name: ingredient,
+          userId: 1
+        });
         // return db.query(`select "userIngredients"("userId", "ingredientId")
         //                 values (1, $1)
         //                 returning *`, [result.rows[0].ingredientId])
