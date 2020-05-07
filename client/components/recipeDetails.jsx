@@ -8,93 +8,61 @@ export default class RecipeDetails extends React.Component {
     super(props);
     this.handleClick = this.handleClick.bind(this);
     this.state = {
-      recipes: {
-        recipeId: 5,
-        recipeTitle: 'Nashville Hot Chicken',
-        recipeImage: 'https://images.media-allrecipes.com/userphotos/3778321.jpg',
-        recipePrepTime: 20,
-        recipeIngredients: [
-          'Buttermilk',
-          'Hot Sauce',
-          'Chicken',
-          'All - purpose flour',
-          'Salt',
-          'Pepper',
-          'Paprika',
-          'Cayenne pepper',
-          'Brown sugar',
-          'Garlic powder',
-          'Chili powder',
-          'Red pepper flakes',
-          'Vegetable oil'
-        ],
-        recipeInstructions: [
-          {
-            step: 1,
-            displayText:
-            'In a large bowl put the buttermilk, hot sauce, salt, pepper and paprika – whisk well to combine and add the chicken and make sure it’s well covered.Refrigerate up to 4 hours, even overnight is fine.'
-          },
-          {
-            step: 2,
-            displayText:
-            'In a large bowl, whisk together flour, salt, pepper, and paprika until well combined to make flour dredge.'
-          },
-          {
-            step: 3,
-            displayText:
-            'Remove the chicken pieces one by one from the buttermilk and let any excess drip off.'
-          },
-          {
-            step: 4,
-            displayText:
-            'Put the pieces, one by one into the flour making sure each is well coated, shake off excess then back into the buttermilk and then into the flour again and put on a plate or a rack on a baking sheet – repeat with al the chicken.'
-          },
-          {
-            step: 5,
-            displayText:
-            'Fill either a deep fryer with oil, or a large cast iron pan about 1/3 of the way up the sides and heat to 325 degrees.'
-          },
-          {
-            step: 6,
-            displayText:
-            'Slowly add 3 or 4 pieces of chicken at a time and cook until golden brown and crisp on both sides(turning pieces over about halfway through) and the chicken reaches 160 to165 degrees, approximately 12-14 minutes.'
-          },
-          {
-            step: 7,
-            displayText:
-            'When done, move the chicken pieces to a rack covered baking sheet and place in a 250 degree oven while you finish cooking the remaining pieces.'
-          },
-          {
-            step: 8,
-            displayText:
-            'When all the frying is done, combine the cayenne pepper, brown sugar, garlic powder, paprika, chili powder, red pepper flakes in a medium bowl and add 1 cup of the hot frying oil – stir well to combine.'
-          },
-          {
-            step: 9,
-            displayText:
-            'To serve, brush the cooked chicken well with the sauce, or dunk the pieces - serve hot.'
-          }
-        ]
-      },
+
+      recipes:
+        {
+          recipeId: 1,
+          recipeTitle: 'Smothered Pork Chops',
+          recipeImage: 'https://www.simplyrecipes.com/wp-content/uploads/2019/12/Skillet_Smothered_Pork_LEAD_2b.jpg',
+          recipePrepTime: 40,
+          recipeIngredients: [
+            'vegetable oil',
+            'pork chops',
+            'salt',
+            'pepper',
+            'onion',
+            'garlic',
+            'flour',
+            'beef stock',
+            'heavy cream',
+            'rosemary'
+          ],
+          recipeInstructions: [
+            {
+              step: 1,
+              displayText:
+                'In a large (12 to 14-inch) skillet set over medium - high heat, add the oil. While the oil is heating, sprinkle one side of the pork chops with salt and pepper. Place the chops into the hot pan, seasoned side down, and sear for 4 minutes, or until they are a dark, golden brown.While the first sides are searing, season the top side with more salt and pepper. Flip the chops over and cook for another 4 minutes.Transfer the chops from the pan to a platter. You may have to do this in batches for a good sear.'
+            },
+            {
+              step: 2,
+              displayText:
+                'Add the onion and garlic to the pan and cook them over medium heat, stirring frequently for 3 - 4 minutes or until they are softened and become a deep golden color.'
+            },
+            {
+              step: 3,
+              displayText:
+                'Once the onions and garlic are cooked down but still a little glossy, sprinkle flour over the veggies. If the onions are not glossy, add 1 tablespoon of oil before adding the flour. Cook the flour for one minute to remove the raw, starchy taste from it. Add 1/4 cup of beef stock to the pan and use your spoon to scrape up the browned bits from the bottom of the pan. The mixture will look like a very thick paste at this point.'
+            },
+            {
+              step: 4,
+              displayText:
+                'Combine the cream with the rest of the beef stock and pour this liquid into the pan. Add the rosemary sprigs and bring the mixture up to a gentle simmer, stirring frequently, until thickened.'
+            },
+            {
+              step: 5,
+              displayText:
+                'Nestle the pork chops into the simmering gravy, then cover the pan. Allow the chops to simmer in the thickened gravy for 10 minutes, or until their internal temperature reaches at least 145°F and no higher than 165°F.'
+            }
+          ]
+        },
       doneCooking: false
     };
   }
 
   handleClick() {
-    this.setState(
-      {
-        doneCooking: true
-      }
-    );
-  }
-
-  getIngredients(userId) {
-    fetch(`/api/userIngredients/${userId}`)
-      .then(res => res.json())
-      .then(ingredients => this.setState({
-        ingredients: ingredients
-      }))
-      .catch(err => console.error(err));
+    this.setState({
+      doneCooking: true
+    });
   }
 
   render() {
@@ -113,16 +81,16 @@ export default class RecipeDetails extends React.Component {
     const recipeImage = this.state.recipes.recipeImage;
     const recipePrepTime = this.state.recipes.recipePrepTime;
 
-    let doneCookingTest;
+    let doneCooking;
     if (this.state.doneCooking === false) {
-      doneCookingTest = null;
+      doneCooking = null;
     } else {
-      doneCookingTest = <DoneCooking />;
+      doneCooking = <DoneCooking />;
     }
 
     return (
       <div>
-        {doneCookingTest}
+        {doneCooking}
         <div className="recipeDetailsImageDiv">
           <img className="recipeDetailsImage" src={recipeImage}/>
         </div>
