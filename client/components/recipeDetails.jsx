@@ -8,6 +8,7 @@ export default class RecipeDetails extends React.Component {
     super(props);
     this.handleClick = this.handleClick.bind(this);
     this.state = {
+
       recipes:
         {
           recipeId: 1,
@@ -110,9 +111,9 @@ export default class RecipeDetails extends React.Component {
         <hr className="recipeDivider"></hr>
         <div className="recipeDetailsInstructions">
           <h5 className="ingredientsHeader">Instructions</h5>
-          <ul className="instructionsList">
+          <ol className="instructionsList">
             {recipeInstructions}
-          </ul>
+          </ol>
         </div>
         <div className="doneCookingDiv">
           <button onClick={this.handleClick} className="doneCookingButton">DONE COOKING</button>
