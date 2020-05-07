@@ -7,7 +7,8 @@ export default class RecipeList extends React.Component {
     this.state = {
       newIngredient: '',
       message: null,
-      ingredients: []
+      ingredients: [],
+      newIngredient: ''
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -48,7 +49,9 @@ export default class RecipeList extends React.Component {
   }
 
   handleChange(event) {
-    this.setState({ newIngredient: event.target.value });
+    this.setState({
+      newIngredient: event.target.value
+    });
   }
 
   handleSubmit(event) {
@@ -93,9 +96,14 @@ export default class RecipeList extends React.Component {
       );
     });
     return (
-      <div className="container">
+      <div className="container ingredient-list">
         {this.state.message
-          ? <div className='alert alert-warning flex'><div className="d-flex justify-content-end closeButton"><span onClick={this.closeAlert}>&times;</span></div><h5 className="row p-3 text-center">{this.state.message}</h5></div>
+          ? <div className='alert alert-warning flex'>
+            <div className="d-flex justify-content-end closeButton">
+              <span onClick={this.closeAlert}>&times;</span>
+            </div>
+            <h5 className="row p-3 text-center">{this.state.message}</h5>
+          </div>
           : <div className="input-group my-3 px-2">
             <input
               id="addIngredient"

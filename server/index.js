@@ -158,59 +158,63 @@ app.get('/api/recipes/:recipeId', (req, res, next) => {
 const checkIngredients = (database, ingredient) => {
   for (let i = 0; i < database.rows.length; i++) {
     if (database.rows[i].name === ingredient) {
-      return { ingredient: database.rows[i].name, ingredientId: database.rows[i].ingredientId };
+      return {
+        name: database.rows[i].name,
+        ingredientId: database.rows[i].ingredientId
+      };
     }
   }
-};
-
-const checkIngredientId = (database, ingredientId) => {
-  for (let i = 0; i < database.rows.length; i++) {
-    if (database.rows[i].ingredientId === ingredientId) {
-      return { userId: database.rows[i].userId, ingredientId: ingredientId };
-    }
-  }
+  const sql = `
+    insert into "ingredients" ("ingredientId", "name")
+    values (default, $1)
+    returning *;
+    `;
+  const value = [ingredient];
+  return db.query(sql, value)
+    .then(result => {
+      const newIngredient = result.rows[0];
+      return newIngredient;
+    });
 };
 
 app.post('/api/ingredients', (req, res, next) => {
   const ingredient = req.body.name;
-  const params = [ingredient];
-  const sql = `insert into "ingredients" ("ingredientId", "name")
-                values (default, $1)
-                returning "ingredientId";`;
-  db.query(`select *
-              from "ingredients";`)
-    .then(response => {
-      return checkIngredients(response, ingredient);
+  const sql = `
+    select *
+    from "ingredients";
+  `;
+  db.query(sql)
+    .then(allIngredients => {
+      return checkIngredients(allIngredients, ingredient);
     })
-    .then(data => {
-      if (data === undefined) {
-        return db.query(sql, params)
-          .then(response => response.rows[0])
-          .catch(err => next(err));
-      } else {
-        return db.query(`select *
-                          from "userIngredients";`)
-          .then(response => checkIngredientId(response, data.ingredientId))
-          .then(result => {
-            if (result === undefined) {
-              return db.query(`insert into "userIngredients"("userId", "ingredientId")
-                             values (1, $1)
-                             returning *`, [data.ingredientId]);
-            }
-          })
-          .catch(err => next(err));
-      }
+    .then(ingredientResult => {
+      const { ingredientId } = ingredientResult;
+
+      const sql = `
+        insert into "userIngredients" ("userId", "ingredientId")
+        values (1, $1)
+        on conflict ("userId","ingredientId") do nothing
+        returning *;
+      `;
+      const values = [ingredientId];
+
+      return db.query(sql, values)
+        .then(addUserIngredientResult => {
+          return addUserIngredientResult.rows[0];
+        });
     })
-    .then(result => {
-      if (!result) {
-        return res.status(400).send({ message: 'The ingredient you are trying to add already exists!' });
+    .then(newIngredient => {
+      if (!newIngredient) {
+        return res.status(400).send({
+          message: 'The ingredient you are trying to add already exists!'
+        });
       } else {
-        return res.status(201).send({ ingredientId: result.ingredientId, name: ingredient, userId: 1 });
-        // return db.query(`select "userIngredients"("userId", "ingredientId")
-        //                 values (1, $1)
-        //                 returning *`, [result.rows[0].ingredientId])
-        //   .then(response => res.status(201).send({ ingredientId: result.ingredientId, name: ingredient, userId: 1 })
-        //   );
+        const { userId, ingredientId } = newIngredient;
+        return res.status(201).send({
+          ingredientId: ingredientId,
+          name: ingredient,
+          userId: userId
+        });
       }
     });
 });
