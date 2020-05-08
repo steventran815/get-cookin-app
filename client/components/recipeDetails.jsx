@@ -42,8 +42,9 @@ export default class RecipeDetails extends React.Component {
         );
       });
       const recipeInstructions = recipe.recipeInstructions.map((instruction, index) => {
+        const parsed = JSON.parse(instruction);
         return (
-          <RecipeInstruction key={index} instruction={instruction} />
+          <RecipeInstruction key={index} instruction={parsed} />
         );
       });
       const recipeTitle = recipe.recipeTitle;
