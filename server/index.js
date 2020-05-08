@@ -263,22 +263,16 @@ app.get('/api/availableRecipes', (req, res, next) => {
 app.get('/api/favoriteRecipes', (req, res, next) => {
   const sql = `
     SELECT
-      "fr"."userId",
-      "r".*,
-      json_agg("i"."name") as "ingredients"
-    FROM "favoriteRecipes" as "fr"
-    JOIN "recipes" as "r" using ("recipeId")
-    JOIN "recipeIngredients" as "ring" using ("recipeId")
-    JOIN "ingredients" as "i" using ("ingredientId")
-    GROUP BY "fr"."userId", "r"."recipeId";
+    "r".*
+    FROM "favoriteRecipes"
+    JOIN "recipes" as "r" using ("recipeId");
   `;
-
   db.query(sql)
     .then(favRecipes => {
       if (!favRecipes.rows[0]) {
         throw new ClientError('There are no recipes in your favorites list!', 404);
       } else {
-        res.json(favRecipes.rows[0]);
+        res.json(favRecipes.rows);
       }
     })
     .catch(err => next(err));
