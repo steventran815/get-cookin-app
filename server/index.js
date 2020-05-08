@@ -44,8 +44,8 @@ app.get('/api/recipes', (req, res, next) => {
   const sql = `
     WITH "recipeIngredients" as (
       SELECT
-      "r".*,
-      json_agg("i"."name") as "ingredients"
+        "r".*,
+        json_agg("i"."name") as "ingredients"
       FROM "recipes" as "r"
       JOIN "recipeIngredients" as "ri" using ("recipeId")
       JOIN "ingredients" as "i" using ("ingredientId")
@@ -53,19 +53,19 @@ app.get('/api/recipes', (req, res, next) => {
     ),
     "recipeInstructions" as (
       SELECT
-      "r".*,
-      json_agg("i"."instruction") as "instructions"
+        "r".*,
+        json_agg("i"."instruction") as "instructions"
       FROM "recipes" as "r"
       JOIN "recipeInstructions" as "rins" using ("recipeId")
       JOIN "instructions" as "i" using ("instructionId")
       GROUP BY "r"."recipeId"
       )
     SELECT
-    "ring"."recipeId",
-    "ring"."recipeTitle",
-    "ring"."recipeImage",
-    "ring"."ingredients" as "recipeIngredients",
-    "rins"."instructions" as "recipeInstructions"
+      "ring"."recipeId",
+      "ring"."recipeTitle",
+      "ring"."recipeImage",
+      "ring"."ingredients" as "recipeIngredients",
+      "rins"."instructions" as "recipeInstructions"
     FROM "recipeIngredients" as "ring"
     JOIN "recipeInstructions" as "rins" using ("recipeId")
     ORDER BY "recipeId" asc
@@ -109,8 +109,8 @@ app.get('/api/recipes/:recipeId', (req, res, next) => {
   const sql = `
     WITH "recipeIngredients" as (
       SELECT
-      "r".*,
-      json_agg("i"."name") as "ingredients"
+        "r".*,
+        json_agg("i"."name") as "ingredients"
       FROM "recipes" as "r"
       JOIN "recipeIngredients" as "ri" using ("recipeId")
       JOIN "ingredients" as "i" using ("ingredientId")
@@ -255,6 +255,30 @@ app.get('/api/availableRecipes', (req, res, next) => {
         throw new ClientError('There are no recipes available that match the ingredients in your fridge', 404);
       } else {
         res.status(200).json(availableRecipes.rows);
+      }
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/favoriteRecipes', (req, res, next) => {
+  const sql = `
+    SELECT
+      "fr"."userId",
+      "r".*,
+      json_agg("i"."name") as "ingredients"
+    FROM "favoriteRecipes" as "fr"
+    JOIN "recipes" as "r" using ("recipeId")
+    JOIN "recipeIngredients" as "ring" using ("recipeId")
+    JOIN "ingredients" as "i" using ("ingredientId")
+    GROUP BY "fr"."userId", "r"."recipeId";
+  `;
+
+  db.query(sql)
+    .then(favRecipes => {
+      if (!favRecipes.rows[0]) {
+        throw new ClientError('There are no recipes in your favorites list!', 404);
+      } else {
+        res.json(favRecipes.rows[0]);
       }
     })
     .catch(err => next(err));
