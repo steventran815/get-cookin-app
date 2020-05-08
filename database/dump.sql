@@ -87,8 +87,8 @@ SET default_with_oids = false;
 --
 
 CREATE TABLE public."favoriteRecipes" (
-    "userId" integer,
-    "recipeId" integer
+    "userId" integer NOT NULL,
+    "recipeId" integer NOT NULL
 );
 
 
@@ -286,6 +286,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN "userId" SET DEFAULT nextval('public.
 --
 
 COPY public."favoriteRecipes" ("userId", "recipeId") FROM stdin;
+1	1
 \.
 
 
