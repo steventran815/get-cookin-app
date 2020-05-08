@@ -287,6 +287,9 @@ ALTER TABLE ONLY public.users ALTER COLUMN "userId" SET DEFAULT nextval('public.
 
 COPY public."favoriteRecipes" ("userId", "recipeId") FROM stdin;
 1	1
+1	2
+1	3
+1	4
 \.
 
 
