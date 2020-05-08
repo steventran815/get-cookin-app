@@ -42,8 +42,33 @@ app.get('/api/userIngredients/:userId', (req, res, next) => {
 
 app.get('/api/recipes', (req, res, next) => {
   const sql = `
-    select *
-    from "recipes"
+    WITH "recipeIngredients" as (
+      SELECT
+      "r".*,
+      json_agg("i"."name") as "ingredients"
+      FROM "recipes" as "r"
+      JOIN "recipeIngredients" as "ri" using ("recipeId")
+      JOIN "ingredients" as "i" using ("ingredientId")
+      GROUP BY "r"."recipeId"
+    ),
+    "recipeInstructions" as (
+      SELECT
+      "r".*,
+      json_agg("i"."instruction") as "instructions"
+      FROM "recipes" as "r"
+      JOIN "recipeInstructions" as "rins" using ("recipeId")
+      JOIN "instructions" as "i" using ("instructionId")
+      GROUP BY "r"."recipeId"
+      )
+    SELECT
+    "ring"."recipeId",
+    "ring"."recipeTitle",
+    "ring"."recipeImage",
+    "ring"."ingredients" as "recipeIngredients",
+    "rins"."instructions" as "recipeInstructions"
+    FROM "recipeIngredients" as "ring"
+    JOIN "recipeInstructions" as "rins" using ("recipeId")
+    ORDER BY "recipeId" asc
   ;`;
   db.query(sql)
     .then(result => res.json(result.rows))
@@ -82,9 +107,35 @@ app.delete('/api/userIngredients/:ingredientId', (req, res, next) => {
 app.get('/api/recipes/:recipeId', (req, res, next) => {
   const recipeId = parseInt(req.params.recipeId);
   const sql = `
-    select *
-    from "recipes"
-    where "recipeId" = $1
+    WITH "recipeIngredients" as (
+      SELECT
+      "r".*,
+      json_agg("i"."name") as "ingredients"
+      FROM "recipes" as "r"
+      JOIN "recipeIngredients" as "ri" using ("recipeId")
+      JOIN "ingredients" as "i" using ("ingredientId")
+      GROUP BY "r"."recipeId"
+    ),
+    "recipeInstructions" as (
+      SELECT
+      "r".*,
+      json_agg("i"."instruction") as "instructions"
+      FROM "recipes" as "r"
+      JOIN "recipeInstructions" as "rins" using ("recipeId")
+      JOIN "instructions" as "i" using ("instructionId")
+      GROUP BY "r"."recipeId"
+    )
+    SELECT
+    "ring"."recipeId",
+    "ring"."recipeTitle",
+    "ring"."recipeImage",
+    "ring"."recipePrepTime",
+    "ring"."ingredients" as "recipeIngredients",
+    "rins"."instructions" as "recipeInstructions"
+    FROM "recipeIngredients" as "ring"
+    JOIN "recipeInstructions" as "rins" using ("recipeId")
+    WHERE "ring"."recipeId" = $1
+    ORDER BY "recipeId" asc
   ;`;
   const params = [recipeId];
 
@@ -95,66 +146,75 @@ app.get('/api/recipes/:recipeId', (req, res, next) => {
   }
 
   db.query(sql, params)
-    .then(result => res.json(result.rows[0]))
+    .then(result => {
+      if (!result.rows[0]) {
+        throw new ClientError('This recipeId does not exist', 400);
+      } else {
+        res.json(result.rows[0]);
+      }
+    })
     .catch(err => next(err));
 });
 
-const checkIngredients = (database, ingredient) => {
-  for (let i = 0; i < database.rows.length; i++) {
-    if (database.rows[i].name === ingredient) {
-      return { ingredient: database.rows[i].name, ingredientId: database.rows[i].ingredientId };
-    }
-  }
-};
-
-const checkIngredientId = (database, ingredientId) => {
-  for (let i = 0; i < database.rows.length; i++) {
-    if (database.rows[i].ingredientId === ingredientId) {
-      return { userId: database.rows[i].userId, ingredientId: ingredientId };
-    }
-  }
-};
-
 app.post('/api/ingredients', (req, res, next) => {
-  const ingredient = req.body.name;
-  const params = [ingredient];
-  const sql = `insert into "ingredients" ("ingredientId", "name")
-                values (default, $1)
-                returning "ingredientId";`;
-  db.query(`select *
-              from "ingredients";`)
-    .then(response => {
-      return checkIngredients(response, ingredient);
-    })
-    .then(data => {
-      if (data === undefined) {
-        return db.query(sql, params)
-          .then(response => response.rows[0])
-          .catch(err => next(err));
-      } else {
-        return db.query(`select *
-                          from "userIngredients";`)
-          .then(response => checkIngredientId(response, data.ingredientId))
-          .then(result => {
-            if (result === undefined) {
-              return db.query(`insert into "userIngredients"("userId", "ingredientId")
-                             values (1, $1)
-                             returning *`, [data.ingredientId]);
-            }
-          })
-          .catch(err => next(err));
+  const checkIngredients = (database, ingredient) => {
+    for (let i = 0; i < database.rows.length; i++) {
+      if (database.rows[i].name === ingredient) {
+        return {
+          name: database.rows[i].name,
+          ingredientId: database.rows[i].ingredientId
+        };
       }
+    }
+    const sql = `
+      insert into "ingredients" ("ingredientId", "name")
+      values (default, $1)
+      returning *;
+      `;
+    const value = [ingredient];
+    return db.query(sql, value)
+      .then(result => {
+        const newIngredient = result.rows[0];
+        return newIngredient;
+      });
+  };
+  const ingredient = req.body.name;
+  const sql = `
+    select *
+    from "ingredients";
+  `;
+  db.query(sql)
+    .then(allIngredients => {
+      return checkIngredients(allIngredients, ingredient);
     })
-    .then(result => {
-      if (!result) {
-        return res.status(400).send({ message: 'The ingredient you are trying to add already exists!' });
+    .then(ingredientResult => {
+      const { ingredientId } = ingredientResult;
+
+      const sql = `
+        insert into "userIngredients" ("userId", "ingredientId")
+        values (1, $1)
+        on conflict ("userId","ingredientId") do nothing
+        returning *;
+      `;
+      const values = [ingredientId];
+
+      return db.query(sql, values)
+        .then(addUserIngredientResult => {
+          return addUserIngredientResult.rows[0];
+        });
+    })
+    .then(newIngredient => {
+      if (!newIngredient) {
+        return res.status(400).send({
+          message: 'The ingredient you are trying to add already exists!'
+        });
       } else {
-        return res.status(201).send({ ingredientId: result.ingredientId, name: ingredient, userId: 1 });
-        // return db.query(`select "userIngredients"("userId", "ingredientId")
-        //                 values (1, $1)
-        //                 returning *`, [result.rows[0].ingredientId])
-        //   .then(response => res.status(201).send({ ingredientId: result.ingredientId, name: ingredient, userId: 1 })
-        //   );
+        const { userId, ingredientId } = newIngredient;
+        return res.status(201).send({
+          ingredientId: ingredientId,
+          name: ingredient,
+          userId: userId
+        });
       }
     });
 });

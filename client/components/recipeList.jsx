@@ -16,7 +16,7 @@ export default class RecipeList extends React.Component {
   }
 
   getRecipes() {
-    fetch('/api/recipes/')
+    fetch('/api/availableRecipes')
       .then(res => res.json())
       .then(recipes => this.setState({
         recipes: recipes
