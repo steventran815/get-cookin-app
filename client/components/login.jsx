@@ -4,6 +4,7 @@ export default class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      value: '',
       users: []
     };
   }
@@ -21,8 +22,20 @@ export default class Login extends React.Component {
   }
 
   render() {
+    const { users } = this.state;
+    const options = users.map(user => {
+      return (
+        <option key={user.userId} value={user.userName}>{user.userName}</option>
+      );
+    });
+
     return (
-      <h1>Hello World</h1>
+      <form action="">
+        <select className="form-control">
+          <option>Select User</option>
+          {options}
+        </select>
+      </form>
     );
   }
 }
