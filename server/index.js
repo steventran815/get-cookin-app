@@ -284,6 +284,19 @@ app.get('/api/favoriteRecipes', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.get('/api/users', (req, res, next) => {
+  const sql = `
+    select *
+    from "users"
+  `;
+  db.query(sql)
+    .then(result => {
+      const users = result.rows;
+      res.status(200).json(users);
+    })
+    .catch(err => next(err));
+});
+
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));
 });
