@@ -22,7 +22,7 @@ export default class RecipeListItem extends React.Component {
           </center>
           <div className="recipeFooter">
             <h2><span className="prepTime">Prep Time: {recipePrepTime}</span></h2>
-            <div><span className="favoriteIcon"> <i className="fa fa-heart"></i> </span></div>
+            <div><span className="favoriteIcon"><i className="fa fa-heart"></i></span></div>
           </div>
           <hr className="recipeDivider"></hr>
         </div>

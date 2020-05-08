@@ -267,7 +267,6 @@ app.get('/api/favoriteRecipes', (req, res, next) => {
     FROM "favoriteRecipes"
     JOIN "recipes" as "r" using ("recipeId");
   `;
-
   db.query(sql)
     .then(favRecipes => {
       if (!favRecipes.rows[0]) {
