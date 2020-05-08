@@ -72,7 +72,7 @@ footer{
   position:fixed;
   bottom:0px;
   width:100%;
-  z-index:2;
+  z-index:100;
 }
 
 .footerIcon{
@@ -97,7 +97,7 @@ footer{
   text-align:center;
   background-color:#C5C5C5;
   opacity:.85;
-  margin:0 1rem 1rem 1rem;
+  margin:1rem 1rem 1rem 1rem;
 }
 
 .prepTime{
@@ -345,4 +345,40 @@ footer{
   padding:10px;
   width:100%;
   border:none;
+}
+
+.searchRecipeTitle{
+  font-size:1.15rem;
+  font-weight:400;
+}
+.searchRecipeImage{
+  max-height:50px;
+  width:50px;
+  object-fit:cover;
+  display:inline-block;
+}
+
+.searchLeftContent{
+  display:inline-block
+}
+
+.searchItem{
+  display:flex;
+  justify-content:space-between;
+  align-items: center;
+  padding:0% 5%;
+}
+
+.searchLeft{
+  display:flex;
+  align-items:center;
+}
+
+.searchPrepTime{
+    color: #FF5758;
+  font-weight:400;
+  font-size:1rem;
+}
+.searchLink{
+  color:#444444;
 }

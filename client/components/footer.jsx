@@ -22,10 +22,10 @@ export default class Footer extends React.Component {
         <Link to='/fridgeList'>
           <img className="footerIcon" src="/images/fridgeIcon.png" />
         </Link>
-        <Link to='search'>
+        <Link to='/search'>
           <img className="footerIcon" src="/images/searchIcon.png" />
         </Link>
-        <Link to='shoppingList'>
+        <Link to='/shoppingList'>
           <img className="footerIcon" src="/images/shoppingListIcon.png" />
         </Link>
       </footer>
