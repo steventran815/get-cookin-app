@@ -129,6 +129,7 @@ app.get('/api/recipes/:recipeId', (req, res, next) => {
     "ring"."recipeId",
     "ring"."recipeTitle",
     "ring"."recipeImage",
+    "ring"."recipePrepTime",
     "ring"."ingredients" as "recipeIngredients",
     "rins"."instructions" as "recipeInstructions"
     FROM "recipeIngredients" as "ring"
@@ -155,29 +156,28 @@ app.get('/api/recipes/:recipeId', (req, res, next) => {
     .catch(err => next(err));
 });
 
-const checkIngredients = (database, ingredient) => {
-  for (let i = 0; i < database.rows.length; i++) {
-    if (database.rows[i].name === ingredient) {
-      return {
-        name: database.rows[i].name,
-        ingredientId: database.rows[i].ingredientId
-      };
-    }
-  }
-  const sql = `
-    insert into "ingredients" ("ingredientId", "name")
-    values (default, $1)
-    returning *;
-    `;
-  const value = [ingredient];
-  return db.query(sql, value)
-    .then(result => {
-      const newIngredient = result.rows[0];
-      return newIngredient;
-    });
-};
-
 app.post('/api/ingredients', (req, res, next) => {
+  const checkIngredients = (database, ingredient) => {
+    for (let i = 0; i < database.rows.length; i++) {
+      if (database.rows[i].name === ingredient) {
+        return {
+          name: database.rows[i].name,
+          ingredientId: database.rows[i].ingredientId
+        };
+      }
+    }
+    const sql = `
+      insert into "ingredients" ("ingredientId", "name")
+      values (default, $1)
+      returning *;
+      `;
+    const value = [ingredient];
+    return db.query(sql, value)
+      .then(result => {
+        const newIngredient = result.rows[0];
+        return newIngredient;
+      });
+  };
   const ingredient = req.body.name;
   const sql = `
     select *
