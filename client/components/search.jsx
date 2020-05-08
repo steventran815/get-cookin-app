@@ -1,10 +1,41 @@
 import React from 'react';
+import SearchListItem from './searchListItem';
 
-export default class Search extends React.Component {
+export default class RecipeList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      recipes: []
+    };
+    this.getRecipes = this.getRecipes.bind(this);
+  }
+
+  componentDidMount() {
+    this.getRecipes();
+  }
+
+  getRecipes() {
+    fetch('/api/recipes/')
+      .then(res => res.json())
+      .then(recipes => this.setState({
+        recipes: recipes
+      }))
+      .catch(err => console.error(err));
+  }
 
   render() {
+    const { recipes } = this.state;
+    const searchList = recipes.map(recipe => {
+      return (
+        <SearchListItem key={recipe.recipeId} recipe={recipe} />
+      );
+    });
+
     return (
-      < h1 className='testing' >SEARCH PAGE</h1 >
+      <div>
+        {searchList}
+        <h5 className="noMoreRecipes">End of Recipes List</h5>
+      </div>
     );
   }
 }

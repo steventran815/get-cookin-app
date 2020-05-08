@@ -8,21 +8,21 @@ export default class RecipeList extends React.Component {
     this.state = {
       recipes: []
     };
-    // this.getRecipes = this.getRecipes.bind(this);
+    this.getRecipes = this.getRecipes.bind(this);
   }
 
-  // componentDidMount() {
-  //   this.getRecipes();
-  // }
+  componentDidMount() {
+    this.getRecipes();
+  }
 
-  // getRecipes() {
-  //   fetch('/api/recipes/')
-  //     .then(res => res.json())
-  //     .then(recipes => this.setState({
-  //       recipes: recipes
-  //     }))
-  //     .catch(err => console.error(err));
-  // }
+  getRecipes() {
+    fetch('/api/recipes/')
+      .then(res => res.json())
+      .then(recipes => this.setState({
+        recipes: recipes
+      }))
+      .catch(err => console.error(err));
+  }
 
   render() {
     const { recipes } = this.state;
