@@ -26,13 +26,8 @@ export default class RecipeList extends React.Component {
 
   render() {
     const { recipes } = this.state;
-    const recipesList = recipes.map(recipe => {
-      return (
-        <RecipeListItem key={recipe.recipeId} recipe={recipe} />
-      );
-    });
-
-    if (this.state.recipes.length === 0) {
+    let recipesList = null;
+    if (recipes.error) {
       return (
         <div className="notEnoughIngredientsDiv">
           <div className="notEnoughIngredientsContent">
@@ -46,8 +41,13 @@ export default class RecipeList extends React.Component {
             </Link>
           </div>
         </div>
-
       );
+    } else {
+      recipesList = recipes.map(recipe => {
+        return (
+          <RecipeListItem key={recipe.recipeId} recipe={recipe} />
+        );
+      });
     }
     return (
       <div>
