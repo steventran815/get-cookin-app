@@ -279,6 +279,7 @@ app.get('/api/favoriteRecipes', (req, res, next) => {
     .catch(err => next(err));
 });
 
+
 app.post('/api/favoriteRecipes', (req, res, next) => {
   const sql = `
     INSERT INTO "favoriteRecipes"("userId", "recipeId")
@@ -290,7 +291,22 @@ app.post('/api/favoriteRecipes', (req, res, next) => {
   db.query(sql, params)
     .then(newFav => {
       res.json(newFav.rows[0]);
-    });
+    })    
+    .catch(err => next(err));
+});
+
+
+app.get('/api/users', (req, res, next) => {
+  const sql = `
+    select *
+    from "users"
+  `;
+  db.query(sql)
+    .then(result => {
+      const users = result.rows;
+      res.status(200).json(users);
+    })
+    .catch(err => next(err));
 });
 
 app.use('/api', (req, res, next) => {
