@@ -32,8 +32,8 @@ export default class Login extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     const { selectedId } = this.state;
-    // eslint-disable-next-line no-console
-    console.log(selectedId);
+    const { onLogin } = this.props;
+    onLogin(selectedId);
   }
 
   render() {

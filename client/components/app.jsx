@@ -23,15 +23,22 @@ export default class App extends React.Component {
         userName: ''
       }
     };
+    this.onLogin = this.onLogin.bind(this);
+  }
+
+  onLogin(userId) {
+    // eslint-disable-next-line no-console
+    console.log('testing', userId);
   }
 
   render() {
     if (this.state.login) {
-      return <Login/>;
+      return <Login onLogin={this.onLogin}/>;
     } else {
       return (
         <Router>
           <Header />
+          <Route path="/login" component={Login} />
           <Route path="/recipeList" exact component={RecipeList}/>
           <Route path="/recipeList/:id" component={RecipeDetails} />
           <Route path="/fridgeList" component={FridgeList} />
