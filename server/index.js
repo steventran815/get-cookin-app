@@ -64,6 +64,7 @@ app.get('/api/recipes', (req, res, next) => {
       "ring"."recipeId",
       "ring"."recipeTitle",
       "ring"."recipeImage",
+      "ring"."recipePrepTime",
       "ring"."ingredients" as "recipeIngredients",
       "rins"."instructions" as "recipeInstructions"
     FROM "recipeIngredients" as "ring"
