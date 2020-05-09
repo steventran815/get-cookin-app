@@ -297,6 +297,24 @@ app.get('/api/users', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.get('/api/users/:userId', (req, res, next) => {
+  const { userId } = req.params;
+
+  const sql = `
+    select *
+    from "users"
+    where "userId" = $1;
+  `;
+  const values = [userId];
+
+  db.query(sql, values)
+    .then(result => {
+      const user = result.rows[0];
+      // eslint-disable-next-line no-console
+      console.log(user);
+    });
+});
+
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));
 });
