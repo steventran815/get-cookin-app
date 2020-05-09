@@ -7,6 +7,8 @@ export default class Login extends React.Component {
       value: '',
       users: []
     };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -21,21 +23,49 @@ export default class Login extends React.Component {
       }));
   }
 
+  handleChange(event) {
+    this.setState({
+      value: event.target.value
+    });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    // eslint-disable-next-line no-console
+    console.log(this.state.value);
+  }
+
   render() {
     const { users } = this.state;
     const options = users.map(user => {
       return (
-        <option key={user.userId} value={user.userName}>{user.userName}</option>
+        <option key={user.userId} value={user.userId}>{user.userName}</option>
       );
     });
 
     return (
-      <form action="">
-        <select className="form-control">
-          <option>Select User</option>
-          {options}
-        </select>
-      </form>
+      <div className="container d-flex flex-wrap align-items-center">
+        <div className="title w-100 text-center">
+          <div>
+            <img src="/images/getCookinLogoRed.png" alt="get_cookin"/>
+          </div>
+          <h1>
+            Get Cookin&apos;
+          </h1>
+        </div>
+
+        <div className="form-input w-100">
+          <label htmlFor="exampleFormControlSelect1">What&apos;s in your fridge?</label>
+          <form id="usersList" onSubmit={this.handleSubmit}>
+            <select className="form-control" value={this.state.value} onChange={this.handleChange}>
+              <option>Select User</option>
+              {options}
+            </select>
+            <button type="submit" className="btn btn-secondary btn-lg btn-block mt-2">Log In</button>
+          </form>
+        </div>
+
+      </div>
     );
   }
 }
