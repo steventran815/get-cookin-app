@@ -25,6 +25,9 @@ export default class App extends React.Component {
       }
     };
     this.onLogin = this.onLogin.bind(this);
+    this.contextValue = {
+      getUser: this.getUser.bind(this)
+    };
   }
 
   onLogin(userId) {
@@ -36,12 +39,16 @@ export default class App extends React.Component {
       }));
   }
 
+  getUser() {
+    return this.state.user;
+  }
+
   render() {
     if (this.state.login === true) {
       return <Login onLogin={this.onLogin}/>;
     } else {
       return (
-        <AppContext.Provider>
+        <AppContext.Provider value={this.contextValue}>
           <Router>
             <Header />
             <Route path="/login" component={Login} />

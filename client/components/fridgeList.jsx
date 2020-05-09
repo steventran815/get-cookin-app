@@ -1,14 +1,14 @@
 import React from 'react';
 import Ingredient from './ingredient';
+import AppContext from '../lib/context';
 
-export default class RecipeList extends React.Component {
+export default class FridgeList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       newIngredient: '',
       message: null,
-      ingredients: [],
-      newIngredient: ''
+      ingredients: []
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -125,3 +125,5 @@ export default class RecipeList extends React.Component {
     );
   }
 }
+
+FridgeList.contextType = AppContext;
