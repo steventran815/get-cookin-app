@@ -310,9 +310,9 @@ app.get('/api/users/:userId', (req, res, next) => {
   db.query(sql, values)
     .then(result => {
       const user = result.rows[0];
-      // eslint-disable-next-line no-console
-      console.log(user);
-    });
+      res.status(200).json(user);
+    })
+    .catch(err => next(err));
 });
 
 app.use('/api', (req, res, next) => {

@@ -19,7 +19,7 @@ export default class App extends React.Component {
       isLoading: true,
       login: true,
       user: {
-        userId: 1, // hard coded userId to pass as props
+        userId: 1,
         userName: ''
       }
     };
@@ -27,12 +27,16 @@ export default class App extends React.Component {
   }
 
   onLogin(userId) {
-    // eslint-disable-next-line no-console
-    console.log('testing', userId);
+    fetch(`/api/users/${userId}`)
+      .then(res => res.json())
+      .then(user => this.setState({
+        user: user,
+        login: !this.state.login
+      }));
   }
 
   render() {
-    if (this.state.login) {
+    if (this.state.login === true) {
       return <Login onLogin={this.onLogin}/>;
     } else {
       return (
