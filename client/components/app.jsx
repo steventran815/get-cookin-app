@@ -8,6 +8,7 @@ import FavoritesList from './favorites';
 import ShoppingList from './shoppingList';
 import RecipeDetails from './recipeDetails';
 import Login from './login';
+import AppContext from '../lib/context';
 // eslint-disable-next-line no-unused-vars
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
@@ -40,17 +41,19 @@ export default class App extends React.Component {
       return <Login onLogin={this.onLogin}/>;
     } else {
       return (
-        <Router>
-          <Header />
-          <Route path="/login" component={Login} />
-          <Route path="/recipeList" exact component={RecipeList}/>
-          <Route path="/recipeList/:id" component={RecipeDetails} />
-          <Route path="/fridgeList" component={FridgeList} />
-          <Route path="/favoritesList" component={FavoritesList} />
-          <Route path="/search" component={Search} />
-          <Route path="/shoppingList" component={ShoppingList} />
-          <Footer />
-        </Router>
+        <AppContext.Provider>
+          <Router>
+            <Header />
+            <Route path="/login" component={Login} />
+            <Route path="/recipeList" exact component={RecipeList}/>
+            <Route path="/recipeList/:id" component={RecipeDetails} />
+            <Route path="/fridgeList" component={FridgeList} />
+            <Route path="/favoritesList" component={FavoritesList} />
+            <Route path="/search" component={Search} />
+            <Route path="/shoppingList" component={ShoppingList} />
+            <Footer />
+          </Router>
+        </AppContext.Provider>
       );
     }
   }
