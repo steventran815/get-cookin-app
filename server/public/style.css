@@ -382,3 +382,15 @@ footer{
 .searchLink{
   color:#444444;
 }
+
+.searchInputDiv{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:75px;
+  background-color: #FF5758;
+}
+.searchInput{
+  width:90%;
+  margin:25px 0px;
+}
