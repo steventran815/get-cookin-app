@@ -75,7 +75,8 @@ app.get('/api/recipes', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.delete('/api/userIngredients/:ingredientId', (req, res, next) => {
+app.delete('/api/userIngredients/:userId/:ingredientId', (req, res, next) => {
+  const userId = parseInt(req.params.userId);
   const ingredientId = parseInt(req.params.ingredientId);
 
   if (isNaN(ingredientId) || ingredientId < 0) {
@@ -85,12 +86,12 @@ app.delete('/api/userIngredients/:ingredientId', (req, res, next) => {
   // sql query with hard coded value for userId, to be revisited when more there is more than 1 user
   const sql = `
     delete from "userIngredients"
-    where "userId" = 1
-    and "ingredientId" = $1
+    where "userId" = $1
+    and "ingredientId" = $2
     returning *;
   `;
 
-  const values = [ingredientId];
+  const values = [userId, ingredientId];
 
   db.query(sql, values)
     .then(result => {

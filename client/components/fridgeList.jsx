@@ -17,7 +17,8 @@ export default class FridgeList extends React.Component {
   }
 
   componentDidMount() {
-    this.getIngredients(1); // hard coded userID; to be changed in the future with new users
+    const user = this.context.getUser();
+    this.getIngredients(user.userId); // hard coded userID; to be changed in the future with new users
   }
 
   getIngredients(userId) {
@@ -67,10 +68,12 @@ export default class FridgeList extends React.Component {
 
   deleteIngredient(ingredientId) {
     const { ingredients } = this.state;
+    const user = this.context.getUser();
+
     const req = {
       method: 'DELETE'
     };
-    fetch(`/api/userIngredients/${ingredientId}`, req)
+    fetch(`/api/userIngredients/${user.userId}/${ingredientId}`, req)
       .then(() => {
         const filtered = ingredients.filter(ingredient => ingredient.ingredientId !== ingredientId);
         this.setState({

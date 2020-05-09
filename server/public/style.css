@@ -382,3 +382,13 @@ footer{
 .searchLink{
   color:#444444;
 }
+
+.login-background {
+  background-color: #FF5758;
+  height: 100vh;
+}
+
+.page-title {
+  font-family: Anton;
+  color: white;
+}

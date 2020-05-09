@@ -45,28 +45,30 @@ export default class Login extends React.Component {
     });
 
     return (
-      <div className="container d-flex flex-wrap align-items-center">
-        <div className="title w-100 text-center">
-          <div>
-            <img src="/images/getCookinLogoRed.png" alt="get_cookin"/>
-          </div>
-          <h1>
+      <div className="container d-flex flex-wrap align-items-center login-background">
+        <div className="container">
+          <div className="title w-100 text-center">
+            <div>
+              <img src="/images/getCookinLogoWhite.png" alt="get_cookin"/>
+            </div>
+            <h1 className="page-title">
             Get Cookin&apos;
-          </h1>
-        </div>
+            </h1>
+          </div>
 
-        <div className="form-input w-100">
-          <label htmlFor="exampleFormControlSelect1">What&apos;s in your fridge?</label>
-          <form id="usersList" onSubmit={this.handleSubmit}>
-            <select
-              className="form-control"
-              value={this.state.value}
-              onChange={this.handleChange}>
-              <option>Select User</option>
-              {options}
-            </select>
-            <button type="submit" className="btn btn-secondary btn-block mt-2">Log In</button>
-          </form>
+          <div className="form-input w-100">
+            <label htmlFor="exampleFormControlSelect1">What&apos;s in your fridge?</label>
+            <form id="usersList" onSubmit={this.handleSubmit}>
+              <select
+                className="form-control"
+                value={this.state.value}
+                onChange={this.handleChange}>
+                <option>Select User</option>
+                {options}
+              </select>
+              <button type="submit" className="btn btn-secondary btn-block mt-2">Log In</button>
+            </form>
+          </div>
         </div>
 
       </div>

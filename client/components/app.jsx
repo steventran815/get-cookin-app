@@ -20,7 +20,7 @@ export default class App extends React.Component {
       isLoading: true,
       login: true,
       user: {
-        userId: 1,
+        userId: null,
         userName: ''
       }
     };
