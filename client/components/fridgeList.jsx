@@ -30,8 +30,8 @@ export default class FridgeList extends React.Component {
       .catch(err => console.error(err));
   }
 
-  addIngredients(newIngredient) {
-    fetch('/api/ingredients', {
+  addIngredients(newIngredient, userId) {
+    fetch(`/api/ingredients/${userId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -57,11 +57,12 @@ export default class FridgeList extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    const user = this.context.getUser();
     const newIngredient = {
       name: this.state.newIngredient.toLowerCase(),
       newIngredient: ''
     };
-    this.addIngredients(newIngredient);
+    this.addIngredients(newIngredient, user.userId);
     document.getElementById('addIngredient').value = '';
 
   }

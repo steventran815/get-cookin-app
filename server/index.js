@@ -157,7 +157,7 @@ app.get('/api/recipes/:recipeId', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.post('/api/ingredients', (req, res, next) => {
+app.post('/api/ingredients/:userId', (req, res, next) => {
   const checkIngredients = (database, ingredient) => {
     for (let i = 0; i < database.rows.length; i++) {
       if (database.rows[i].name === ingredient) {
@@ -179,11 +179,15 @@ app.post('/api/ingredients', (req, res, next) => {
         return newIngredient;
       });
   };
+
   const ingredient = req.body.name;
+  const userId = req.params.userId;
+
   const sql = `
     select *
     from "ingredients";
   `;
+
   db.query(sql)
     .then(allIngredients => {
       return checkIngredients(allIngredients, ingredient);
@@ -193,11 +197,11 @@ app.post('/api/ingredients', (req, res, next) => {
 
       const sql = `
         insert into "userIngredients" ("userId", "ingredientId")
-        values (1, $1)
+        values ($1, $2)
         on conflict ("userId","ingredientId") do nothing
         returning *;
       `;
-      const values = [ingredientId];
+      const values = [userId, ingredientId];
 
       return db.query(sql, values)
         .then(addUserIngredientResult => {
