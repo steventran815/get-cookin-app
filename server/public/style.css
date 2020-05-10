@@ -392,3 +392,8 @@ footer{
   font-family: Anton;
   color: white;
 }
+
+.select-label {
+  font-family: roboto;
+  color: white;
+}

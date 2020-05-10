@@ -13,7 +13,6 @@ app.use(sessionMiddleware);
 
 app.use(express.json());
 
-// GET Endpoint for view user's fridge/ingredients
 app.get('/api/userIngredients/:userId', (req, res, next) => {
   const userId = parseInt(req.params.userId);
 
@@ -83,7 +82,6 @@ app.delete('/api/userIngredients/:userId/:ingredientId', (req, res, next) => {
     return next(new ClientError('"ingredientId" must be a positive integer', 400));
   }
 
-  // sql query with hard coded value for userId, to be revisited when more there is more than 1 user
   const sql = `
     delete from "userIngredients"
     where "userId" = $1
@@ -303,7 +301,11 @@ app.get('/api/users', (req, res, next) => {
 });
 
 app.get('/api/users/:userId', (req, res, next) => {
-  const { userId } = req.params;
+  const userId = parseInt(req.params.userId);
+
+  if (isNaN(userId) || userId < 0) {
+    return next(new ClientError('"userId" must be a positive integer', 400));
+  }
 
   const sql = `
     select *
@@ -315,7 +317,11 @@ app.get('/api/users/:userId', (req, res, next) => {
   db.query(sql, values)
     .then(result => {
       const user = result.rows[0];
-      res.status(200).json(user);
+      if (!user) {
+        throw new ClientError('userId does not exist', 404);
+      } else {
+        res.status(200).json(user);
+      }
     })
     .catch(err => next(err));
 });

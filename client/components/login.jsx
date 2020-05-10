@@ -57,7 +57,7 @@ export default class Login extends React.Component {
           </div>
 
           <div className="form-input w-100">
-            <label htmlFor="exampleFormControlSelect1">What&apos;s in your fridge?</label>
+            <label className="select-label">What&apos;s in your fridge?</label>
             <form id="usersList" onSubmit={this.handleSubmit}>
               <select
                 className="form-control"
