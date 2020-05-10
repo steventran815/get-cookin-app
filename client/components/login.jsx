@@ -45,7 +45,7 @@ export default class Login extends React.Component {
     });
 
     return (
-      <div className="container d-flex flex-wrap align-items-center login-background">
+      <div className="d-flex align-items-center login-background">
         <div className="container">
           <div className="title w-100 text-center">
             <div>
