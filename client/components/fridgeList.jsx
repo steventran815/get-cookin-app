@@ -110,6 +110,7 @@ export default class FridgeList extends React.Component {
           </div>
           : <div className="input-group my-3 px-2">
             <input
+              required
               id="addIngredient"
               className="form-control add-input"
               type="text"

@@ -1,5 +1,6 @@
 import React from 'react';
 import RecipeListItem from './recipeListItem';
+import AppContext from '../lib/context';
 import { Link } from 'react-router-dom';
 
 export default class RecipeList extends React.Component {
@@ -12,11 +13,12 @@ export default class RecipeList extends React.Component {
   }
 
   componentDidMount() {
-    this.getRecipes();
+    const user = this.context.getUser();
+    this.getRecipes(user.userId);
   }
 
-  getRecipes() {
-    fetch('/api/availableRecipes')
+  getRecipes(userId) {
+    fetch(`/api/availableRecipes/${userId}`)
       .then(res => res.json())
       .then(recipes => this.setState({
         recipes: recipes
@@ -57,3 +59,5 @@ export default class RecipeList extends React.Component {
     );
   }
 }
+
+RecipeList.contextType = AppContext;

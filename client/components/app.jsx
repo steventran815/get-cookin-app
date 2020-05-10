@@ -31,6 +31,7 @@ export default class App extends React.Component {
   }
 
   onLogin(userId) {
+    if (!userId) return;
     fetch(`/api/users/${userId}`)
       .then(res => res.json())
       .then(user => this.setState({
