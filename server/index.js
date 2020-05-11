@@ -63,6 +63,7 @@ app.get('/api/recipes', (req, res, next) => {
       "ring"."recipeId",
       "ring"."recipeTitle",
       "ring"."recipeImage",
+      "ring"."recipePrepTime",
       "ring"."ingredients" as "recipeIngredients",
       "rins"."instructions" as "recipeInstructions"
     FROM "recipeIngredients" as "ring"
@@ -149,7 +150,7 @@ app.get('/api/recipes/:recipeId', (req, res, next) => {
       if (!result.rows[0]) {
         throw new ClientError('This recipeId does not exist', 400);
       } else {
-        res.json(result.rows[0]);
+        res.status(200).json(result.rows[0]);
       }
     })
     .catch(err => next(err));
@@ -265,39 +266,50 @@ app.get('/api/availableRecipes/:userId', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.get('/api/favoriteRecipes', (req, res, next) => {
-  const sql = `
+app.route('/api/favoriteRecipes')
+  .get((req, res, next) => {
+    const sql = `
     SELECT
-      "fr"."userId",
-      "r".*,
-      json_agg("i"."name") as "ingredients"
-    FROM "favoriteRecipes" as "fr"
-    JOIN "recipes" as "r" using ("recipeId")
-    JOIN "recipeIngredients" as "ring" using ("recipeId")
-    JOIN "ingredients" as "i" using ("ingredientId")
-    GROUP BY "fr"."userId", "r"."recipeId";
+      "r".*
+    FROM "favoriteRecipes"
+    JOIN "recipes" as "r" using ("recipeId");
   `;
 
-  db.query(sql)
-    .then(favRecipes => {
-      if (!favRecipes.rows[0]) {
-        throw new ClientError('There are no recipes in your favorites list!', 404);
-      } else {
-        res.json(favRecipes.rows[0]);
-      }
-    })
-    .catch(err => next(err));
-});
+    db.query(sql)
+      .then(favRecipes => {
+        if (!favRecipes.rows[0]) {
+          throw new ClientError('There are no recipes in your favorites list!', 404);
+        } else {
+          res.status(200).json(favRecipes.rows);
+        }
+      })
+      .catch(err => next(err));
+  })
+  .post((req, res, next) => {
+    const sql = `
+    INSERT INTO "favoriteRecipes"("userId", "recipeId")
+    VALUES (1, $1)
+    RETURNING *;
+  `;
+    const params = [req.body.recipe];
 
-app.get('/api/users', (req, res, next) => {
+    db.query(sql, params)
+      .then(newFav => {
+        res.status(201).json(newFav.rows[0]);
+      })
+      .catch(err => next(err));
+  });
+
+app.delete('/api/favoriteRecipes/:recipeId', (req, res, next) => {
   const sql = `
-    select *
-    from "users"
+    DELETE FROM "favoriteRecipes"
+    WHERE "recipeId" = $1;
   `;
-  db.query(sql)
+  const params = [req.params.recipeId];
+
+  db.query(sql, params)
     .then(result => {
-      const users = result.rows;
-      res.status(200).json(users);
+      res.status(204).json(result);
     })
     .catch(err => next(err));
 });

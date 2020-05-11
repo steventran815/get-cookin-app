@@ -58,6 +58,10 @@ header{
    height:35px;
    background-color:white;
    border-radius:100%;
+   border:3px solid white;
+   background:url('images/uzairShieldPP.png');
+   background-position:center;
+   object-fit:scale-down;
 }
 
 .testing{
@@ -72,7 +76,7 @@ footer{
   position:fixed;
   bottom:0px;
   width:100%;
-  z-index:100;
+  z-index:2;
 }
 
 .footerIcon{
@@ -96,7 +100,7 @@ footer{
 .recipeDivider{
   text-align:center;
   background-color:#C5C5C5;
-  opacity:.85;
+  opacity:.65;
   margin:1rem 1rem 1rem 1rem;
 }
 
@@ -227,15 +231,15 @@ footer{
   justify-content:center;
 }
 .doneCookingButton{
-  margin:10px;
+  border:none;
+  flex-basis:90%;
+  margin:10px 5%;
   background-color:#30B6BE;
   color:white;
   font-family:oswald;
-  letter-spacing:0px;
   font-weight:600;
   font-size:1.25rem;
   padding:12px;
-  width:80%;
 }
 
 .closeButton{
@@ -379,9 +383,11 @@ footer{
   font-weight:400;
   font-size:1rem;
 }
+
 .searchLink{
   color:#444444;
 }
+
 
 .login-background {
   background-color: #FF5758;
@@ -396,4 +402,85 @@ footer{
 .select-label {
   font-family: roboto;
   color: white;
+}
+
+.searchInputDiv{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:75px;
+  background-color: #FF5758;
+}
+
+.searchInput{
+  width:90%;
+  margin:25px 0px;
+  border:none;
+}
+
+.hamburgerOpacity{
+  width: 100%;
+  height: 100%;
+  position:fixed;
+  z-index:100;
+  top:0;
+  bottom:0;
+  right:0;
+  left:0;
+  margin: 0;
+  padding: 0;
+  background-color:rgba(0, 0, 0, 0.7);
+}
+
+.hamburgerMenu{
+  width:250px;
+  background-color:#FF5758;
+  height:100%;
+  z-index:200;
+  padding-top:15%;
+  height:100%;
+}
+
+.hamburgerMenuDiv{
+  width: 250px;
+  height: 100%;
+  position:fixed;
+  z-index:100;
+  top:0;
+  bottom:0;
+  right:0;
+  left:0;
+  margin: 0;
+  padding: 0;
+}
+
+.logoutDiv{
+  position:absolute;
+  bottom:0;
+  font-family:oswald;
+  font-weight:500;
+  text-align:left;
+  background-color:#30B6BE;
+  width:250px;
+}
+
+.logoutButton{
+  font-family:oswald;
+  font-size:1.5rem;
+  color:white;
+  width:100%;
+  margin:0px;
+  padding:25px 15%;
+}
+.headerList > li{
+  color:white;
+  font-family:oswald;
+  font-size:1.5rem;
+  line-height:2rem;
+  margin: 2.5% 15%;
+  list-style:none;
+}
+
+.headerList{
+  padding:0px;
 }
