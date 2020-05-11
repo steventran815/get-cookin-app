@@ -5,7 +5,10 @@ export default class Login extends React.Component {
     super(props);
     this.state = {
       selectedId: null,
-      users: []
+      users: [],
+      view: {
+        name: ''
+      }
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
