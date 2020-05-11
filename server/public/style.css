@@ -290,12 +290,12 @@ footer{
 }
 
 .getCookinImage{
-  height:125px;
+  height:175px;
   margin:25px;
 }
 
 .doneCookingButton{
-  margin:10px;
+  margin:10px 10px 25px;
   background-color:#30B6BE;
   color:white;
   font-family:oswald;

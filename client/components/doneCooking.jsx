@@ -11,7 +11,7 @@ export default class DoneCooking extends React.Component {
             <h3 className="bonApetit">Bon Apétit!</h3>
             <p className="doneCookingText">Don&apos;t forget to update your fridge!</p>
             <div className="getCookinImageDiv">
-              <img className="getCookinImage"src="/images/getCookinFridgeHappy.png"/>
+              <img className="getCookinImage"src="/images/getCookinFridgeHappy.gif"/>
             </div>
             <Link to='/fridgeList'>
               <button className="doneCookingButton">GO TO FRIDGE</button>
