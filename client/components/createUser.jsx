@@ -4,15 +4,37 @@ export default class CreateUser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      newUser: ''
+      userName: ''
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange() {
     this.setState({
-      newUser: event.target.value
+      userName: event.target.value
     });
+  }
+
+  handleSubmit() {
+    event.preventDefault();
+    const { userName } = this.state;
+    const newUser = {
+      userName: userName
+    };
+    const req =
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/JSON'
+      },
+      body: JSON.stringify(newUser)
+    };
+    fetch('/api/newUser', req)
+      .then(res => res.json())
+      .then(data => {
+        this.props.setView('login');
+      });
   }
 
   render() {
@@ -21,20 +43,19 @@ export default class CreateUser extends React.Component {
         <div className="container">
           <div className="form-input">
             <label className="select-label">Create a new username</label>
-            <form id="usersList">
+            <form id="usersList" onSubmit={this.handleSubmit} onReset={() => this.props.setView('login')}>
               <input
                 required
-                id="addIngredient"
+                id="addUser"
                 className="form-control"
                 type="text"
-                onChange={this.handleChange}
-                maxLength="20" />
-              <button type="submit" className="btn btn-dark btn-block mt-2">Log In</button>
+                onChange={this.handleChange}/>
+              <button type="submit" className="btn btn-dark btn-block mt-2">Create User</button>
+              <button type="reset" className="btn btn-dark btn-block mt-2">Cancel</button>
             </form>
           </div>
         </div>
       </div>
     );
   }
-
 }

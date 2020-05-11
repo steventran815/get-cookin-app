@@ -8,11 +8,12 @@ export default class Login extends React.Component {
       selectedId: null,
       users: [],
       view: {
-        name: 'create'
+        name: 'login'
       }
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.setView = this.setView.bind(this);
   }
 
   componentDidMount() {
@@ -48,6 +49,14 @@ export default class Login extends React.Component {
     });
   }
 
+  resetLogin() {
+    this.setState({
+      view: {
+        name: 'login'
+      }
+    });
+  }
+
   render() {
     const { users, view } = this.state;
     const options = users.map(user => {
@@ -56,7 +65,7 @@ export default class Login extends React.Component {
       );
     });
 
-    if (view.name === 'create') return <CreateUser/>;
+    if (view.name === 'create') return <CreateUser createNewUser={this.createNewUser} setView={this.setView}/>;
 
     return (
       <div className="d-flex align-items-center login-background">
@@ -84,7 +93,7 @@ export default class Login extends React.Component {
             </form>
           </div>
           <p className="text-center pt-3">- or -</p>
-          <button type="click" className="btn btn-secondary btn-block mt-2">Create New User</button>
+          <button type="click" className="btn btn-secondary btn-block mt-2" onClick={() => this.setView('create')}>Create New User</button>
         </div>
 
       </div>
