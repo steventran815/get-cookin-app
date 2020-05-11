@@ -69,6 +69,8 @@ export default class Login extends React.Component {
               <button type="submit" className="btn btn-secondary btn-block mt-2">Log In</button>
             </form>
           </div>
+          <p className="text-center pt-3">- or -</p>
+          <button type="click" className="btn btn-secondary btn-block mt-2">Create New User</button>
         </div>
 
       </div>
