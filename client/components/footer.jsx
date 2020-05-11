@@ -25,7 +25,7 @@ export default class Footer extends React.Component {
         <Link to='/search'>
           <img className="footerIcon" src="/images/searchIcon.png" />
         </Link>
-        <Link to='/shoppingList'>
+        <Link to='/addARecipe'>
           <img className="footerIcon" src="/images/shoppingListIcon.png" />
         </Link>
       </footer>
