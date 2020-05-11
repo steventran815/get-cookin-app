@@ -5,7 +5,7 @@ import RecipeList from './recipeList';
 import FridgeList from './fridgeList';
 import Search from './search';
 import FavoritesList from './favorites';
-import ShoppingList from './shoppingList';
+import AddARecipe from './addARecipe';
 import RecipeDetails from './recipeDetails';
 import Login from './login';
 import AppContext from '../lib/context';
@@ -58,7 +58,7 @@ export default class App extends React.Component {
             <Route path="/fridgeList" component={FridgeList} />
             <Route path="/favoritesList" component={FavoritesList} />
             <Route path="/search" component={Search} />
-            <Route path="/shoppingList" component={ShoppingList} />
+            <Route path="/addARecipe" component={AddARecipe} />
             <Footer />
           </Router>
         </AppContext.Provider>
