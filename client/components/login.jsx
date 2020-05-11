@@ -1,4 +1,5 @@
 import React from 'react';
+import CreateUser from './createUser';
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -7,7 +8,7 @@ export default class Login extends React.Component {
       selectedId: null,
       users: [],
       view: {
-        name: ''
+        name: 'create'
       }
     };
     this.handleChange = this.handleChange.bind(this);
@@ -40,12 +41,14 @@ export default class Login extends React.Component {
   }
 
   render() {
-    const { users } = this.state;
+    const { users, view } = this.state;
     const options = users.map(user => {
       return (
         <option key={user.userId} value={user.userId}>{user.userName}</option>
       );
     });
+
+    if (view.name === 'create') return <CreateUser/>;
 
     return (
       <div className="d-flex align-items-center login-background">
