@@ -40,6 +40,14 @@ export default class Login extends React.Component {
     onLogin(selectedId);
   }
 
+  setView(name) {
+    this.setState({
+      view: {
+        name: name
+      }
+    });
+  }
+
   render() {
     const { users, view } = this.state;
     const options = users.map(user => {
