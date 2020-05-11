@@ -1,14 +1,14 @@
 import React from 'react';
 import Ingredient from './ingredient';
+import AppContext from '../lib/context';
 
-export default class RecipeList extends React.Component {
+export default class FridgeList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       newIngredient: '',
       message: null,
-      ingredients: [],
-      newIngredient: ''
+      ingredients: []
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -17,7 +17,8 @@ export default class RecipeList extends React.Component {
   }
 
   componentDidMount() {
-    this.getIngredients(1); // hard coded userID; to be changed in the future with new users
+    const user = this.context.getUser();
+    this.getIngredients(user.userId); // hard coded userID; to be changed in the future with new users
   }
 
   getIngredients(userId) {
@@ -29,8 +30,8 @@ export default class RecipeList extends React.Component {
       .catch(err => console.error(err));
   }
 
-  addIngredients(newIngredient) {
-    fetch('/api/ingredients', {
+  addIngredients(newIngredient, userId) {
+    fetch(`/api/ingredients/${userId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -56,21 +57,24 @@ export default class RecipeList extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    const user = this.context.getUser();
     const newIngredient = {
       name: this.state.newIngredient.toLowerCase(),
       newIngredient: ''
     };
-    this.addIngredients(newIngredient);
+    this.addIngredients(newIngredient, user.userId);
     document.getElementById('addIngredient').value = '';
 
   }
 
   deleteIngredient(ingredientId) {
     const { ingredients } = this.state;
+    const user = this.context.getUser();
+
     const req = {
       method: 'DELETE'
     };
-    fetch(`/api/userIngredients/${ingredientId}`, req)
+    fetch(`/api/userIngredients/${user.userId}/${ingredientId}`, req)
       .then(() => {
         const filtered = ingredients.filter(ingredient => ingredient.ingredientId !== ingredientId);
         this.setState({
@@ -106,6 +110,7 @@ export default class RecipeList extends React.Component {
           </div>
           : <div className="input-group my-3 px-2">
             <input
+              required
               id="addIngredient"
               className="form-control add-input"
               type="text"
@@ -125,3 +130,5 @@ export default class RecipeList extends React.Component {
     );
   }
 }
+
+FridgeList.contextType = AppContext;

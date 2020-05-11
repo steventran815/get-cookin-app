@@ -388,6 +388,22 @@ footer{
   color:#444444;
 }
 
+
+.login-background {
+  background-color: #FF5758;
+  height: 100vh;
+}
+
+.page-title {
+  font-family: Anton;
+  color: white;
+}
+
+.select-label {
+  font-family: roboto;
+  color: white;
+}
+
 .searchInputDiv{
   display:flex;
   justify-content:center;
@@ -464,9 +480,6 @@ footer{
   margin: 2.5% 15%;
   list-style:none;
 }
-
-
-
 
 .headerList{
   padding:0px;

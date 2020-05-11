@@ -7,6 +7,8 @@ import Search from './search';
 import FavoritesList from './favorites';
 import ShoppingList from './shoppingList';
 import RecipeDetails from './recipeDetails';
+import Login from './login';
+import AppContext from '../lib/context';
 // eslint-disable-next-line no-unused-vars
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
@@ -16,25 +18,51 @@ export default class App extends React.Component {
     this.state = {
       message: null,
       isLoading: true,
+      login: true,
       user: {
-        userId: 1, // hard coded userId to pass as props
+        userId: null,
         userName: ''
       }
     };
+    this.onLogin = this.onLogin.bind(this);
+    this.contextValue = {
+      getUser: this.getUser.bind(this)
+    };
+  }
+
+  onLogin(userId) {
+    if (!userId) return;
+    fetch(`/api/users/${userId}`)
+      .then(res => res.json())
+      .then(user => this.setState({
+        user: user,
+        login: !this.state.login
+      }));
+  }
+
+  getUser() {
+    return this.state.user;
   }
 
   render() {
-    return (
-      <Router>
-        <Header />
-        <Route path="/recipeList" exact component={RecipeList}/>
-        <Route path="/recipeList/:id" component={RecipeDetails} />
-        <Route path="/fridgeList" component={FridgeList} />
-        <Route path="/favoritesList" component={FavoritesList} />
-        <Route path="/search" component={Search} />
-        <Route path="/shoppingList" component={ShoppingList} />
-        <Footer />
-      </Router>
-    );
+    if (this.state.login === true) {
+      return <Login onLogin={this.onLogin}/>;
+    } else {
+      return (
+        <AppContext.Provider value={this.contextValue}>
+          <Router>
+            <Header />
+            <Route path="/login" component={Login} />
+            <Route path="/recipeList" exact component={RecipeList}/>
+            <Route path="/recipeList/:id" component={RecipeDetails} />
+            <Route path="/fridgeList" component={FridgeList} />
+            <Route path="/favoritesList" component={FavoritesList} />
+            <Route path="/search" component={Search} />
+            <Route path="/shoppingList" component={ShoppingList} />
+            <Footer />
+          </Router>
+        </AppContext.Provider>
+      );
+    }
   }
 }

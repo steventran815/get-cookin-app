@@ -13,7 +13,6 @@ app.use(sessionMiddleware);
 
 app.use(express.json());
 
-// GET Endpoint for view user's fridge/ingredients
 app.get('/api/userIngredients/:userId', (req, res, next) => {
   const userId = parseInt(req.params.userId);
 
@@ -76,22 +75,22 @@ app.get('/api/recipes', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.delete('/api/userIngredients/:ingredientId', (req, res, next) => {
+app.delete('/api/userIngredients/:userId/:ingredientId', (req, res, next) => {
+  const userId = parseInt(req.params.userId);
   const ingredientId = parseInt(req.params.ingredientId);
 
   if (isNaN(ingredientId) || ingredientId < 0) {
     return next(new ClientError('"ingredientId" must be a positive integer', 400));
   }
 
-  // sql query with hard coded value for userId, to be revisited when more there is more than 1 user
   const sql = `
     delete from "userIngredients"
-    where "userId" = 1
-    and "ingredientId" = $1
+    where "userId" = $1
+    and "ingredientId" = $2
     returning *;
   `;
 
-  const values = [ingredientId];
+  const values = [userId, ingredientId];
 
   db.query(sql, values)
     .then(result => {
@@ -157,7 +156,7 @@ app.get('/api/recipes/:recipeId', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.post('/api/ingredients', (req, res, next) => {
+app.post('/api/ingredients/:userId', (req, res, next) => {
   const checkIngredients = (database, ingredient) => {
     for (let i = 0; i < database.rows.length; i++) {
       if (database.rows[i].name === ingredient) {
@@ -179,11 +178,15 @@ app.post('/api/ingredients', (req, res, next) => {
         return newIngredient;
       });
   };
+
   const ingredient = req.body.name;
+  const userId = req.params.userId;
+
   const sql = `
     select *
     from "ingredients";
   `;
+
   db.query(sql)
     .then(allIngredients => {
       return checkIngredients(allIngredients, ingredient);
@@ -193,11 +196,11 @@ app.post('/api/ingredients', (req, res, next) => {
 
       const sql = `
         insert into "userIngredients" ("userId", "ingredientId")
-        values (1, $1)
+        values ($1, $2)
         on conflict ("userId","ingredientId") do nothing
         returning *;
       `;
-      const values = [ingredientId];
+      const values = [userId, ingredientId];
 
       return db.query(sql, values)
         .then(addUserIngredientResult => {
@@ -220,7 +223,8 @@ app.post('/api/ingredients', (req, res, next) => {
     });
 });
 
-app.get('/api/availableRecipes', (req, res, next) => {
+app.get('/api/availableRecipes/:userId', (req, res, next) => {
+  const userId = parseInt(req.params.userId);
   const sql = `
     with "ingredientsNeeded" as (
       select "r"."recipeId",
@@ -239,7 +243,7 @@ app.get('/api/availableRecipes', (req, res, next) => {
       from "recipes" as "r"
       join "recipeIngredients" as "ri" using ("recipeId")
       join "userIngredients" as "ui" using ("ingredientId")
-      where "ui"."userId"=1
+      where "ui"."userId" = $1
       group by "r"."recipeId", "ui"."userId"
     )
     select "in"."recipeTitle",
@@ -249,8 +253,9 @@ app.get('/api/availableRecipes', (req, res, next) => {
     from "ingredientsNeeded" as "in"
     join "ingredientsInFridge" as "if" using("recipeId", "ingredientCount");
   `;
+  const values = [userId];
 
-  db.query(sql)
+  db.query(sql, values)
     .then(availableRecipes => {
       if (!availableRecipes.rows[0]) {
         throw new ClientError('There are no recipes available that match the ingredients in your fridge', 404);
@@ -305,6 +310,32 @@ app.delete('/api/favoriteRecipes/:recipeId', (req, res, next) => {
   db.query(sql, params)
     .then(result => {
       res.status(204).json(result);
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/users/:userId', (req, res, next) => {
+  const userId = parseInt(req.params.userId);
+
+  if (isNaN(userId) || userId < 0) {
+    return next(new ClientError('"userId" must be a positive integer', 400));
+  }
+
+  const sql = `
+    select *
+    from "users"
+    where "userId" = $1;
+  `;
+  const values = [userId];
+
+  db.query(sql, values)
+    .then(result => {
+      const user = result.rows[0];
+      if (!user) {
+        throw new ClientError('userId does not exist', 404);
+      } else {
+        res.status(200).json(user);
+      }
     })
     .catch(err => next(err));
 });
