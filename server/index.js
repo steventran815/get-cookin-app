@@ -314,6 +314,19 @@ app.delete('/api/favoriteRecipes/:recipeId', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.get('/api/users', (req, res, next) => {
+  const sql = `
+    select *
+    from "users"
+  `;
+  db.query(sql)
+    .then(result => {
+      const users = result.rows;
+      res.status(200).json(users);
+    })
+    .catch(err => next(err));
+});
+
 app.get('/api/users/:userId', (req, res, next) => {
   const userId = parseInt(req.params.userId);
 
