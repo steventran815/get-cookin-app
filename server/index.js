@@ -222,7 +222,8 @@ app.post('/api/ingredients/:userId', (req, res, next) => {
     });
 });
 
-app.get('/api/availableRecipes', (req, res, next) => {
+app.get('/api/availableRecipes/:userId', (req, res, next) => {
+  const userId = parseInt(req.params.userId);
   const sql = `
     with "ingredientsNeeded" as (
       select "r"."recipeId",
@@ -241,7 +242,7 @@ app.get('/api/availableRecipes', (req, res, next) => {
       from "recipes" as "r"
       join "recipeIngredients" as "ri" using ("recipeId")
       join "userIngredients" as "ui" using ("ingredientId")
-      where "ui"."userId"=1
+      where "ui"."userId" = $1
       group by "r"."recipeId", "ui"."userId"
     )
     select "in"."recipeTitle",
@@ -251,8 +252,9 @@ app.get('/api/availableRecipes', (req, res, next) => {
     from "ingredientsNeeded" as "in"
     join "ingredientsInFridge" as "if" using("recipeId", "ingredientCount");
   `;
+  const values = [userId];
 
-  db.query(sql)
+  db.query(sql, values)
     .then(availableRecipes => {
       if (!availableRecipes.rows[0]) {
         throw new ClientError('There are no recipes available that match the ingredients in your fridge', 404);
