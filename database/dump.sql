@@ -229,7 +229,8 @@ CREATE TABLE public."userIngredients" (
 --
 
 CREATE TABLE public.users (
-    "userId" integer NOT NULL
+    "userId" integer NOT NULL,
+    "userName" text
 );
 
 
@@ -508,6 +509,10 @@ COPY public."userIngredients" ("userId", "ingredientId") FROM stdin;
 1	63
 1	8
 1	64
+2	2
+3	3
+4	4
+5	5
 \.
 
 
@@ -515,8 +520,12 @@ COPY public."userIngredients" ("userId", "ingredientId") FROM stdin;
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.users ("userId") FROM stdin;
-1
+COPY public.users ("userId", "userName") FROM stdin;
+1	the_boys
+2	johnnyung
+3	steventran
+4	nathanreitan
+5	phutrieu
 \.
 
 
@@ -545,7 +554,7 @@ SELECT pg_catalog.setval('public."recipes_recipeId_seq"', 4, true);
 -- Name: users_userId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."users_userId_seq"', 1, false);
+SELECT pg_catalog.setval('public."users_userId_seq"', 5, true);
 
 
 --
