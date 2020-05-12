@@ -17,23 +17,25 @@ export default class Footer extends React.Component {
   }
 
   render() {
-    if (this.state.menuClicked) {
-      return <HamburgerMenu toggle={this.toggleMenu} />;
+    let menu;
+    if (this.state.menuClicked === false) {
+      menu = null;
     } else {
-      return (
-        <div>
-          <header>
-            <div className="headerContent">
-              <img onClick={this.toggleMenu} src="/images/hamburgerIcon.png" />
-              <p className="logo">GET COOKIN&apos;</p>
-              <div className="profilePic">
-
-              </div>
-            </div>
-          </header>
-          <div className="headerSpacing"></div>
-        </div >
-      );
+      menu = <HamburgerMenu toggle={this.toggleMenu} />;
     }
+    return (
+      <div>
+        <header>
+          {menu}
+          <div className="headerContent">
+            <img onClick={this.toggleMenu} src="/images/hamburgerIcon.png" />
+            <p className="logo">GET COOKIN&apos;</p>
+            <div className="profilePic">
+            </div>
+          </div>
+        </header>
+        <div className="headerSpacing"></div>
+      </div >
+    );
   }
 }

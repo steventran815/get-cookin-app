@@ -1,11 +1,7 @@
 import React from 'react';
+import AppContext from '../lib/context';
 
 export default class HamburgerMenu extends React.Component {
-  constructor(props) {
-    super(props);
-    this.click = this.click.bind(this);
-  }
-
   render() {
     return (
       <div>
@@ -22,7 +18,7 @@ export default class HamburgerMenu extends React.Component {
                 <li>Terms</li>
               </ul>
               <div className="logoutDiv">
-                <h1 onClick={this.click}className="logoutButton">LOGOUT</h1>
+                <h1 onClick={this.context.logout}className="logoutButton">LOGOUT</h1>
               </div>
             </div>
           </div>
@@ -31,3 +27,5 @@ export default class HamburgerMenu extends React.Component {
     );
   }
 }
+
+HamburgerMenu.contextType = AppContext;

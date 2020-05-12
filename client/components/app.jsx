@@ -18,7 +18,6 @@ export default class App extends React.Component {
     this.state = {
       message: null,
       isLoading: true,
-      login: true,
       user: {
         userId: null,
         userName: ''
@@ -29,7 +28,8 @@ export default class App extends React.Component {
     this.getFavorites = this.getFavorites.bind(this);
     this.contextValue = {
       getUser: this.getUser.bind(this),
-      getFavs: this.getFavs.bind(this)
+      getFavs: this.getFavs.bind(this),
+      logout: this.logout.bind(this)
     };
   }
 
@@ -62,15 +62,23 @@ export default class App extends React.Component {
     return this.state.recipes;
   }
 
+  logout() {
+    this.setState({
+      user: {
+        userId: null,
+        userName: ''
+      }
+    });
+  }
+
   render() {
-    if (this.state.login === true) {
+    if (!this.state.user.userId) {
       return <Login onLogin={this.onLogin}/>;
     } else {
       return (
         <AppContext.Provider value={this.contextValue}>
           <Router>
             <Header />
-            <Route path="/login" component={Login} />
             <Route path="/recipeList" exact component={RecipeList}/>
             <Route path="/recipeList/:id" component={RecipeDetails} />
             <Route path="/fridgeList" component={FridgeList} />
