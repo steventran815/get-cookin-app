@@ -63,7 +63,7 @@ export default class RecipeListItem extends React.Component {
       .catch(error => console.error('Error:', error));
   }
 
-  handleClick(recipeId) {
+  favClick(recipeId) {
     this.addFav(recipeId);
   }
 
@@ -86,9 +86,11 @@ export default class RecipeListItem extends React.Component {
           </center>
           <div className="recipeFooter">
             <h2><span className="prepTime">Prep Time: {recipePrepTime}</span></h2>
-            <div><span onClick={() => { this.handleClick(recipeId); }} className="favoriteIcon">
-              <i className={this.checkIfFav() ? 'fa fa-heart' : 'far fa-heart'}>
-              </i>
+            <div><span className="favoriteIcon">
+              {this.checkIfFav()
+                ? <i className='fa fa-heart'></i>
+                : <i onClick={() => { this.favClick(recipeId); }} className='far fa-heart'></i>
+              }
             </span></div>
           </div>
           <hr className="recipeDivider"></hr>
