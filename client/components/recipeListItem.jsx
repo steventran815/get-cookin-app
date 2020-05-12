@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import AppContext from '../lib/context';
 
 export default class RecipeListItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      favoriteIds: []
+      favoriteIds: [],
+      user: null
     };
     this.favorites = this.props.favorites;
     this.recipe = this.props.recipe;
@@ -20,6 +22,14 @@ export default class RecipeListItem extends React.Component {
 
   componentDidMount() {
     this.getIds(this.favorites);
+    const user = this.context.getUser();
+    this.userState(user);
+  }
+
+  userState(userId) {
+    return this.setState({
+      user: userId
+    });
   }
 
   getIds(favorites) {
@@ -44,9 +54,9 @@ export default class RecipeListItem extends React.Component {
     }
   }
 
-  addFav(recipe) {
+  addFav(userId, recipe) {
     const favorites = this.state.favoriteIds.slice();
-    fetch('/api/favoriteRecipes', {
+    fetch(`/api/favoriteRecipes/${userId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -64,7 +74,7 @@ export default class RecipeListItem extends React.Component {
   }
 
   favClick(recipeId) {
-    this.addFav(recipeId);
+    this.addFav(this.state.user.userId, recipeId);
   }
 
   render() {
@@ -99,3 +109,5 @@ export default class RecipeListItem extends React.Component {
     );
   }
 }
+
+RecipeListItem.contextType = AppContext;

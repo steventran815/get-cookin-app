@@ -266,13 +266,14 @@ app.get('/api/availableRecipes/:userId', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.route('/api/favoriteRecipes')
+app.route('/api/favoriteRecipes/:userId')
   .get((req, res, next) => {
     const sql = `
     SELECT
       "r".*
     FROM "favoriteRecipes"
-    JOIN "recipes" as "r" using ("recipeId");
+    JOIN "recipes" as "r" using ("recipeId")
+    WHERE "userId" = $1
   `;
 
     db.query(sql)
@@ -288,10 +289,10 @@ app.route('/api/favoriteRecipes')
   .post((req, res, next) => {
     const sql = `
     INSERT INTO "favoriteRecipes"("userId", "recipeId")
-    VALUES (1, $1)
+    VALUES ($1, $2)
     RETURNING *;
   `;
-    const params = [req.body.recipe];
+    const params = [req.params.userId, req.body.recipe];
 
     db.query(sql, params)
       .then(newFav => {
