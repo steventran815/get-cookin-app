@@ -301,16 +301,22 @@ app.route('/api/favoriteRecipes/:userId')
       .catch(err => next(err));
   });
 
-app.delete('/api/favoriteRecipes/:recipeId', (req, res, next) => {
+app.delete('/api/favoriteRecipes/:userId/:recipeId', (req, res, next) => {
+  const userId = parseInt(req.params.userId);
+  const recipeId = parseInt(req.params.recipeId);
+
   const sql = `
     DELETE FROM "favoriteRecipes"
-    WHERE "recipeId" = $1;
+    WHERE "userId" = $1
+    AND "recipeId" = $2
+    RETURNING *;
   `;
-  const params = [req.params.recipeId];
+  const params = [userId, recipeId];
 
   db.query(sql, params)
     .then(result => {
-      res.status(204).json(result);
+      const deletedFav = result.rows[0];
+      res.status(204).json(deletedFav);
     })
     .catch(err => next(err));
 });
