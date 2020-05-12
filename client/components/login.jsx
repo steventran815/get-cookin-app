@@ -51,6 +51,7 @@ export default class Login extends React.Component {
       },
       body: JSON.stringify(newUser)
     };
+
     fetch('/api/newUser', req)
       .then(res => res.json())
       .then(data => {
@@ -103,11 +104,11 @@ export default class Login extends React.Component {
                 <option>Select User</option>
                 {options}
               </select>
-              <button type="submit" className="btn btn-secondary btn-block mt-2">Log In</button>
+              <button type="submit" className="btn btn-secondary btn-block mt-2 login-button">Log In</button>
             </form>
           </div>
           <p className="text-center pt-3">- or -</p>
-          <button type="click" className="btn btn-secondary btn-block mt-2" onClick={() => this.setView('create')}>Create New User</button>
+          <button type="click" className="btn btn-secondary btn-block mt-2 login-button" onClick={() => this.setView('create')}>Create New User</button>
         </div>
 
       </div>

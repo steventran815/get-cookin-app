@@ -38,8 +38,8 @@ export default class CreateUser extends React.Component {
                 className="form-control"
                 type="text"
                 onChange={this.handleChange}/>
-              <button type="submit" className="btn btn-dark btn-block mt-2">Create User</button>
-              <button type="reset" className="btn btn-dark btn-block mt-2">Cancel</button>
+              <button type="submit" className="btn btn-dark btn-block mt-2 login-button">Create User</button>
+              <button type="reset" className="btn btn-dark btn-block mt-2 login-button">Cancel</button>
             </form>
           </div>
         </div>
