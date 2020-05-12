@@ -1,14 +1,20 @@
 import React from 'react';
+import CreateUser from './createUser';
 
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       selectedId: null,
-      users: []
+      users: [],
+      view: {
+        name: 'login'
+      }
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.createNewUser = this.createNewUser.bind(this);
+    this.setView = this.setView.bind(this);
   }
 
   componentDidMount() {
@@ -36,13 +42,45 @@ export default class Login extends React.Component {
     onLogin(selectedId);
   }
 
+  createNewUser(newUser) {
+    const req =
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/JSON'
+      },
+      body: JSON.stringify(newUser)
+    };
+
+    fetch('/api/newUser', req)
+      .then(res => res.json())
+      .then(data => {
+        this.setState({
+          users: this.state.users.concat(data),
+          view: {
+            name: 'login'
+          }
+        });
+      });
+  }
+
+  setView(name) {
+    this.setState({
+      view: {
+        name: name
+      }
+    });
+  }
+
   render() {
-    const { users } = this.state;
+    const { users, view } = this.state;
     const options = users.map(user => {
       return (
         <option key={user.userId} value={user.userId}>{user.userName}</option>
       );
     });
+
+    if (view.name === 'create') return <CreateUser createNewUser={this.createNewUser} setView={this.setView}/>;
 
     return (
       <div className="d-flex align-items-center login-background">
@@ -66,9 +104,11 @@ export default class Login extends React.Component {
                 <option>Select User</option>
                 {options}
               </select>
-              <button type="submit" className="btn btn-secondary btn-block mt-2">Log In</button>
+              <button type="submit" className="btn btn-secondary btn-block mt-2 login-button">Log In</button>
             </form>
           </div>
+          <p className="text-center pt-3">- or -</p>
+          <button type="click" className="btn btn-secondary btn-block mt-2 login-button" onClick={() => this.setView('create')}>Create New User</button>
         </div>
 
       </div>

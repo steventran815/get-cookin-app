@@ -64,7 +64,6 @@ export default class FridgeList extends React.Component {
     };
     this.addIngredients(newIngredient, user.userId);
     document.getElementById('addIngredient').value = '';
-
   }
 
   deleteIngredient(ingredientId) {

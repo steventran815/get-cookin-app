@@ -536,3 +536,8 @@ footer{
 .add-a-recipe-ingredientsList, .add-a-recipe-instructionsList{
   margin-top:15px;
 }
+
+.login-button {
+  background-color: #30B6BE;
+  border:none;
+}

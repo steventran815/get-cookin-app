@@ -355,9 +355,9 @@ app.get('/api/users/:userId', (req, res, next) => {
 
 // Post to create new userId
 app.post('/api/newUser', (req, res, next) => {
-  const { name } = req.body;
+  const { userName } = req.body;
 
-  if (!name) {
+  if (!userName) {
     return next(new ClientError('client has supplied invalid userName', 400));
   }
 
@@ -366,7 +366,7 @@ app.post('/api/newUser', (req, res, next) => {
     values (default, $1)
     returning *;
   `;
-  const values = [name];
+  const values = [userName];
 
   db.query(sql, values)
     .then(result => {
