@@ -44,6 +44,29 @@ export default class RecipeListItem extends React.Component {
     }
   }
 
+  addFav(recipe) {
+    const favorites = this.state.favoriteIds.slice();
+    fetch('/api/favoriteRecipes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ recipe: recipe })
+    })
+      .then(res => res.json())
+      .then(data => this.setState(() => {
+        favorites.push(data.recipeId);
+        return {
+          favoriteIds: favorites
+        };
+      }))
+      .catch(error => console.error('Error:', error));
+  }
+
+  handleClick(recipeId) {
+    this.addFav(recipeId);
+  }
+
   render() {
     const recipe = this.recipe;
     const recipeTitle = recipe.recipeTitle;
@@ -63,10 +86,10 @@ export default class RecipeListItem extends React.Component {
           </center>
           <div className="recipeFooter">
             <h2><span className="prepTime">Prep Time: {recipePrepTime}</span></h2>
-            {this.checkIfFav()
-              ? <div><span className="favoriteIcon"> <i className="fa fa-heart"></i> </span></div>
-              : <div><span className="favoriteIcon"> <i className="far fa-heart"></i> </span></div>
-            }
+            <div><span onClick={() => { this.handleClick(recipeId); }} className="favoriteIcon">
+              <i className={this.checkIfFav() ? 'fa fa-heart' : 'far fa-heart'}>
+              </i>
+            </span></div>
           </div>
           <hr className="recipeDivider"></hr>
         </div>
