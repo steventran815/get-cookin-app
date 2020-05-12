@@ -72,6 +72,7 @@ footer{
   background-color: #FF5758;
   display:flex;
   justify-content:space-between;
+  align-items:center;
   padding:10px 5%;
   position:fixed;
   bottom:0px;
@@ -439,6 +440,8 @@ footer{
   z-index:200;
   padding-top:15%;
   height:100%;
+  display:flex;
+  padding-top:35px;
 }
 
 .hamburgerMenuDiv{
@@ -476,13 +479,21 @@ footer{
   color:white;
   font-family:oswald;
   font-size:1.5rem;
-  line-height:2rem;
+  line-height:3rem;
   margin: 2.5% 15%;
   list-style:none;
+  width:100%;
 }
+
 
 .headerList{
   padding:0px;
+  width:100%;
+}
+
+.headerList > .headerListTitle{
+  margin: 5% 15%;
+
 }
 
 .add-a-recipe-div{
@@ -509,7 +520,6 @@ footer{
   margin-top:25px
 }
 
-
 .add-a-recipe-button{
   font-family:oswald;
   font-size:1.25rem;
@@ -535,4 +545,24 @@ footer{
 
 .add-a-recipe-ingredientsList, .add-a-recipe-instructionsList{
   margin-top:15px;
+}
+
+.in-minutes{
+  font-size:1rem;
+}
+
+input::placeholder {
+  color: #9c9c9c;
+}
+
+.footer-add{
+  font-size:30px;
+  color:white;
+  margin:auto 0;
+}
+
+.ingredients-button{
+  background-color:#30B6BE;
+  color:white;
+  border:none;
 }

@@ -65,7 +65,7 @@ export default class RecipeDetails extends React.Component {
           </div>
           <div className="recipeTitleDiv">
             <h5 className="recipeDetailsTitle">{recipeTitle}</h5>
-            <h5 className="recipeDetailsPrepTime">Prep Time: {recipePrepTime}</h5>
+            <h5 className="recipeDetailsPrepTime">Cooking Time: {recipePrepTime}</h5>
             <div className="favoriteIconDetails">
               <span><i className="fa fa-heart"></i> </span>
             </div>
