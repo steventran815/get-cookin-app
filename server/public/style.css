@@ -566,3 +566,7 @@ input::placeholder {
   color:white;
   border:none;
 }
+.login-button {
+  background-color: #30B6BE;
+  border:none;
+}

@@ -353,6 +353,30 @@ app.get('/api/users/:userId', (req, res, next) => {
     .catch(err => next(err));
 });
 
+// Post to create new userId
+app.post('/api/newUser', (req, res, next) => {
+  const { userName } = req.body;
+
+  if (!userName) {
+    return next(new ClientError('client has supplied invalid userName', 400));
+  }
+
+  const sql = `
+    insert into "users" ("userId", "userName")
+    values (default, $1)
+    returning *;
+  `;
+  const values = [userName];
+
+  db.query(sql, values)
+    .then(result => {
+      const newUser = result.rows[0];
+      res.status(201).json(newUser);
+    })
+    .catch(err => next(err));
+
+});
+
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));
 });
