@@ -13,6 +13,7 @@ export default class Login extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.createNewUser = this.createNewUser.bind(this);
     this.setView = this.setView.bind(this);
   }
 
@@ -41,18 +42,31 @@ export default class Login extends React.Component {
     onLogin(selectedId);
   }
 
+  createNewUser(newUser) {
+    const req =
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/JSON'
+      },
+      body: JSON.stringify(newUser)
+    };
+    fetch('/api/newUser', req)
+      .then(res => res.json())
+      .then(data => {
+        this.setState({
+          users: this.state.users.concat(data),
+          view: {
+            name: 'login'
+          }
+        });
+      });
+  }
+
   setView(name) {
     this.setState({
       view: {
         name: name
-      }
-    });
-  }
-
-  resetLogin() {
-    this.setState({
-      view: {
-        name: 'login'
       }
     });
   }

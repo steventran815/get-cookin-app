@@ -22,19 +22,7 @@ export default class CreateUser extends React.Component {
     const newUser = {
       userName: userName
     };
-    const req =
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/JSON'
-      },
-      body: JSON.stringify(newUser)
-    };
-    fetch('/api/newUser', req)
-      .then(res => res.json())
-      .then(data => {
-        this.props.setView('login');
-      });
+    this.props.createNewUser(newUser);
   }
 
   render() {
