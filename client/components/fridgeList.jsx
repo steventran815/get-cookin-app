@@ -8,7 +8,8 @@ export default class FridgeList extends React.Component {
     this.state = {
       newIngredient: '',
       message: null,
-      ingredients: []
+      ingredients: [],
+      isLoading: true
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -19,6 +20,9 @@ export default class FridgeList extends React.Component {
   componentDidMount() {
     const user = this.context.getUser();
     this.getIngredients(user.userId); // hard coded userID; to be changed in the future with new users
+    this.setState({
+      isLoading: false
+    });
   }
 
   getIngredients(userId) {
@@ -88,6 +92,10 @@ export default class FridgeList extends React.Component {
   }
 
   render() {
+    if (this.state.isLoading === true) {
+      return <h1>TESTING 123 123 123 123</h1>;
+    }
+
     const { ingredients } = this.state;
     const userIngredients = ingredients.map(ingredient => {
       return (
@@ -124,7 +132,8 @@ export default class FridgeList extends React.Component {
         <ul className="list-group list-group-flush">
           {userIngredients}
         </ul>
-        <div className="noMoreIngredients"></div>
+        <div className="noMoreIngredients">
+        </div>
       </div>
     );
   }
