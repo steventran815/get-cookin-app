@@ -63,6 +63,7 @@ export default class FridgeList extends React.Component {
       newIngredient: ''
     };
     this.addIngredients(newIngredient, user.userId);
+    this.setState({ newIngredient: '' });
     document.getElementById('addIngredient').value = '';
   }
 
