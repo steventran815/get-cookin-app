@@ -375,6 +375,73 @@ app.get('/api/users/:userId', (req, res, next) => {
     .catch(err => next(err));
 });
 
+
+app.post('/api/recipes', (req, res, next) => {
+  const recipesSql = `
+    INSERT INTO "recipes" ("recipeTitle", "recipeImage", "recipePrepTime")
+    VALUES ($1, $2, $3)
+    RETURNING *;
+  `;
+  const recipesParams = [req.body.recipeTitle, req.body.recipeImage, req.body.recipePrepTime];
+
+  db.query(recipesSql, recipesParams)
+    .then(insertedRecipe => {
+      const ingredients = req.body.ingredients;
+      ingredients.map(ingredient => {
+        const ingredientsSql = `
+              INSERT INTO "ingredients" ("ingredientId", "name")
+              VALUES (default, $1)
+              ON CONFLICT ("name") DO NOTHING
+              RETURNING *
+            `;
+        const ingredientsParams = [ingredient];
+
+        db.query(ingredientsSql, ingredientsParams)
+          .then(newIngredient => {
+            const { recipeId } = insertedRecipe.rows[0];
+            const { ingredientId } = newIngredient.rows[0];
+            const recipeIngredientsSql = `
+                INSERT INTO "recipeIngredients" ("recipeId", "ingredientId")
+                VALUES ($1, $2)
+                RETURNING *
+              `;
+            const recipeIngredientsParams = [recipeId, ingredientId];
+
+            db.query(recipeIngredientsSql, recipeIngredientsParams)
+              .catch(err => next(err));
+          })
+          .catch(err => next(err));
+      });
+
+      const instructions = req.body.instructions;
+      instructions.map(instruction => {
+        const instructionsSql = `
+          INSERT INTO "instructions" ("instruction")
+          VALUES ($1)
+          RETURNING*;
+        `;
+        const instructionsParams = [instruction];
+        db.query(instructionsSql, instructionsParams)
+          .then(newInstruction => {
+            const { recipeId } = insertedRecipe.rows[0];
+            const { instructionId } = newInstruction.rows[0];
+            const recipeInstructionsSql = `
+              INSERT INTO "recipeInstructions" ("recipeId", "instructionId")
+              VALUES ($1, $2)
+            `;
+            const recipeInstructionsParams = [recipeId, instructionId];
+
+            db.query(recipeInstructionsSql, recipeInstructionsParams)
+              .catch(err => next(err));
+          });
+      });
+      res.json({
+        success: `${insertedRecipe.rows[0].recipeTitle} has been added!`
+      });
+    })
+    .catch(err => next(err));
+});
+
 // Post to create new userId
 app.post('/api/newUser', (req, res, next) => {
   const { userName } = req.body;
@@ -394,9 +461,9 @@ app.post('/api/newUser', (req, res, next) => {
     .then(result => {
       const newUser = result.rows[0];
       res.status(201).json(newUser);
+
     })
     .catch(err => next(err));
-
 });
 
 app.use('/api', (req, res, next) => {

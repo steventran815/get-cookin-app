@@ -27,6 +27,7 @@ ALTER TABLE ONLY public."recipeIngredients" DROP CONSTRAINT "recipeIngredients_i
 ALTER TABLE ONLY public."favoriteRecipes" DROP CONSTRAINT "favoriteRecipes_userId_fkey";
 ALTER TABLE ONLY public."favoriteRecipes" DROP CONSTRAINT "favoriteRecipes_recipeId_fkey";
 DROP INDEX public."userIngredients_userId_ingredientId";
+DROP INDEX public.ingredients_name;
 ALTER TABLE ONLY public.users DROP CONSTRAINT users_pkey;
 ALTER TABLE ONLY public.recipes DROP CONSTRAINT recipes_pkey;
 ALTER TABLE ONLY public.instructions DROP CONSTRAINT instructions_pkey;
@@ -368,6 +369,7 @@ COPY public.ingredients ("ingredientId", name) FROM stdin;
 71	jalapeno
 72	cilantro
 73	mozzarella cheese
+74	lettuce
 \.
 
 
@@ -533,7 +535,7 @@ COPY public.users ("userId", "userName") FROM stdin;
 -- Name: ingredients_ingredientId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."ingredients_ingredientId_seq"', 72, true);
+SELECT pg_catalog.setval('public."ingredients_ingredientId_seq"', 74, true);
 
 
 --
@@ -587,6 +589,13 @@ ALTER TABLE ONLY public.recipes
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY ("userId");
+
+
+--
+-- Name: ingredients_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX ingredients_name ON public.ingredients USING btree (name);
 
 
 --
