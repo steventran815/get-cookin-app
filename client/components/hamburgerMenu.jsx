@@ -4,15 +4,8 @@ import { Link } from 'react-router-dom';
 export default class HamburgerMenu extends React.Component {
   constructor(props) {
     super(props);
-    this.toggleMenu = this.toggleMenu.bind(this);
     this.state = ({
       menuClicked: false
-    });
-  }
-
-  toggleMenu() {
-    this.setState({
-      menuClicked: !this.state.menuClicked
     });
   }
 
