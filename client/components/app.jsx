@@ -75,7 +75,7 @@ export default class App extends React.Component {
               <Route path="/" exact component={requireAuth(FridgeList)} />
               <Route path="/login" component={Login} />
               <Route path="/recipeList" exact component={requireAuth(RecipeList)}/>
-              <Route path="/recipeList/:id" component={requireAuth(RecipeDetails)} />
+              <Route path="/recipeList/:id" component={RecipeDetails} />
               <Route path="/favoritesList" component={requireAuth(FavoritesList)} />
               <Route path="/search" component={requireAuth(Search)} />
               <Route path="/addARecipe" component={requireAuth(AddARecipe)} />

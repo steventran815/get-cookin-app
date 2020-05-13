@@ -19,7 +19,7 @@ export default class Footer extends React.Component {
         <Link to='/favoritesList'>
           <img className="footerIcon" src="/images/favoritesIcon.png" />
         </Link>
-        <Link to='/fridgeList'>
+        <Link to='/'>
           <img className="footerIcon" src="/images/fridgeIcon.png" />
         </Link>
         <Link to='/search'>
