@@ -83,7 +83,6 @@ export default class RecipeList extends React.Component {
       <div>
         {recipesList}
         <div className="noMoreIngredients">
-          <h5>no more ingredients</h5>
         </div>
       </div>
     );
