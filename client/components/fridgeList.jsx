@@ -43,8 +43,7 @@ export default class FridgeList extends React.Component {
         if (data.message) {
           return this.setState(state => ({ message: data.message }));
         }
-        const newData = this.state.ingredients.concat(data);
-        return this.setState(state => ({ ingredients: newData }));
+        return this.setState(state => ({ ingredients: data }));
       })
       .catch(error => console.error('Error:', error));
   }
