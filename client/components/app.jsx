@@ -7,7 +7,6 @@ import AddARecipe from './addARecipe';
 import RecipeDetails from './recipeDetails';
 import Login from './login';
 import AppContext from '../lib/context';
-// eslint-disable-next-line no-unused-vars
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Layout from './layout';
 import requireAuth from './require-auth';
