@@ -1,7 +1,7 @@
 import React from 'react';
 import HamburgerMenu from './hamburgerMenu';
 
-export default class Footer extends React.Component {
+export default class Header extends React.Component {
   constructor(props) {
     super(props);
     this.toggleMenu = this.toggleMenu.bind(this);

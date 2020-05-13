@@ -348,6 +348,7 @@ app.get('/api/users/:userId', (req, res, next) => {
       if (!user) {
         throw new ClientError('userId does not exist', 404);
       } else {
+        req.session.user = user;
         res.status(200).json(user);
       }
     })
