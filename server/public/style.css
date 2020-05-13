@@ -442,7 +442,24 @@ footer{
   display:flex;
   padding-top:35px;
 }
+.hamburgerMenuDiv-unclicked{
+  width: 250px;
+  height: 100%;
+  position:fixed;
+  z-index:100;
+  top:0;
+  bottom:0;
+  right:0;
+  left:-250px;
+  margin: 0;
+  padding: 0;
+}
 
+.hamburgerMenuIcon{
+  background:url('/images/hamburgerIcon.png');
+  background-position:cover;
+  height:45px;
+}
 .hamburgerMenuDiv{
   width: 250px;
   height: 100%;
@@ -474,6 +491,7 @@ footer{
   margin:0px;
   padding:25px 15%;
 }
+
 .headerList > li{
   color:white;
   font-family:oswald;
@@ -495,7 +513,7 @@ footer{
 
 .add-a-recipe-div{
   background-color: #F96C6D;
-  height:100%;
+  height:100vh;
   display:flex;
   justify-content: center;
   padding-bottom:25px;

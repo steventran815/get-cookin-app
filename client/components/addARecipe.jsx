@@ -1,4 +1,5 @@
 import React from 'react';
+import AppContext from '../lib/context';
 
 export default class AddARecipe extends React.Component {
   constructor(props) {
@@ -67,6 +68,36 @@ export default class AddARecipe extends React.Component {
     document.getElementById('instructionValue').value = '';
   }
 
+  // addRecipe(newRecipe, userId) {
+  //   fetch('/api/recipes/', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify(newRecipe)
+  //   })
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       const newData = this.state.concat(data);
+  //       return this.setState(state => ({ ingredients: newData }));
+  //     })
+  //     .catch(error => console.error('Error:', error));
+  // }
+
+  // handleSubmit(event) {
+  //   event.preventDefault();
+  //   const user = this.context.getUser();
+  //   const newRecipe = {
+  //     recipeTitle: this.state.recipeTitle.toLowerCase(),
+  //     recipePrepTime: this.state.recipePrepTime,
+  //     recipeImage: this.state.recipeImage,
+  //     recipeIngredients: this.state.recipeIngredients,
+  //     recipeInstructions: this.state.recipeInstructions
+  //   };
+  //   this.addRecipe(newRecipe, user.userId);
+  //   document.getElementById('addARecipeForm').reset();
+  // }
+
   render() {
     return (
       <div className="add-a-recipe-div">
@@ -79,7 +110,7 @@ export default class AddARecipe extends React.Component {
           <div>
             {/* PREP TIME */}
             <h5 className="add-a-recipe-title">Cooking Time <span className="in-minutes">(In Minutes)</span></h5>
-            <input required value={this.state.value} onChange={this.handlePrepTimeChange} placeholder="eg. 60" className="add-a-recipe-input"/>
+            <input type="number" required value={this.state.value} onChange={this.handlePrepTimeChange} placeholder="eg. 60" className="add-a-recipe-input"/>
           </div>
           <div>
             {/* IMAGE */}
@@ -104,9 +135,11 @@ export default class AddARecipe extends React.Component {
             </div>
             <ul id="addAnInstructionUl" className="add-a-recipe-instructionsList"></ul>
           </div>
-          <button type="submit" className="add-a-recipe-button">SUBMIT RECIPE</button>
+          <button onClick={this.handleSubmit} type="submit" className="add-a-recipe-button">SUBMIT RECIPE</button>
         </form>
       </div>
     );
   }
 }
+
+AddARecipe.contextType = AppContext;
