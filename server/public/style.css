@@ -442,7 +442,24 @@ footer{
   display:flex;
   padding-top:35px;
 }
+.hamburgerMenuDiv-unclicked{
+  width: 250px;
+  height: 100%;
+  position:fixed;
+  z-index:100;
+  top:0;
+  bottom:0;
+  right:0;
+  left:-250px;
+  margin: 0;
+  padding: 0;
+}
 
+.hamburgerMenuIcon{
+  background:url('/images/hamburgerIcon.png');
+  background-position:cover;
+  height:45px;
+}
 .hamburgerMenuDiv{
   width: 250px;
   height: 100%;
@@ -474,6 +491,7 @@ footer{
   margin:0px;
   padding:25px 15%;
 }
+
 .headerList > li{
   color:white;
   font-family:oswald;
@@ -494,26 +512,27 @@ footer{
 }
 
 .add-a-recipe-div{
-  background-color: #F96C6D;
-  height:100%;
+  background-color: #F8f8f8;
+  background-size:cover;
+  height:100vh;
   display:flex;
   justify-content: center;
   padding-bottom:25px;
 }
 .add-a-recipe-form{
   width:90%;
-  color:white;
+  color:#444444;
 }
 .add-a-recipe-input{
   width:100%;
   height:35px;
-  box-shadow:0 4px 4px rgba(0,0,0,.25);
+  box-shadow: 0 2px 7px rgba(50, 50, 50, 0.5);
   border:none;
   padding:0px 15px;
 }
 
 .add-a-recipe-title{
-  color:white;
+  color:#444444;
   margin-top:25px
 }
 
@@ -540,6 +559,7 @@ footer{
   border-radius:10px;
   padding:15px;
   margin-top:10px;
+  box-shadow: 0 2px 7px rgba(50, 50, 50, 0.5);
 }
 
 .add-a-recipe-ingredientsList, .add-a-recipe-instructionsList{
@@ -587,7 +607,6 @@ input::placeholder {
 .select-user{
   margin-bottom:5px;
   height:45px;
-
 }
 
 .or-div{
@@ -609,4 +628,36 @@ input::placeholder {
 .login-or{
   font-family:oswald;
   font-weight:semi-bold;
+}
+
+.loading-screen{
+  height:80vh;
+  background-color:#f8f8f8;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+
+.loading-header{
+  color:#30B6BE;
+  font-family:oswald;
+  font-weight: semi-bold;
+}
+
+.loading-image{
+  animation:spin 2s;
+}
+
+@keyframes spin{
+  0%{
+    transform:rotate(-5deg)
+  }
+  100%{
+    transform:rotate(5deg);
+  }
+}
+
+.finding-available-ingredients{
+  color:#F96C6D
 }

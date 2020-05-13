@@ -7,13 +7,22 @@ export default class RecipeList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      recipes: []
+      recipes: [],
+      isLoading: false
     };
     this.getRecipes = this.getRecipes.bind(this);
+    this.loadingScreen = this.loadingScreen.bind(this);
+  }
+
+  loadingScreen() {
+    this.setState({
+      isLoading: true
+    });
   }
 
   componentDidMount() {
     this.getRecipes();
+    setTimeout(this.loadingScreen, 1500);
   }
 
   getRecipes(userId) {
@@ -26,6 +35,17 @@ export default class RecipeList extends React.Component {
   }
 
   render() {
+    if (this.state.isLoading === false) {
+      return (
+        <div className="loading-screen">
+          <div className="loading-screen-content">
+            <h2 className="loading-header">LOADING...</h2>
+            <img className="loading-image" src="/images/getCookinLoadingGif.gif" />
+            <h4 className="finding-available-ingredients">Finding Available Recipes</h4>
+          </div>
+        </div>
+      );
+    }
     const { recipes } = this.state;
     let recipesList = null;
     if (recipes.error) {
@@ -53,7 +73,8 @@ export default class RecipeList extends React.Component {
     return (
       <div>
         {recipesList}
-        <h5 className="noMoreRecipes">End of Recipes List</h5>
+        <div className="noMoreIngredients">
+        </div>
       </div>
     );
   }

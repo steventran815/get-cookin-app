@@ -213,12 +213,21 @@ app.post('/api/ingredients/:userId', (req, res, next) => {
           message: 'The ingredient you are trying to add already exists!'
         });
       } else {
-        const { userId, ingredientId } = newIngredient;
-        return res.status(201).send({
-          ingredientId: ingredientId,
-          name: ingredient,
-          userId: userId
-        });
+        const sql = `
+          select "u"."userId",
+            "i"."ingredientId",
+            "i"."name"
+          from "users" as "u"
+          join "userIngredients" using ("userId")
+          join "ingredients" as "i" using ("ingredientId")
+          where "userId" = $1
+          order by "name";
+        `;
+        db.query(sql, [userId])
+          .then(results => {
+            const ingredients = results.rows;
+            res.status(201).json(ingredients);
+          });
       }
     });
 });

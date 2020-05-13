@@ -15,6 +15,8 @@ export default class AddARecipe extends React.Component {
     this.handleRecipeTitleChange = this.handleRecipeTitleChange.bind(this);
     this.handlePrepTimeChange = this.handlePrepTimeChange.bind(this);
     this.handleImageChange = this.handleImageChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.addRecipe = this.addRecipe.bind(this);
   }
 
   handleRecipeTitleChange(event) {
@@ -22,7 +24,7 @@ export default class AddARecipe extends React.Component {
   }
 
   handlePrepTimeChange(event) {
-    this.setState({ recipePrepTime: event.target.value });
+    this.setState({ recipePrepTime: parseInt(event.target.value) });
   }
 
   handleImageChange(event) {
@@ -67,28 +69,50 @@ export default class AddARecipe extends React.Component {
     document.getElementById('instructionValue').value = '';
   }
 
+  addRecipe(newRecipe) {
+    fetch('/api/recipes/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newRecipe)
+    })
+      .then(res => res.json())
+      .then(data => {
+        return <h1>Your Recipe has Been Added!</h1>;
+      })
+      .catch(error => console.error('Error:', error));
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    const newRecipe = this.state;
+    this.addRecipe(newRecipe);
+    document.getElementById('addARecipeForm').reset();
+  }
+
   render() {
     return (
       <div className="add-a-recipe-div">
         <form id="addARecipeForm" onSubmit={this.handleSubmit} className="add-a-recipe-form">
           <div>
             {/* TITLE */}
-            <h5 className="add-a-recipe-title">Recipe Name</h5>
+            <h6 className="add-a-recipe-title">Recipe Name</h6>
             <input required value={this.state.value} onChange={this.handleRecipeTitleChange} placeholder="eg. Chicken Sandwich" input="text" className="add-a-recipe-input"/>
           </div>
           <div>
             {/* PREP TIME */}
-            <h5 className="add-a-recipe-title">Cooking Time <span className="in-minutes">(In Minutes)</span></h5>
-            <input required value={this.state.value} onChange={this.handlePrepTimeChange} placeholder="eg. 60" className="add-a-recipe-input"/>
+            <h6 className="add-a-recipe-title">Cooking Time <span className="in-minutes">(In Minutes)</span></h6>
+            <input type="number" required value={this.state.value} onChange={this.handlePrepTimeChange} placeholder="eg. 60" className="add-a-recipe-input"/>
           </div>
           <div>
             {/* IMAGE */}
-            <h5 className="add-a-recipe-title">Image URL</h5>
+            <h6 className="add-a-recipe-title">Image URL</h6>
             <input required value={this.state.value} onChange={this.handleImageChange} placeholder="https://example.com/" input="text" className="add-a-recipe-input"/>
           </div>
           <div>
             {/* INGREDIENTS */}
-            <h5 className="add-a-recipe-title">Ingredients</h5>
+            <h6 className="add-a-recipe-title">Ingredients</h6>
             <div className="add-a-recipe-input-instruction">
               <input required id="ingredientValue" placeholder="eg. Chicken" input="text" className="add-a-recipe-input" />
               <button type="button" className="ingredients-button" onClick={this.handleClickIngredients}><i className="fa fa-plus"></i></button>
@@ -97,14 +121,14 @@ export default class AddARecipe extends React.Component {
           </div>
           <div>
             {/* INSTRUCTIONS */}
-            <h5 className="add-a-recipe-title">Instructions</h5>
+            <h6 className="add-a-recipe-title">Instructions</h6>
             <div className="add-a-recipe-input-ingredient">
               <input required id="instructionValue" placeholder="eg. Preheat the oven to 325 deg" input="text" className="add-a-recipe-input"/>
               <button type="button" className="ingredients-button" onClick={this.handleClickInstructions}><i className="fa fa-plus"></i></button>
             </div>
             <ul id="addAnInstructionUl" className="add-a-recipe-instructionsList"></ul>
           </div>
-          <button type="submit" className="add-a-recipe-button">SUBMIT RECIPE</button>
+          <button onClick={this.handleSubmit} type="submit" className="add-a-recipe-button">SUBMIT RECIPE</button>
         </form>
       </div>
     );
