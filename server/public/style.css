@@ -72,6 +72,7 @@ footer{
   background-color: #FF5758;
   display:flex;
   justify-content:space-between;
+  align-items:center;
   padding:10px 5%;
   position:fixed;
   bottom:0px;
@@ -388,7 +389,6 @@ footer{
   color:#444444;
 }
 
-
 .login-background {
   background-color: #FF5758;
   height: 100vh;
@@ -439,8 +439,27 @@ footer{
   z-index:200;
   padding-top:15%;
   height:100%;
+  display:flex;
+  padding-top:35px;
+}
+.hamburgerMenuDiv-unclicked{
+  width: 250px;
+  height: 100%;
+  position:fixed;
+  z-index:100;
+  top:0;
+  bottom:0;
+  right:0;
+  left:-250px;
+  margin: 0;
+  padding: 0;
 }
 
+.hamburgerMenuIcon{
+  background:url('/images/hamburgerIcon.png');
+  background-position:cover;
+  height:45px;
+}
 .hamburgerMenuDiv{
   width: 250px;
   height: 100%;
@@ -472,15 +491,173 @@ footer{
   margin:0px;
   padding:25px 15%;
 }
+
 .headerList > li{
   color:white;
   font-family:oswald;
   font-size:1.5rem;
-  line-height:2rem;
+  line-height:3rem;
   margin: 2.5% 15%;
   list-style:none;
+  width:100%;
 }
 
 .headerList{
   padding:0px;
+  width:100%;
+}
+
+.headerList > .headerListTitle{
+  margin: 5% 15%;
+}
+
+.add-a-recipe-div{
+  background-color: #F8f8f8;
+  background-size:cover;
+  height:100vh;
+  display:flex;
+  justify-content: center;
+  padding-bottom:25px;
+}
+.add-a-recipe-form{
+  width:90%;
+  color:#444444;
+}
+.add-a-recipe-input{
+  width:100%;
+  height:35px;
+  box-shadow: 0 2px 7px rgba(50, 50, 50, 0.5);
+  border:none;
+  padding:0px 15px;
+}
+
+.add-a-recipe-title{
+  color:#444444;
+  margin-top:25px
+}
+
+.add-a-recipe-button{
+  font-family:oswald;
+  font-size:1.25rem;
+  color:white;
+  width:100%;
+  margin:0px;
+  padding:10px 15%;
+  background-color:#30B6BE;
+  border:none;
+  margin:25px 0px 50px;
+}
+
+.add-a-recipe-instructionsList{
+  list-style:none;
+  color:#444444;
+  padding-left:0px;
+}
+
+.added-instruction{
+  background-color:white;
+  border-radius:10px;
+  padding:15px;
+  margin-top:10px;
+  box-shadow: 0 2px 7px rgba(50, 50, 50, 0.5);
+}
+
+.add-a-recipe-ingredientsList, .add-a-recipe-instructionsList{
+  margin-top:15px;
+}
+
+.in-minutes{
+  font-size:1rem;
+}
+
+input::placeholder {
+  color: #9c9c9c;
+}
+
+.footer-add{
+  font-size:30px;
+  color:white;
+  margin:auto 0;
+}
+
+.add-a-recipe-input-instruction, .add-a-recipe-input-ingredient{
+  position:relative;
+}
+
+.ingredients-button{
+  background-color:#30B6BE;
+  color:white;
+  border:none;
+  position:absolute;
+  top:0px;
+  bottom:0px;
+  right:0px;
+  padding:0px 10px;
+}
+
+.login-button {
+  font-family:oswald;
+  font-weight:semi-bold;
+  font-size:1.25rem;
+  padding:7px 0px;
+  background-color: #30B6BE;
+  border:none;
+}
+
+.select-user{
+  margin-bottom:5px;
+  height:45px;
+}
+
+.or-div{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.login-logo{
+  width:35%;
+}
+
+.login-hr{
+  width:45%;
+  border-width: 2px;
+  border-color:white;
+}
+
+.login-or{
+  font-family:oswald;
+  font-weight:semi-bold;
+}
+
+.loading-screen{
+  height:80vh;
+  background-color:#f8f8f8;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+
+.loading-header{
+  color:#30B6BE;
+  font-family:oswald;
+  font-weight: semi-bold;
+}
+
+.loading-image{
+  animation:spin 2s;
+}
+
+@keyframes spin{
+  0%{
+    transform:rotate(-5deg)
+  }
+  100%{
+    transform:rotate(5deg);
+  }
+}
+
+.finding-available-ingredients{
+  color:#F96C6D
 }

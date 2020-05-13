@@ -1,5 +1,6 @@
 import React from 'react';
 import FavoriteListItem from './favoriteListItem';
+import AppContext from '../lib/context';
 
 export default class FavoritesList extends React.Component {
   constructor(props) {
@@ -7,7 +8,6 @@ export default class FavoritesList extends React.Component {
     this.state = {
       recipes: []
     };
-    this.getFavorites = this.getFavorites.bind(this);
   }
 
   componentDidMount() {
@@ -28,7 +28,7 @@ export default class FavoritesList extends React.Component {
     let recipesList = null;
     if (recipes.error) {
       return (
-        <div className="noFavorites">
+        <div className="noMoreRecipes">
          You do not have any favorite recipes saved
         </div>
       );
@@ -38,7 +38,6 @@ export default class FavoritesList extends React.Component {
           <FavoriteListItem key={recipe.recipeId} recipe={recipe} />
         );
       });
-
     }
     return (
       <div>
@@ -48,3 +47,5 @@ export default class FavoritesList extends React.Component {
     );
   }
 }
+
+FavoritesList.contextType = AppContext;

@@ -1,7 +1,7 @@
 import React from 'react';
 import HamburgerMenu from './hamburgerMenu';
 
-export default class Footer extends React.Component {
+export default class Header extends React.Component {
   constructor(props) {
     super(props);
     this.toggleMenu = this.toggleMenu.bind(this);
@@ -31,7 +31,6 @@ export default class Footer extends React.Component {
             <img onClick={this.toggleMenu} src="/images/hamburgerIcon.png" />
             <p className="logo">GET COOKIN&apos;</p>
             <div className="profilePic">
-
             </div>
           </div>
         </header>

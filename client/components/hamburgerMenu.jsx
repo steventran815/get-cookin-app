@@ -1,19 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import AppContext from '../lib/context';
+import { withRouter } from 'react-router-dom';
 
-export default class HamburgerMenu extends React.Component {
+class HamburgerMenu extends React.Component {
   constructor(props) {
     super(props);
-    this.toggleMenu = this.toggleMenu.bind(this);
-    this.state = ({
-      menuClicked: false
-    });
+    this.handleLogout = this.handleLogout.bind(this);
   }
 
-  toggleMenu() {
-    this.setState({
-      menuClicked: !this.state.menuClicked
-    });
+  handleLogout() {
+    this.context.logout();
+    this.props.history.push('/login');
   }
 
   render() {
@@ -21,21 +18,26 @@ export default class HamburgerMenu extends React.Component {
       <div>
         <div onClick={this.props.toggle} className="hamburgerOpacity">
         </div>
-        <div className="hamburgerMenuDiv">
+        <div id="hamburgerMenu" className="hamburgerMenuDiv">
           <div className="hamburgerMenu">
-            <ul className="headerList">
-              <li>About Us</li>
-              <li>Privacy Policy</li>
-              <li>Terms</li>
-            </ul>
-            <Link to='/search'>
+            <div>
+              <ul className="headerList">
+                <li className="headerListTitle">GET COOKIN&apos;</li>
+                <div className="recipeDivider"></div>
+                <li>About Us</li>
+                <li>Privacy Policy</li>
+                <li>Terms</li>
+              </ul>
               <div className="logoutDiv">
-                <h1 onClick={this.props.toggle} className="logoutButton">LOGOUT</h1>
+                <h1 onClick={this.handleLogout}className="logoutButton">LOGOUT</h1>
               </div>
-            </Link>
+            </div>
           </div>
         </div>
       </div>
     );
   }
 }
+
+HamburgerMenu.contextType = AppContext;
+export default withRouter(HamburgerMenu);

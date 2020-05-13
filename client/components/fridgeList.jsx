@@ -8,7 +8,8 @@ export default class FridgeList extends React.Component {
     this.state = {
       newIngredient: '',
       message: null,
-      ingredients: []
+      ingredients: [],
+      isLoading: true
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -19,6 +20,9 @@ export default class FridgeList extends React.Component {
   componentDidMount() {
     const user = this.context.getUser();
     this.getIngredients(user.userId); // hard coded userID; to be changed in the future with new users
+    this.setState({
+      isLoading: false
+    });
   }
 
   getIngredients(userId) {
@@ -43,8 +47,7 @@ export default class FridgeList extends React.Component {
         if (data.message) {
           return this.setState(state => ({ message: data.message }));
         }
-        const newData = this.state.ingredients.concat(data);
-        return this.setState(state => ({ ingredients: newData }));
+        return this.setState(state => ({ ingredients: data }));
       })
       .catch(error => console.error('Error:', error));
   }
@@ -63,8 +66,8 @@ export default class FridgeList extends React.Component {
       newIngredient: ''
     };
     this.addIngredients(newIngredient, user.userId);
+    this.setState({ newIngredient: '' });
     document.getElementById('addIngredient').value = '';
-
   }
 
   deleteIngredient(ingredientId) {
@@ -89,6 +92,10 @@ export default class FridgeList extends React.Component {
   }
 
   render() {
+    if (this.state.isLoading === true) {
+      return <h1>TESTING 123 123 123 123</h1>;
+    }
+
     const { ingredients } = this.state;
     const userIngredients = ingredients.map(ingredient => {
       return (
@@ -108,7 +115,7 @@ export default class FridgeList extends React.Component {
             </div>
             <h5 className="row p-3 text-center">{this.state.message}</h5>
           </div>
-          : <div className="input-group my-3 px-2">
+          : <form className="input-group my-3 px-2" onSubmit={this.handleSubmit}>
             <input
               required
               id="addIngredient"
@@ -118,14 +125,15 @@ export default class FridgeList extends React.Component {
               placeholder="Add an Ingredient"
               maxLength="20" />
             <div className="input-group-append">
-              <button onClick={this.handleSubmit} className="btn btn-info add-input pr-3"><i className="fas fa-plus"></i></button>
+              <button type="submit" className="btn btn-info add-input pr-3"><i className="fas fa-plus"></i></button>
             </div>
-          </div>
+          </form>
         }
         <ul className="list-group list-group-flush">
           {userIngredients}
         </ul>
-        <div className="noMoreIngredients"></div>
+        <div className="noMoreIngredients">
+        </div>
       </div>
     );
   }

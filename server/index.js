@@ -213,18 +213,27 @@ app.post('/api/ingredients/:userId', (req, res, next) => {
           message: 'The ingredient you are trying to add already exists!'
         });
       } else {
-        const { userId, ingredientId } = newIngredient;
-        return res.status(201).send({
-          ingredientId: ingredientId,
-          name: ingredient,
-          userId: userId
-        });
+        const sql = `
+          select "u"."userId",
+            "i"."ingredientId",
+            "i"."name"
+          from "users" as "u"
+          join "userIngredients" using ("userId")
+          join "ingredients" as "i" using ("ingredientId")
+          where "userId" = $1
+          order by "name";
+        `;
+        db.query(sql, [userId])
+          .then(results => {
+            const ingredients = results.rows;
+            res.status(201).json(ingredients);
+          });
       }
     });
 });
 
-app.get('/api/availableRecipes/:userId', (req, res, next) => {
-  const userId = parseInt(req.params.userId);
+app.get('/api/availableRecipes/', (req, res, next) => {
+  const userId = parseInt(req.session.user.userId);
   const sql = `
     with "ingredientsNeeded" as (
       select "r"."recipeId",
@@ -249,11 +258,13 @@ app.get('/api/availableRecipes/:userId', (req, res, next) => {
     select "in"."recipeTitle",
       "in"."recipeImage",
       "in"."recipePrepTime",
-      "in"."recipeId"
+      "in"."recipeId",
+      ("fr"."userId" is not null AND "fr"."userId" = $2) as "isFavorited"
     from "ingredientsNeeded" as "in"
-    join "ingredientsInFridge" as "if" using("recipeId", "ingredientCount");
+    join "ingredientsInFridge" as "if" using("recipeId", "ingredientCount")
+    left join "favoriteRecipes" as "fr" using ("recipeId")
   `;
-  const values = [userId];
+  const values = [userId, userId];
 
   db.query(sql, values)
     .then(availableRecipes => {
@@ -272,10 +283,13 @@ app.route('/api/favoriteRecipes')
     SELECT
       "r".*
     FROM "favoriteRecipes"
-    JOIN "recipes" as "r" using ("recipeId");
+    JOIN "recipes" as "r" using ("recipeId")
+    WHERE "userId" = $1
   `;
 
-    db.query(sql)
+    const id = [req.session.user.userId];
+
+    db.query(sql, id)
       .then(favRecipes => {
         if (!favRecipes.rows[0]) {
           throw new ClientError('There are no recipes in your favorites list!', 404);
@@ -288,10 +302,10 @@ app.route('/api/favoriteRecipes')
   .post((req, res, next) => {
     const sql = `
     INSERT INTO "favoriteRecipes"("userId", "recipeId")
-    VALUES (1, $1)
+    VALUES ($1, $2)
     RETURNING *;
   `;
-    const params = [req.body.recipe];
+    const params = [req.session.user.userId, req.body.recipe];
 
     db.query(sql, params)
       .then(newFav => {
@@ -301,15 +315,22 @@ app.route('/api/favoriteRecipes')
   });
 
 app.delete('/api/favoriteRecipes/:recipeId', (req, res, next) => {
+  // req.session.user.userId possibly
+  const userId = parseInt(req.session.user.userId);
+  const recipeId = parseInt(req.params.recipeId);
+
   const sql = `
     DELETE FROM "favoriteRecipes"
-    WHERE "recipeId" = $1;
+    WHERE "userId" = $1
+    AND "recipeId" = $2
+    RETURNING *;
   `;
-  const params = [req.params.recipeId];
+  const params = [userId, recipeId];
 
   db.query(sql, params)
     .then(result => {
-      res.status(204).json(result);
+      const deletedFav = result.rows[0];
+      res.status(204).json(deletedFav);
     })
     .catch(err => next(err));
 });
@@ -347,11 +368,13 @@ app.get('/api/users/:userId', (req, res, next) => {
       if (!user) {
         throw new ClientError('userId does not exist', 404);
       } else {
+        req.session.user = user;
         res.status(200).json(user);
       }
     })
     .catch(err => next(err));
 });
+
 
 app.post('/api/recipes', (req, res, next) => {
   const recipesSql = `
@@ -417,7 +440,30 @@ app.post('/api/recipes', (req, res, next) => {
       });
     })
     .catch(err => next(err));
+});
 
+// Post to create new userId
+app.post('/api/newUser', (req, res, next) => {
+  const { userName } = req.body;
+
+  if (!userName) {
+    return next(new ClientError('client has supplied invalid userName', 400));
+  }
+
+  const sql = `
+    insert into "users" ("userId", "userName")
+    values (default, $1)
+    returning *;
+  `;
+  const values = [userName];
+
+  db.query(sql, values)
+    .then(result => {
+      const newUser = result.rows[0];
+      res.status(201).json(newUser);
+
+    })
+    .catch(err => next(err));
 });
 
 app.use('/api', (req, res, next) => {

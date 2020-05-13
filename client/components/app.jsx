@@ -1,16 +1,15 @@
 import React from 'react';
-import Footer from './footer';
-import Header from './header';
 import RecipeList from './recipeList';
 import FridgeList from './fridgeList';
 import Search from './search';
 import FavoritesList from './favorites';
-import ShoppingList from './shoppingList';
+import AddARecipe from './addARecipe';
 import RecipeDetails from './recipeDetails';
 import Login from './login';
 import AppContext from '../lib/context';
-// eslint-disable-next-line no-unused-vars
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Layout from './layout';
+import requireAuth from './require-auth';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -18,51 +17,56 @@ export default class App extends React.Component {
     this.state = {
       message: null,
       isLoading: true,
-      login: true,
       user: {
         userId: null,
         userName: ''
-      }
+      },
+      recipes: []
     };
     this.onLogin = this.onLogin.bind(this);
     this.contextValue = {
-      getUser: this.getUser.bind(this)
+      getUser: this.getUser.bind(this),
+      logout: this.logout.bind(this),
+      onLogin: this.onLogin.bind(this)
     };
   }
 
-  onLogin(userId) {
-    if (!userId) return;
-    fetch(`/api/users/${userId}`)
-      .then(res => res.json())
-      .then(user => this.setState({
-        user: user,
-        login: !this.state.login
-      }));
+  onLogin(user) {
+    this.setState({
+      user: user
+    });
   }
 
   getUser() {
     return this.state.user;
   }
 
+  logout() {
+    this.setState({
+      user: {
+        userId: null,
+        userName: ''
+      }
+    });
+  }
+
   render() {
-    if (this.state.login === true) {
-      return <Login onLogin={this.onLogin}/>;
-    } else {
-      return (
-        <AppContext.Provider value={this.contextValue}>
-          <Router>
-            <Header />
-            <Route path="/login" component={Login} />
-            <Route path="/recipeList" exact component={RecipeList}/>
-            <Route path="/recipeList/:id" component={RecipeDetails} />
-            <Route path="/fridgeList" component={FridgeList} />
-            <Route path="/favoritesList" component={FavoritesList} />
-            <Route path="/search" component={Search} />
-            <Route path="/shoppingList" component={ShoppingList} />
-            <Footer />
-          </Router>
-        </AppContext.Provider>
-      );
-    }
+    return (
+      <AppContext.Provider value={this.contextValue}>
+        <Router>
+          <Layout>
+            <Switch>
+              <Route path="/" exact component={requireAuth(FridgeList)} />
+              <Route path="/login" component={Login} />
+              <Route path="/recipeList" exact component={requireAuth(RecipeList)}/>
+              <Route path="/recipeList/:id" component={RecipeDetails} />
+              <Route path="/favoritesList" component={requireAuth(FavoritesList)} />
+              <Route path="/search" component={requireAuth(Search)} />
+              <Route path="/addARecipe" component={requireAuth(AddARecipe)} />
+            </Switch>
+          </Layout>
+        </Router>
+      </AppContext.Provider>
+    );
   }
 }
