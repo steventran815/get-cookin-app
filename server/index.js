@@ -232,8 +232,8 @@ app.post('/api/ingredients/:userId', (req, res, next) => {
     });
 });
 
-app.get('/api/availableRecipes/:userId', (req, res, next) => {
-  const userId = parseInt(req.params.userId);
+app.get('/api/availableRecipes/', (req, res, next) => {
+  const userId = parseInt(req.session.user.userId);
   const sql = `
     with "ingredientsNeeded" as (
       select "r"."recipeId",
@@ -258,11 +258,13 @@ app.get('/api/availableRecipes/:userId', (req, res, next) => {
     select "in"."recipeTitle",
       "in"."recipeImage",
       "in"."recipePrepTime",
-      "in"."recipeId"
+      "in"."recipeId",
+      ("fr"."userId" is not null AND "fr"."userId" = $2) as "isFavorited"
     from "ingredientsNeeded" as "in"
-    join "ingredientsInFridge" as "if" using("recipeId", "ingredientCount");
+    join "ingredientsInFridge" as "if" using("recipeId", "ingredientCount")
+    left join "favoriteRecipes" as "fr" using ("recipeId")
   `;
-  const values = [userId];
+  const values = [userId, userId];
 
   db.query(sql, values)
     .then(availableRecipes => {
@@ -275,7 +277,7 @@ app.get('/api/availableRecipes/:userId', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.route('/api/favoriteRecipes/:userId')
+app.route('/api/favoriteRecipes')
   .get((req, res, next) => {
     const sql = `
     SELECT
@@ -285,7 +287,9 @@ app.route('/api/favoriteRecipes/:userId')
     WHERE "userId" = $1
   `;
 
-    db.query(sql)
+    const id = [req.session.user.userId];
+
+    db.query(sql, id)
       .then(favRecipes => {
         if (!favRecipes.rows[0]) {
           throw new ClientError('There are no recipes in your favorites list!', 404);
@@ -301,7 +305,7 @@ app.route('/api/favoriteRecipes/:userId')
     VALUES ($1, $2)
     RETURNING *;
   `;
-    const params = [req.params.userId, req.body.recipe];
+    const params = [req.session.user.userId, req.body.recipe];
 
     db.query(sql, params)
       .then(newFav => {
@@ -310,8 +314,9 @@ app.route('/api/favoriteRecipes/:userId')
       .catch(err => next(err));
   });
 
-app.delete('/api/favoriteRecipes/:userId/:recipeId', (req, res, next) => {
-  const userId = parseInt(req.params.userId);
+app.delete('/api/favoriteRecipes/:recipeId', (req, res, next) => {
+  // req.session.user.userId possibly
+  const userId = parseInt(req.session.user.userId);
   const recipeId = parseInt(req.params.recipeId);
 
   const sql = `

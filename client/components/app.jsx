@@ -24,10 +24,8 @@ export default class App extends React.Component {
       recipes: []
     };
     this.onLogin = this.onLogin.bind(this);
-    this.getFavorites = this.getFavorites.bind(this);
     this.contextValue = {
       getUser: this.getUser.bind(this),
-      getFavs: this.getFavs.bind(this),
       logout: this.logout.bind(this),
       onLogin: this.onLogin.bind(this)
     };
@@ -39,21 +37,8 @@ export default class App extends React.Component {
     });
   }
 
-  getFavorites() {
-    fetch('/api/favoriteRecipes')
-      .then(FavoritesList => FavoritesList.json())
-      .then(recipes => this.setState({
-        recipes: recipes
-      }))
-      .catch(err => console.error(err));
-  }
-
   getUser() {
     return this.state.user;
-  }
-
-  getFavs() {
-    return this.state.recipes;
   }
 
   logout() {
