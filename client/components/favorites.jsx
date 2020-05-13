@@ -11,14 +11,16 @@ export default class FavoritesList extends React.Component {
   }
 
   componentDidMount() {
-    const favs = this.context.getFavs();
-    this.favState(favs);
+    this.getFavorites();
   }
 
-  favState(favs) {
-    return this.setState({
-      recipes: favs
-    });
+  getFavorites() {
+    fetch('/api/favoriteRecipes')
+      .then(FavoritesList => FavoritesList.json())
+      .then(recipes => this.setState({
+        recipes: recipes
+      }))
+      .catch(err => console.error(err));
   }
 
   render() {

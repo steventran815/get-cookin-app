@@ -13,20 +13,11 @@ export default class RecipeList extends React.Component {
   }
 
   componentDidMount() {
-    const user = this.context.getUser();
-    const favs = this.context.getFavs();
-    this.favState(favs);
-    this.getRecipes(user.userId);
-  }
-
-  favState(favs) {
-    return this.setState({
-      favorites: favs
-    });
+    this.getRecipes();
   }
 
   getRecipes(userId) {
-    fetch(`/api/availableRecipes/${userId}`)
+    fetch('/api/availableRecipes')
       .then(res => res.json())
       .then(recipes => this.setState({
         recipes: recipes
@@ -55,7 +46,7 @@ export default class RecipeList extends React.Component {
     } else {
       recipesList = recipes.map(recipe => {
         return (
-          <RecipeListItem key={recipe.recipeId} favorites={this.state.favorites} recipe={recipe} />
+          <RecipeListItem key={recipe.recipeId} recipe={recipe} />
         );
       });
     }

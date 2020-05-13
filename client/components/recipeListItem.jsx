@@ -6,8 +6,7 @@ export default class RecipeListItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      favoriteIds: [],
-      user: null
+      isFavorited: this.props.recipe.isFavorited
     };
     this.favorites = this.props.favorites;
     this.recipe = this.props.recipe;
@@ -15,48 +14,15 @@ export default class RecipeListItem extends React.Component {
     this.recipePrepTime = this.recipe.recipePrepTime;
     this.recipeImage = this.recipe.recipeImage;
     this.recipeId = this.recipe.recipeId;
-    this.favIds = this.state.favoriteIds;
-    this.getIds = this.getIds.bind(this);
     this.checkIfFav = this.checkIfFav.bind(this);
   }
 
-  componentDidMount() {
-    this.getIds(this.favorites);
-    const user = this.context.getUser();
-    this.userState(user);
-  }
-
-  userState(userId) {
-    return this.setState({
-      user: userId
-    });
-  }
-
-  getIds(favorites) {
-    const favIds = this.state.favoriteIds.slice();
-    for (let i = 0; i < favorites.length; i++) {
-      favIds.push(favorites[i].recipeId);
-    }
-    return this.setState({
-      favoriteIds: favIds
-    });
-  }
-
   checkIfFav() {
-    const favId = this.state.favoriteIds;
-    const recipeId = this.recipeId;
-    for (let i = 0; i < favId.length; i++) {
-      if (favId[i] === recipeId) {
-        return true;
-      } else if (favId[i] !== recipeId && i === favId.length) {
-        return false;
-      }
-    }
+    return this.state.isFavorited;
   }
 
-  addFav(userId, recipe) {
-    const favorites = this.state.favoriteIds.slice();
-    fetch(`/api/favoriteRecipes/${userId}`, {
+  addFav(recipe) {
+    fetch('/api/favoriteRecipes', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -65,39 +31,34 @@ export default class RecipeListItem extends React.Component {
     })
       .then(res => res.json())
       .then(data => this.setState(() => {
-        favorites.push(data.recipeId);
         return {
-          favoriteIds: favorites
+          isFavorited: true
         };
       }))
       .catch(error => console.error('Error:', error));
   }
 
-  remFav(userId, recipe) {
-    const favorites = this.state.favoriteIds.slice();
-    fetch(`/api/favoriteRecipes/${userId}/${recipe}`, {
+  remFav(recipe) {
+    fetch(`/api/favoriteRecipes/${recipe}`, {
       method: 'DELETE'
     })
       .then(data => {
-        for (let i = 0; i < favorites; i++) {
-          if (favorites[i] === recipe) {
-            favorites.splice(i);
-            return favorites;
-          }
-        }
+        return this.setState(() => {
+          return {
+            isFavorited: false
+          };
+        });
       })
-      .then(newArray => {
-        return this.setState(state => ({ favoriteIds: favorites }));
-      })
+
       .catch(error => console.error('Error:', error));
   }
 
   addFavClick(recipeId) {
-    this.addFav(this.state.user.userId, recipeId);
+    this.addFav(recipeId);
   }
 
   remFavClick(recipeId) {
-    this.remFav(this.state.user.userId, recipeId);
+    this.remFav(recipeId);
   }
 
   render() {
