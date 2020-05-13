@@ -13,7 +13,7 @@ export default class DoneCooking extends React.Component {
             <div className="getCookinImageDiv">
               <img className="getCookinImage"src="/images/getCookinFridgeHappy.gif"/>
             </div>
-            <Link to='/fridgeList'>
+            <Link to='/'>
               <button className="doneCookingButton">GO TO FRIDGE</button>
             </Link>
           </div>
