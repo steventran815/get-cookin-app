@@ -1,5 +1,6 @@
 import React from 'react';
 import CreateUser from './createUser';
+import AppContext from '../lib/context';
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -38,8 +39,13 @@ export default class Login extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     const { selectedId } = this.state;
-    const { onLogin } = this.props;
-    onLogin(selectedId);
+    if (!selectedId) return;
+    fetch(`/api/users/${selectedId}`)
+      .then(res => res.json())
+      .then(user => {
+        this.context.onLogin(user);
+        this.props.history.push('/');
+      });
   }
 
   createNewUser(newUser) {
@@ -117,3 +123,5 @@ export default class Login extends React.Component {
     );
   }
 }
+
+Login.contextType = AppContext;

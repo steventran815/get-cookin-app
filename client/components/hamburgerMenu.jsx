@@ -1,12 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import AppContext from '../lib/context';
+import { withRouter } from 'react-router-dom';
 
-export default class HamburgerMenu extends React.Component {
+class HamburgerMenu extends React.Component {
   constructor(props) {
     super(props);
-    this.state = ({
-      menuClicked: false
-    });
+    this.handleLogout = this.handleLogout.bind(this);
+  }
+
+  handleLogout() {
+    this.context.logout();
+    this.props.history.push('/login');
   }
 
   render() {
@@ -24,11 +28,9 @@ export default class HamburgerMenu extends React.Component {
                 <li>Privacy Policy</li>
                 <li>Terms</li>
               </ul>
-              <Link to='/search'>
-                <div className="logoutDiv">
-                  <h1 onClick={this.props.toggle} className="logoutButton">LOGOUT</h1>
-                </div>
-              </Link>
+              <div className="logoutDiv">
+                <h1 onClick={this.handleLogout}className="logoutButton">LOGOUT</h1>
+              </div>
             </div>
           </div>
         </div>
@@ -36,3 +38,6 @@ export default class HamburgerMenu extends React.Component {
     );
   }
 }
+
+HamburgerMenu.contextType = AppContext;
+export default withRouter(HamburgerMenu);

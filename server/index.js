@@ -266,13 +266,14 @@ app.get('/api/availableRecipes/:userId', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.route('/api/favoriteRecipes')
+app.route('/api/favoriteRecipes/:userId')
   .get((req, res, next) => {
     const sql = `
     SELECT
       "r".*
     FROM "favoriteRecipes"
-    JOIN "recipes" as "r" using ("recipeId");
+    JOIN "recipes" as "r" using ("recipeId")
+    WHERE "userId" = $1
   `;
 
     db.query(sql)
@@ -288,10 +289,10 @@ app.route('/api/favoriteRecipes')
   .post((req, res, next) => {
     const sql = `
     INSERT INTO "favoriteRecipes"("userId", "recipeId")
-    VALUES (1, $1)
+    VALUES ($1, $2)
     RETURNING *;
   `;
-    const params = [req.body.recipe];
+    const params = [req.params.userId, req.body.recipe];
 
     db.query(sql, params)
       .then(newFav => {
@@ -300,16 +301,22 @@ app.route('/api/favoriteRecipes')
       .catch(err => next(err));
   });
 
-app.delete('/api/favoriteRecipes/:recipeId', (req, res, next) => {
+app.delete('/api/favoriteRecipes/:userId/:recipeId', (req, res, next) => {
+  const userId = parseInt(req.params.userId);
+  const recipeId = parseInt(req.params.recipeId);
+
   const sql = `
     DELETE FROM "favoriteRecipes"
-    WHERE "recipeId" = $1;
+    WHERE "userId" = $1
+    AND "recipeId" = $2
+    RETURNING *;
   `;
-  const params = [req.params.recipeId];
+  const params = [userId, recipeId];
 
   db.query(sql, params)
     .then(result => {
-      res.status(204).json(result);
+      const deletedFav = result.rows[0];
+      res.status(204).json(deletedFav);
     })
     .catch(err => next(err));
 });
@@ -347,6 +354,7 @@ app.get('/api/users/:userId', (req, res, next) => {
       if (!user) {
         throw new ClientError('userId does not exist', 404);
       } else {
+        req.session.user = user;
         res.status(200).json(user);
       }
     })

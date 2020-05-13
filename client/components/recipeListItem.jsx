@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import AppContext from '../lib/context';
 
 export default class RecipeListItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      favoriteIds: []
+      favoriteIds: [],
+      user: null
     };
     this.favorites = this.props.favorites;
     this.recipe = this.props.recipe;
@@ -20,6 +22,14 @@ export default class RecipeListItem extends React.Component {
 
   componentDidMount() {
     this.getIds(this.favorites);
+    const user = this.context.getUser();
+    this.userState(user);
+  }
+
+  userState(userId) {
+    return this.setState({
+      user: userId
+    });
   }
 
   getIds(favorites) {
@@ -44,9 +54,9 @@ export default class RecipeListItem extends React.Component {
     }
   }
 
-  addFav(recipe) {
+  addFav(userId, recipe) {
     const favorites = this.state.favoriteIds.slice();
-    fetch('/api/favoriteRecipes', {
+    fetch(`/api/favoriteRecipes/${userId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -63,8 +73,31 @@ export default class RecipeListItem extends React.Component {
       .catch(error => console.error('Error:', error));
   }
 
-  favClick(recipeId) {
-    this.addFav(recipeId);
+  remFav(userId, recipe) {
+    const favorites = this.state.favoriteIds.slice();
+    fetch(`/api/favoriteRecipes/${userId}/${recipe}`, {
+      method: 'DELETE'
+    })
+      .then(data => {
+        for (let i = 0; i < favorites; i++) {
+          if (favorites[i] === recipe) {
+            favorites.splice(i);
+            return favorites;
+          }
+        }
+      })
+      .then(newArray => {
+        return this.setState(state => ({ favoriteIds: favorites }));
+      })
+      .catch(error => console.error('Error:', error));
+  }
+
+  addFavClick(recipeId) {
+    this.addFav(this.state.user.userId, recipeId);
+  }
+
+  remFavClick(recipeId) {
+    this.remFav(this.state.user.userId, recipeId);
   }
 
   render() {
@@ -88,8 +121,8 @@ export default class RecipeListItem extends React.Component {
             <h2><span className="prepTime">Cooking Time: {recipePrepTime}</span></h2>
             <div><span className="favoriteIcon">
               {this.checkIfFav()
-                ? <i className='fa fa-heart'></i>
-                : <i onClick={() => { this.favClick(recipeId); }} className='far fa-heart'></i>
+                ? <i onClick={() => { this.remFavClick(recipeId); }} className='fa fa-heart'></i>
+                : <i onClick={() => { this.addFavClick(recipeId); }} className='far fa-heart'></i>
               }
             </span></div>
           </div>
@@ -99,3 +132,5 @@ export default class RecipeListItem extends React.Component {
     );
   }
 }
+
+RecipeListItem.contextType = AppContext;
