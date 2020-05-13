@@ -91,32 +91,34 @@ export default class Login extends React.Component {
     return (
       <div className="d-flex align-items-center login-background">
         <div className="container">
-          <div className="title w-100 text-center">
+          <div className="title mb-3 w-100 text-center">
             <div>
-              <img src="/images/getCookinLogoWhite.png" alt="get_cookin"/>
+              <img className="login-logo" src="/images/getCookinLogoWhite.png" alt="get_cookin"/>
             </div>
-            <h1 className="page-title">
-            Get Cookin&apos;
-            </h1>
+            <h2 className="page-title">
+            GET COOKIN&apos;
+            </h2>
           </div>
 
           <div className="form-input w-100">
-            <label className="select-label">What&apos;s in your fridge?</label>
             <form id="usersList" onSubmit={this.handleSubmit}>
               <select
-                className="form-control"
+                className="form-control select-user"
                 value={this.state.value}
                 onChange={this.handleChange}>
                 <option>Select User</option>
                 {options}
               </select>
-              <button type="submit" className="btn btn-secondary btn-block mt-2 login-button">Log In</button>
+              <button type="submit" className="btn btn-secondary btn-block mt-2 login-button">LOGIN</button>
             </form>
           </div>
-          <p className="text-center pt-3">- or -</p>
-          <button type="click" className="btn btn-secondary btn-block mt-2 login-button" onClick={() => this.setView('create')}>Create New User</button>
+          <div className="or-div">
+            <hr className="login-hr"></hr>
+            <h5 className="text-center p-3 text-white login-or"> OR </h5>
+            <hr className="login-hr"></hr>
+          </div>
+          <button type="click" className="btn btn-secondary btn-block login-button" onClick={() => this.setView('create')}>CREATE NEW USER</button>
         </div>
-
       </div>
     );
   }

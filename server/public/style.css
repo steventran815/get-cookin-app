@@ -389,7 +389,6 @@ footer{
   color:#444444;
 }
 
-
 .login-background {
   background-color: #FF5758;
   height: 100vh;
@@ -485,7 +484,6 @@ footer{
   width:100%;
 }
 
-
 .headerList{
   padding:0px;
   width:100%;
@@ -493,7 +491,6 @@ footer{
 
 .headerList > .headerListTitle{
   margin: 5% 15%;
-
 }
 
 .add-a-recipe-div{
@@ -512,7 +509,7 @@ footer{
   height:35px;
   box-shadow:0 4px 4px rgba(0,0,0,.25);
   border:none;
-  padding-left:15px;
+  padding:0px 15px;
 }
 
 .add-a-recipe-title{
@@ -531,11 +528,13 @@ footer{
   border:none;
   margin:25px 0px 50px;
 }
+
 .add-a-recipe-instructionsList{
   list-style:none;
   color:#444444;
   padding-left:0px;
 }
+
 .added-instruction{
   background-color:white;
   border-radius:10px;
@@ -561,12 +560,53 @@ input::placeholder {
   margin:auto 0;
 }
 
+.add-a-recipe-input-instruction, .add-a-recipe-input-ingredient{
+  position:relative;
+}
+
 .ingredients-button{
   background-color:#30B6BE;
   color:white;
   border:none;
+  position:absolute;
+  top:0px;
+  bottom:0px;
+  right:0px;
+  padding:0px 10px;
 }
+
 .login-button {
+  font-family:oswald;
+  font-weight:semi-bold;
+  font-size:1.25rem;
+  padding:7px 0px;
   background-color: #30B6BE;
   border:none;
+}
+
+.select-user{
+  margin-bottom:5px;
+  height:45px;
+
+}
+
+.or-div{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.login-logo{
+  width:35%;
+}
+
+.login-hr{
+  width:45%;
+  border-width: 2px;
+  border-color:white;
+}
+
+.login-or{
+  font-family:oswald;
+  font-weight:semi-bold;
 }
