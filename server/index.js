@@ -68,8 +68,8 @@ app.get('/api/recipes', (req, res, next) => {
       "rins"."instructions" as "recipeInstructions"
     FROM "recipeIngredients" as "ring"
     JOIN "recipeInstructions" as "rins" using ("recipeId")
-    ORDER BY "recipeId" asc
-  ;`;
+    ORDER BY "recipeId" asc;
+    `;
   db.query(sql)
     .then(result => res.json(result.rows))
     .catch(err => next(err));
@@ -259,12 +259,12 @@ app.get('/api/availableRecipes/', (req, res, next) => {
       "in"."recipeImage",
       "in"."recipePrepTime",
       "in"."recipeId",
-      ("fr"."userId" is not null AND "fr"."userId" = $2) as "isFavorited"
+      ("fr"."userId" is not null AND "fr"."userId" = $1) as "isFavorited"
     from "ingredientsNeeded" as "in"
     join "ingredientsInFridge" as "if" using("recipeId", "ingredientCount")
-    left join "favoriteRecipes" as "fr" using ("recipeId")
+    left join "favoriteRecipes" as "fr" using ("recipeId");
   `;
-  const values = [userId, userId];
+  const values = [userId];
 
   db.query(sql, values)
     .then(availableRecipes => {
@@ -284,7 +284,7 @@ app.route('/api/favoriteRecipes')
       "r".*
     FROM "favoriteRecipes"
     JOIN "recipes" as "r" using ("recipeId")
-    WHERE "userId" = $1
+    WHERE "userId" = $1;
   `;
 
     const id = [req.session.user.userId];
@@ -338,7 +338,7 @@ app.delete('/api/favoriteRecipes/:recipeId', (req, res, next) => {
 app.get('/api/users', (req, res, next) => {
   const sql = `
     select *
-    from "users"
+    from "users";
   `;
   db.query(sql)
     .then(result => {
@@ -391,7 +391,7 @@ app.post('/api/recipes', (req, res, next) => {
               INSERT INTO "ingredients" ("ingredientId", "name")
               VALUES (default, $1)
               ON CONFLICT ("name") DO UPDATE SET "name"=$1
-              RETURNING *
+              RETURNING *;
             `;
         const ingredientsParams = [ingredient];
 
@@ -402,7 +402,7 @@ app.post('/api/recipes', (req, res, next) => {
             const recipeIngredientsSql = `
                 INSERT INTO "recipeIngredients" ("recipeId", "ingredientId")
                 VALUES ($1, $2)
-                RETURNING *
+                RETURNING *;
               `;
             const recipeIngredientsParams = [recipeId, ingredientId];
 
@@ -426,7 +426,7 @@ app.post('/api/recipes', (req, res, next) => {
             const { instructionId } = newInstruction.rows[0];
             const recipeInstructionsSql = `
               INSERT INTO "recipeInstructions" ("recipeId", "instructionId")
-              VALUES ($1, $2)
+              VALUES ($1, $2);
             `;
             const recipeInstructionsParams = [recipeId, instructionId];
 
