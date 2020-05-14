@@ -661,3 +661,8 @@ input::placeholder {
 .finding-available-ingredients{
   color:#F96C6D
 }
+
+.opacity{
+  opacity:.5;
+  pointer-events: none;
+}
