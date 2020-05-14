@@ -21,7 +21,6 @@ export default class RecipeDetails extends React.Component {
 
   componentDidMount() {
     const { id } = this.props.match.params;
-
     fetch(`/api/recipes/${id}`)
       .then(res => res.json())
       .then(recipe => this.setState({
@@ -87,11 +86,9 @@ export default class RecipeDetails extends React.Component {
           <div className="doneCookingDiv">
             <button onClick={this.handleClick} className="doneCookingButton">DONE COOKING</button>
           </div>
-          <div><h1>END OF RECIPE</h1></div>
+          <div className="noMoreIngredients"></div>
         </div>
       );
-
     }
-
   }
 }
