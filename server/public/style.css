@@ -375,6 +375,7 @@ footer{
 .searchLeft{
   display:flex;
   align-items:center;
+  color: #444444;
 }
 
 .searchPrepTime{
