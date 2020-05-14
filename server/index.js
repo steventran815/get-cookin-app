@@ -441,7 +441,6 @@ app.post('/api/recipes', (req, res, next) => {
     .catch(err => next(err));
 });
 
-// Post to create new userId
 app.post('/api/newUser', (req, res, next) => {
   const { userName } = req.body;
 
