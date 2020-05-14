@@ -134,8 +134,6 @@ footer{
 }
 
 .noMoreIngredients{
-  color: #6c6c6c;
-  text-align:center;
   height: 50px;
   margin: 5px, 0, 0, 0;
 }
@@ -514,7 +512,7 @@ footer{
 .add-a-recipe-div{
   background-color: #F8f8f8;
   background-size:cover;
-  height:100vh;
+  height:80vh;
   display:flex;
   justify-content: center;
   padding-bottom:25px;
@@ -555,7 +553,9 @@ footer{
 }
 
 .added-instruction{
-  background-color:white;
+  color:white;
+  background-color:#f96c6d;
+  font-size:1rem;
   border-radius:10px;
   padding:15px;
   margin-top:10px;

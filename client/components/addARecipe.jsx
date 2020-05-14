@@ -32,12 +32,13 @@ export default class AddARecipe extends React.Component {
   }
 
   handleClickIngredients() {
+    const ingredientValue = document.getElementById('ingredientValue').value.toLowerCase();
     const ingredientsClone = this.state.ingredients.slice();
-    ingredientsClone.push(document.getElementById('ingredientValue').value);
+    ingredientsClone.push(ingredientValue);
+
     this.setState({
       ingredients: ingredientsClone
     });
-    const ingredientValue = document.getElementById('ingredientValue').value;
     if (ingredientValue === '') { return; }
     const ingredientUl = document.getElementById('addAnIngredientUl');
     const ingredientListItem = document.createElement('li');
@@ -86,9 +87,17 @@ export default class AddARecipe extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    const ingredientUl = document.getElementById('addAnIngredientUl');
+    const instructionUl = document.getElementById('addAnInstructionUl');
     const newRecipe = this.state;
     this.addRecipe(newRecipe);
     document.getElementById('addARecipeForm').reset();
+    while (ingredientUl.firstChild) {
+      ingredientUl.removeChild(ingredientUl.firstChild);
+    }
+    while (instructionUl.firstChild) {
+      instructionUl.removeChild(instructionUl.firstChild);
+    }
   }
 
   render() {
@@ -129,6 +138,8 @@ export default class AddARecipe extends React.Component {
             <ul id="addAnInstructionUl" className="add-a-recipe-instructionsList"></ul>
           </div>
           <button onClick={this.handleSubmit} type="submit" className="add-a-recipe-button">SUBMIT RECIPE</button>
+          <div className="noMoreIngredients">
+          </div>
         </form>
       </div>
     );
