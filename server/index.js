@@ -375,7 +375,6 @@ app.get('/api/users/:userId', (req, res, next) => {
     .catch(err => next(err));
 });
 
-
 app.post('/api/recipes', (req, res, next) => {
   const recipesSql = `
     INSERT INTO "recipes" ("recipeTitle", "recipeImage", "recipePrepTime")
@@ -391,7 +390,7 @@ app.post('/api/recipes', (req, res, next) => {
         const ingredientsSql = `
               INSERT INTO "ingredients" ("ingredientId", "name")
               VALUES (default, $1)
-              ON CONFLICT ("name") DO NOTHING
+              ON CONFLICT ("name") DO UPDATE SET "name"=$1
               RETURNING *
             `;
         const ingredientsParams = [ingredient];
