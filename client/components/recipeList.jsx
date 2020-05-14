@@ -22,7 +22,11 @@ export default class RecipeList extends React.Component {
 
   componentDidMount() {
     this.getRecipes();
-    setTimeout(this.loadingScreen, 1500);
+    this.loadingInterval = setInterval(this.loadingScreen, 1500);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.loadingInterval);
   }
 
   getRecipes(userId) {

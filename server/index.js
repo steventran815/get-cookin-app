@@ -40,8 +40,9 @@ app.get('/api/userIngredients/:userId', (req, res, next) => {
 });
 
 app.get('/api/recipes', (req, res, next) => {
+  const userId = parseInt(req.session.user.userId);
   const sql = `
-    WITH "recipeIngredients" as (
+       WITH "recipeIngredients" as (
       SELECT
         "r".*,
         json_agg("i"."name") as "ingredients"
@@ -65,12 +66,15 @@ app.get('/api/recipes', (req, res, next) => {
       "ring"."recipeImage",
       "ring"."recipePrepTime",
       "ring"."ingredients" as "recipeIngredients",
-      "rins"."instructions" as "recipeInstructions"
+      "rins"."instructions" as "recipeInstructions",
+      ("fr"."userId" is not null AND "fr"."userId" = $1) as "isFavorited"
     FROM "recipeIngredients" as "ring"
     JOIN "recipeInstructions" as "rins" using ("recipeId")
-    ORDER BY "recipeId" asc;
-    `;
-  db.query(sql)
+    LEFT JOIN "favoriteRecipes" as "fr" using ("recipeId")
+    ORDER BY "recipeId" asc
+  ;`;
+  const params = [userId];
+  db.query(sql, params)
     .then(result => res.json(result.rows))
     .catch(err => next(err));
 });
@@ -315,7 +319,6 @@ app.route('/api/favoriteRecipes')
   });
 
 app.delete('/api/favoriteRecipes/:recipeId', (req, res, next) => {
-  // req.session.user.userId possibly
   const userId = parseInt(req.session.user.userId);
   const recipeId = parseInt(req.params.recipeId);
 
