@@ -7,8 +7,8 @@ export default class AddARecipe extends React.Component {
       recipeTitle: '',
       recipePrepTime: 0,
       recipeImage: '',
-      recipeIngredients: [],
-      recipeInstructions: []
+      ingredients: [],
+      instructions: []
     };
     this.handleClickIngredients = this.handleClickIngredients.bind(this);
     this.handleClickInstructions = this.handleClickInstructions.bind(this);
@@ -32,10 +32,10 @@ export default class AddARecipe extends React.Component {
   }
 
   handleClickIngredients() {
-    const ingredientsclone = this.state.recipeIngredients.slice();
-    ingredientsclone.push(document.getElementById('ingredientValue').value);
+    const ingredientsClone = this.state.ingredients.slice();
+    ingredientsClone.push(document.getElementById('ingredientValue').value);
     this.setState({
-      recipeIngredients: ingredientsclone
+      ingredients: ingredientsClone
     });
     const ingredientValue = document.getElementById('ingredientValue').value;
     if (ingredientValue === '') { return; }
@@ -50,12 +50,12 @@ export default class AddARecipe extends React.Component {
 
   handleClickInstructions() {
     const instructionObj = {};
-    instructionObj.step = this.state.recipeInstructions.length + 1;
-    instructionObj.textContent = document.getElementById('instructionValue').value;
-    const instuctionsClone = this.state.recipeInstructions.slice();
+    instructionObj.step = this.state.instructions.length + 1;
+    instructionObj.displayText = document.getElementById('instructionValue').value;
+    const instuctionsClone = this.state.instructions.slice();
     instuctionsClone.push(instructionObj);
     this.setState({
-      recipeInstructions: instuctionsClone
+      instructions: instuctionsClone
     });
 
     const instructionValue = document.getElementById('instructionValue').value;
@@ -70,7 +70,7 @@ export default class AddARecipe extends React.Component {
   }
 
   addRecipe(newRecipe) {
-    fetch('/api/recipes/', {
+    fetch('/api/recipes', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
