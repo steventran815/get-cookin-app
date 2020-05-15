@@ -42,36 +42,33 @@ app.get('/api/userIngredients/:userId', (req, res, next) => {
 app.get('/api/recipes', (req, res, next) => {
   const userId = parseInt(req.session.user.userId);
   const sql = `
-       WITH "recipeIngredients" as (
-      SELECT
-        "r".*,
-        json_agg("i"."name") as "ingredients"
-      FROM "recipes" as "r"
-      JOIN "recipeIngredients" as "ri" using ("recipeId")
-      JOIN "ingredients" as "i" using ("ingredientId")
-      GROUP BY "r"."recipeId"
-    ),
-    "recipeInstructions" as (
-      SELECT
-        "r".*,
-        json_agg("i"."instruction") as "instructions"
-      FROM "recipes" as "r"
-      JOIN "recipeInstructions" as "rins" using ("recipeId")
-      JOIN "instructions" as "i" using ("instructionId")
-      GROUP BY "r"."recipeId"
-      )
+  WITH "recipeIngredients" as (
     SELECT
-      "ring"."recipeId",
-      "ring"."recipeTitle",
-      "ring"."recipeImage",
-      "ring"."recipePrepTime",
-      "ring"."ingredients" as "recipeIngredients",
-      "rins"."instructions" as "recipeInstructions",
-      ("fr"."userId" is not null AND "fr"."userId" = $1) as "isFavorited"
-    FROM "recipeIngredients" as "ring"
-    JOIN "recipeInstructions" as "rins" using ("recipeId")
-    LEFT JOIN "favoriteRecipes" as "fr" using ("recipeId")
-    ORDER BY "recipeId" asc
+      "r".*,
+      json_agg("i"."name") as "ingredients"
+    FROM "recipes" as "r"
+    JOIN "recipeIngredients" as "ri" using ("recipeId")
+    JOIN "ingredients" as "i" using ("ingredientId")
+    GROUP BY "r"."recipeId"
+  ),
+  "recipeInstructions" as (
+    SELECT
+      "r".*
+    FROM "recipes" as "r"
+    GROUP BY "r"."recipeId"
+    )
+  SELECT
+    "ring"."recipeId",
+    "ring"."recipeTitle",
+    "ring"."recipeImage",
+    "ring"."recipePrepTime",
+    "ring"."ingredients" as "recipeIngredients",
+    "rins"."recipeInstructions" as "recipeInstructions",
+    ("fr"."userId" is not null AND "fr"."userId" = $1) as "isFavorited"
+  FROM "recipeIngredients" as "ring"
+  JOIN "recipeInstructions" as "rins" using ("recipeId")
+  LEFT JOIN "favoriteRecipes" as "fr" using ("recipeId")
+  ORDER BY "recipeId" asc
   ;`;
   const params = [userId];
   db.query(sql, params)
