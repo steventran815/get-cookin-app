@@ -242,8 +242,8 @@ footer{
 }
 
 .closeButton{
-  font-size: 28px;
-  color: red
+  color: #FF5758;
+  font-size:45px;
 }
 
 .doneCookingOpacity{
@@ -441,7 +441,13 @@ footer{
   display:flex;
   padding-top:35px;
 }
-.hamburgerMenuDiv-unclicked{
+
+.hamburgerMenuIcon{
+  background:url('/images/hamburgerIcon.png');
+  background-position:cover;
+  height:45px;
+}
+.hamburgerMenuDiv{
   width: 250px;
   height: 100%;
   position:fixed;
@@ -452,14 +458,10 @@ footer{
   left:-250px;
   margin: 0;
   padding: 0;
+  transition:all ease .5s;
 }
 
-.hamburgerMenuIcon{
-  background:url('/images/hamburgerIcon.png');
-  background-position:cover;
-  height:45px;
-}
-.hamburgerMenuDiv{
+.hamburgerMenu-clicked{
   width: 250px;
   height: 100%;
   position:fixed;
@@ -554,8 +556,8 @@ footer{
 }
 
 .added-instruction{
-  color:white;
-  background-color:#f96c6d;
+  color:#444444;
+  background-color:#FFFFFF;
   font-size:1rem;
   border-radius:10px;
   padding:15px;
@@ -666,4 +668,14 @@ input::placeholder {
 .opacity{
   opacity:.5;
   pointer-events: none;
+}
+
+.new-username{
+  font-size:1.25rem;
+  text-align:Center;
+  font-family: roboto;
+}
+
+.ingredient-exists{
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
 }

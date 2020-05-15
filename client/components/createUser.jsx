@@ -30,7 +30,7 @@ export default class CreateUser extends React.Component {
       <div className="d-flex align-items-center login-background">
         <div className="container">
           <div className="form-input">
-            <label className="select-label">Create a new username</label>
+            <label className="select-label new-username">Create a new username</label>
             <form id="usersList" onSubmit={this.handleSubmit} onReset={() => this.props.setView('login')}>
               <input
                 required
@@ -38,8 +38,8 @@ export default class CreateUser extends React.Component {
                 className="form-control"
                 type="text"
                 onChange={this.handleChange}/>
-              <button type="submit" className="btn btn-dark btn-block mt-2 login-button">Create User</button>
-              <button type="reset" className="btn btn-dark btn-block mt-2 login-button">Cancel</button>
+              <button type="submit" className="btn btn-dark btn-block mt-2 login-button">CREATE USER</button>
+              <button type="reset" className="btn btn-dark btn-block mt-2 login-button">CANCEL</button>
             </form>
           </div>
         </div>
