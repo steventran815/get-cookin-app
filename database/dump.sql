@@ -181,7 +181,8 @@ CREATE TABLE public.recipes (
     "recipeId" integer NOT NULL,
     "recipeTitle" text NOT NULL,
     "recipeImage" text NOT NULL,
-    "recipePrepTime" integer NOT NULL
+    "recipePrepTime" integer NOT NULL,
+    "recipeInstructions" text
 );
 
 
@@ -305,7 +306,6 @@ COPY public.ingredients ("ingredientId", name) FROM stdin;
 7	beef stock
 8	beef broth
 9	broccoli
-10	butter
 11	bread
 12	beans
 13	carrots
@@ -332,7 +332,6 @@ COPY public.ingredients ("ingredientId", name) FROM stdin;
 34	olive oil
 35	oats
 36	peas
-37	potatoes
 38	pickles
 39	pumpkins
 40	quinoa
@@ -348,9 +347,6 @@ COPY public.ingredients ("ingredientId", name) FROM stdin;
 50	vinegar
 51	yogurt
 52	zucchini
-53	vegetable oil
-54	salt
-55	pepper
 56	flour
 57	heavy cream
 58	rosemary
@@ -370,6 +366,18 @@ COPY public.ingredients ("ingredientId", name) FROM stdin;
 72	cilantro
 73	mozzarella cheese
 74	lettuce
+10	butter
+77	paprika
+78	cayenne
+79	all-purpose flour
+80	cornstarch
+54	salt
+82	beer
+83	baking powder
+53	vegetable oil
+55	pepper
+86	fish
+37	potatoes
 \.
 
 
@@ -441,6 +449,19 @@ COPY public."recipeIngredients" ("recipeId", "ingredientId") FROM stdin;
 4	72
 4	28
 4	34
+5	37
+5	10
+5	77
+5	78
+6	79
+6	80
+6	54
+6	82
+6	83
+6	55
+6	53
+6	86
+6	37
 \.
 
 
@@ -471,11 +492,13 @@ COPY public."recipeInstructions" ("recipeId", "instructionId") FROM stdin;
 -- Data for Name: recipes; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.recipes ("recipeId", "recipeTitle", "recipeImage", "recipePrepTime") FROM stdin;
-1	Smothered Pork Chops	https://www.simplyrecipes.com/wp-content/uploads/2019/12/Skillet_Smothered_Pork_LEAD_2b.jpg	40
-2	Swedish Meatballs	https://themodernproper.sfo2.cdn.digitaloceanspaces.com/posts/2018/_recipeSquare/swedish-meatballs-13.jpg?mtime=20181203171358&focal=none	40
-3	One Pan Tortellini	https://www.saltandlavender.com/wp-content/uploads/2019/09/one-pan-tortellini-with-sausage-recipe-3-720x1080.jpg	40
-4	Vegan Avocado Ceviche	https://loveonetoday.com/wp-content/uploads/2017/11/Love-One-Today-Facebook-Vegan-Avocado-Ceviche.jpg	20
+COPY public.recipes ("recipeId", "recipeTitle", "recipeImage", "recipePrepTime", "recipeInstructions") FROM stdin;
+1	Smothered Pork Chops	https://www.simplyrecipes.com/wp-content/uploads/2019/12/Skillet_Smothered_Pork_LEAD_2b.jpg	40	[{"step":1,"displayText":"In a large (12 to 14-inch) skillet set over medium-high heat, add the oil. While the oil is heating, sprinkle one side of the pork chops with salt and pepper. Place the chops into the hot pan, seasoned side down, and sear for 4 minutes, or until they are a dark, golden brown. While the first sides are searing, season the top side with more salt and pepper. Flip the chops over and cook for another 4 minutes. Transfer the chops from the pan to a platter. You may have to do this in batches for a good sear."},{"step":2,"displayText":"Add the onion and garlic to the pan and cook them over medium heat, stirring frequently for 3-4 minutes or until they are softened and become a deep golden color."},{"step":3,"displayText":"Once the onions and garlic are cooked down but still a little glossy, sprinkle flour over the veggies. If the onions aren’t glossy, add 1 tablespoon of oil before adding the flour. Cook the flour for one minute to remove the raw, starchy taste from it. Add 1/4 cup of beef stock to the pan and use your spoon to scrape up the browned bits from the bottom of the pan. The mixture will look like a very thick paste at this point."},{"step":4,"displayText":"Combine the cream with the rest of the beef stock and pour this liquid into the pan. Add the rosemary sprigs and bring the mixture up to a gentle simmer, stirring frequently, until thickened."},{"step":5,"displayText":"Nestle the pork chops into the simmering gravy, then cover the pan. Allow the chops to simmer in the thickened gravy for 10 minutes, or until their internal temperature reaches at least 145°F and no higher than 165°F."}]
+3	One Pan Tortellini	https://www.saltandlavender.com/wp-content/uploads/2019/09/one-pan-tortellini-with-sausage-recipe-3-720x1080.jpg	40	[{"step":1,"displayText":"Take the sausage meat out of the casings and crumble it into a skillet. Cook it over medium-high heat, stirring occasionally, until it browned. Drain the fat and leave the sausage in the pan."},{"step":2,"displayText":"In a large bowl, combine beef, turkey, egg, onion mixture, breadcrumbs, ¼ teaspoon salt, pepper and allspice. Mix well and form into 16 meatballs."},{"step":3,"displayText":"Add the garlic, chicken broth, diced tomatoes, cream, and tortellini. Cook for 5-7 minutes or until the tortellini is cooked and the sauce has reduced to your liking. Cooking the tortellini in the sauce helps thicken it (it releases starch)."},{"step":4,"displayText":"Stir in the spinach and let it wilt. Season with salt & pepper as needed and serve with fresh parmesan sprinkled over top."}]
+2	Swedish Meatballs	https://themodernproper.sfo2.cdn.digitaloceanspaces.com/posts/2018/_recipeSquare/swedish-meatballs-13.jpg?mtime=20181203171358&focal=none	40	[{"step":1,"displayText":"In a large nonstick skillet, heat olive oil over medium heat and add onions and garlic. Sauté until onions are translucent, about 4-5 minutes. Add celery and parsley and cook until soft, about 3-4 more minutes. Set aside to cool."},{"step":2,"displayText":"In a large bowl, combine beef, turkey, egg, onion mixture, breadcrumbs, ¼ teaspoon salt, pepper and allspice. Mix well and form into 16 meatballs."},{"step":3,"displayText":"Add beef stock to the pan and bring to a boil. Reduce the heat to medium-low and slowly drop meatballs into the broth. Cover and cook for about 20 minutes, until cooked through."},{"step":4,"displayText":"Remove the meatballs with a slotted spoon and set aside in a serving dish. Strain the broth, transfer to a blender with cream cheese and blend until smooth. Return to the skillet with the meatballs and simmer."}]
+5	Classic Hash Browns	https://cookieandkate.com/images/2018/02/crispy-hash-browns-recipe-1-1.jpg	25	[{"step":1,"displayText":"Shred potatoes into a large bowl filled with cold water. Stir until water is cloudy, drain, and cover potatoes again with fresh cold water. Stir again to dissolve excess starch. Drain potatoes well, pat dry with paper towels, and squeeze out any excess moisture."},{"step":2,"displayText":"Heat clarified butter in a large non-stick pan over medium heat. Sprinkle shredded potatoes into the hot butter and season with salt, black pepper, cayenne pepper, and paprika."},{"step":3,"displayText":"Cook potatoes until a brown crust forms on the bottom, about 5 minutes. Continue to cook and stir until potatoes are browned all over, about 5 more minutes."}]
+4	Vegan Avocado Ceviche	https://loveonetoday.com/wp-content/uploads/2017/11/Love-One-Today-Facebook-Vegan-Avocado-Ceviche.jpg	20	[{"step":1,"displayText":"In a large bowl, combine avocado, cauliflower, tomatoes, onion, jalapeno, garlic, cilantro, lime juice, salt and olive oil."},{"step":2,"displayText":"Transfer to a serving bowl. Serve with homemade pita chips."}]
+6	Classic Fish and Chips	https://www.thespruceeats.com/thmb/L3PsB3-RhPRTtPMT_YxwpUvu1dk=/960x0/filters:no_upscale():max_bytes(150000):strip_icc()/best-fish-and-chips-recipe-434856-Hero-5b61b89346e0fb00500f2141.jpg	40	[{"step":1,"displayText":"In a large, roomy bowl, mix all but 2 tablespoons of the flour (set aside) with the cornstarch and baking powder. Season lightly with a tiny pinch of salt and pepper."},{"step":2,"displayText":"Using a fork to whisk continuously, add the beer and the sparkling water to the flour mixture and continue mixing until you have a thick, smooth batter. Place the batter in the fridge to rest for between 30 minutes and an hour."},{"step":3,"displayText":"Meanwhile, cut the potatoes into 1-centimeter slices (a little less than a half an inch), then slice these into 1-centimeter-wide chips. Place the chips into a colander and rinse under cold running water."},{"step":4,"displayText":"Place the washed chips into a pan of cold water. Bring to a gentle boil and simmer for 3 to 4 minutes."},{"step":5,"displayText":"Drain carefully through a colander then dry with kitchen paper. Keep in the fridge covered with kitchen paper until needed."},{"step":6,"displayText":"Meanwhile, lay the fish fillets on a sheet of kitchen paper and pat dry. Season lightly with a little sea salt."},{"step":7,"displayText":"Heat the oil to 350 F in a deep-fat fryer or large, deep saucepan. Cook the chips a few handfuls at a time in the fat for about 2 minutes. Do not brown them. Once the chips are slightly cooked, remove them from the fat and drain. Keep to one side."},{"step":8,"displayText":"Place the 2 tablespoons of flour reserved from the batter mix into a shallow bowl. Toss each fish fillet in the flour and shake off any excess."},{"step":9,"displayText":"Dip into the batter, coating the entire fillet."},{"step":10,"displayText":"Check that the oil temperature is still 350 F. Carefully lower each fillet into the hot oil. Fry for approximately 8 minutes, or until the batter is crisp and golden, turning the fillets from time to time with a large slotted spoon."},{"step":11,"displayText":"Once cooked, remove the fillets from the hot oil and drain on kitchen paper. Sprinkle with salt. Cover with greaseproof paper and keep hot."},{"step":12,"displayText":"Heat the oil to 400 F then cook the chips until golden and crisp, or about 5 minutes. Remove from the oil and drain. Season with salt."},{"step":13,"displayText":"Serve immediately with the hot fish accompanied by your favorite condiment."}]
 \.
 
 
@@ -515,6 +538,15 @@ COPY public."userIngredients" ("userId", "ingredientId") FROM stdin;
 3	3
 4	4
 5	5
+1	37
+1	78
+1	77
+1	10
+1	79
+1	80
+1	83
+1	82
+1	86
 \.
 
 
@@ -535,7 +567,7 @@ COPY public.users ("userId", "userName") FROM stdin;
 -- Name: ingredients_ingredientId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."ingredients_ingredientId_seq"', 74, true);
+SELECT pg_catalog.setval('public."ingredients_ingredientId_seq"', 87, true);
 
 
 --
@@ -549,7 +581,7 @@ SELECT pg_catalog.setval('public."instructions_instructionId_seq"', 15, true);
 -- Name: recipes_recipeId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."recipes_recipeId_seq"', 4, true);
+SELECT pg_catalog.setval('public."recipes_recipeId_seq"', 6, true);
 
 
 --
