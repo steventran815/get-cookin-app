@@ -32,9 +32,11 @@ export default class RecipeList extends React.Component {
   getRecipes(userId) {
     fetch('/api/availableRecipes')
       .then(res => res.json())
-      .then(recipes => this.setState({
-        recipes: recipes
-      }))
+      .then(recipes => {
+        this.setState({
+          recipes: recipes
+        });
+      })
       .catch(err => console.error(err));
   }
 

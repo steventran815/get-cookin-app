@@ -109,6 +109,7 @@ app.delete('/api/userIngredients/:userId/:ingredientId', (req, res, next) => {
 });
 
 app.get('/api/recipes/:recipeId', (req, res, next) => {
+  const userId = parseInt(req.session.user.userId);
   const recipeId = parseInt(req.params.recipeId);
   const sql = `
     WITH "recipeIngredients" as (
@@ -122,11 +123,8 @@ app.get('/api/recipes/:recipeId', (req, res, next) => {
     ),
     "recipeInstructions" as (
       SELECT
-      "r".*,
-      json_agg("i"."instruction") as "instructions"
+      "r".*
       FROM "recipes" as "r"
-      JOIN "recipeInstructions" as "rins" using ("recipeId")
-      JOIN "instructions" as "i" using ("instructionId")
       GROUP BY "r"."recipeId"
     )
     SELECT
@@ -135,13 +133,15 @@ app.get('/api/recipes/:recipeId', (req, res, next) => {
     "ring"."recipeImage",
     "ring"."recipePrepTime",
     "ring"."ingredients" as "recipeIngredients",
-    "rins"."instructions" as "recipeInstructions"
+    "rins"."recipeInstructions" as "recipeInstructions",
+    ("fr"."userId" is not null AND "fr"."userId" = $2) as "isFavorited"
     FROM "recipeIngredients" as "ring"
     JOIN "recipeInstructions" as "rins" using ("recipeId")
+    LEFT JOIN "favoriteRecipes" as "fr" using ("recipeId")
     WHERE "ring"."recipeId" = $1
     ORDER BY "recipeId" asc
   ;`;
-  const params = [recipeId];
+  const params = [recipeId, userId];
 
   if (Math.sign(recipeId) === -1 || Number.isNaN(recipeId)) {
     return res.status(400).json({
@@ -244,6 +244,7 @@ app.get('/api/availableRecipes/', (req, res, next) => {
          "r"."recipeTitle",
          "r"."recipeImage",
          "r"."recipePrepTime",
+         "r"."recipeInstructions",
         count ("ri"."ingredientId") as "ingredientCount"
       from recipes as "r"
       join "recipeIngredients" as "ri" using("recipeId")
@@ -263,6 +264,7 @@ app.get('/api/availableRecipes/', (req, res, next) => {
       "in"."recipeImage",
       "in"."recipePrepTime",
       "in"."recipeId",
+      "in"."recipeInstructions",
       ("fr"."userId" is not null AND "fr"."userId" = $1) as "isFavorited"
     from "ingredientsNeeded" as "in"
     join "ingredientsInFridge" as "if" using("recipeId", "ingredientCount")
@@ -380,11 +382,13 @@ app.get('/api/users/:userId', (req, res, next) => {
 
 app.post('/api/recipes', (req, res, next) => {
   const recipesSql = `
-    INSERT INTO "recipes" ("recipeTitle", "recipeImage", "recipePrepTime")
-    VALUES ($1, $2, $3)
+    INSERT INTO "recipes" ("recipeTitle", "recipeImage", "recipePrepTime", "recipeInstructions")
+    VALUES ($1, $2, $3, $4)
     RETURNING *;
   `;
-  const recipesParams = [req.body.recipeTitle, req.body.recipeImage, req.body.recipePrepTime];
+  const jsonInstructions = JSON.stringify(req.body.instructions);
+
+  const recipesParams = [req.body.recipeTitle, req.body.recipeImage, req.body.recipePrepTime, jsonInstructions];
 
   db.query(recipesSql, recipesParams)
     .then(insertedRecipe => {
@@ -413,29 +417,6 @@ app.post('/api/recipes', (req, res, next) => {
               .catch(err => next(err));
           })
           .catch(err => next(err));
-      });
-
-      const instructions = req.body.instructions;
-      instructions.map(instruction => {
-        const instructionsSql = `
-          INSERT INTO "instructions" ("instruction")
-          VALUES ($1)
-          RETURNING*;
-        `;
-        const instructionsParams = [instruction];
-        db.query(instructionsSql, instructionsParams)
-          .then(newInstruction => {
-            const { recipeId } = insertedRecipe.rows[0];
-            const { instructionId } = newInstruction.rows[0];
-            const recipeInstructionsSql = `
-              INSERT INTO "recipeInstructions" ("recipeId", "instructionId")
-              VALUES ($1, $2);
-            `;
-            const recipeInstructionsParams = [recipeId, instructionId];
-
-            db.query(recipeInstructionsSql, recipeInstructionsParams)
-              .catch(err => next(err));
-          });
       });
       res.json({
         success: `${insertedRecipe.rows[0].recipeTitle} has been added!`

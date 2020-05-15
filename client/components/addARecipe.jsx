@@ -103,7 +103,6 @@ export default class AddARecipe extends React.Component {
       instructions: this.state.instructions
     };
     this.addRecipe(newRecipe);
-
     this.setState({
       recipeTitle: '',
       recipePrepTime: 0,
