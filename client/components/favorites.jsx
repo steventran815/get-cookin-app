@@ -60,9 +60,9 @@ export default class FavoritesList extends React.Component {
       });
     }
     return (
-      <div>
+      <div className="pt-3">
         {recipesList}
-        <h5>End of Favorites List</h5>
+        <div className="noMoreIngredients"></div>
       </div>
     );
   }

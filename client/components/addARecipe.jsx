@@ -92,7 +92,6 @@ export default class AddARecipe extends React.Component {
     if (this.state.ingredients.length === 0 || this.state.instructions.length === 0) {
       return;
     }
-
     this.recipeAdded();
     const ingredientUl = document.getElementById('addAnIngredientUl');
     const instructionUl = document.getElementById('addAnInstructionUl');
@@ -104,6 +103,14 @@ export default class AddARecipe extends React.Component {
       instructions: this.state.instructions
     };
     this.addRecipe(newRecipe);
+
+    this.setState({
+      recipeTitle: '',
+      recipePrepTime: 0,
+      recipeImage: '',
+      ingredients: [],
+      instructions: []
+    });
     document.getElementById('addARecipeForm').reset();
     while (ingredientUl.firstChild) {
       ingredientUl.removeChild(ingredientUl.firstChild);
