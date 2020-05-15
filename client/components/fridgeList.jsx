@@ -19,7 +19,7 @@ export default class FridgeList extends React.Component {
 
   componentDidMount() {
     const user = this.context.getUser();
-    this.getIngredients(user.userId); // hard coded userID; to be changed in the future with new users
+    this.getIngredients(user.userId);
     this.setState({
       isLoading: false
     });
