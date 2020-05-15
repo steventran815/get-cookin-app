@@ -29,6 +29,53 @@ export default class RecipeDetails extends React.Component {
       .catch(err => console.error(err));
   }
 
+  checkIfFav() {
+    return this.state.recipe.isFavorited;
+  }
+
+  addFav(recipe) {
+    const recipeCopy = Object.assign({}, this.state.recipe);
+    fetch('/api/favoriteRecipes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ recipe: recipe })
+    })
+      .then(res => res.json())
+      .then(data => this.setState(() => {
+        recipeCopy.isFavorited = true;
+        return {
+          recipe: recipeCopy
+        };
+      }))
+      .catch(error => console.error('Error:', error));
+  }
+
+  remFav(recipe) {
+    const recipeCopy = Object.assign({}, this.state.recipe);
+    fetch(`/api/favoriteRecipes/${recipe}`, {
+      method: 'DELETE'
+    })
+      .then(data => {
+        return this.setState(() => {
+          recipeCopy.isFavorited = false;
+          return {
+            recipe: recipeCopy
+          };
+        });
+      })
+      .catch(error => console.error('Error:', error));
+  }
+
+  addFavClick(recipeId) {
+    this.addFav(recipeId);
+  }
+
+  remFavClick(recipeId) {
+    this.remFav(recipeId);
+  }
+
   render() {
     const { recipe } = this.state;
 
@@ -49,6 +96,7 @@ export default class RecipeDetails extends React.Component {
       const recipeTitle = recipe.recipeTitle;
       const recipeImage = recipe.recipeImage;
       const recipePrepTime = recipe.recipePrepTime;
+      const recipeId = recipe.recipeId;
 
       let doneCooking;
       if (this.state.doneCooking === false) {
@@ -66,7 +114,12 @@ export default class RecipeDetails extends React.Component {
             <h5 className="recipeDetailsTitle">{recipeTitle}</h5>
             <h5 className="recipeDetailsPrepTime">Cooking Time: {recipePrepTime}</h5>
             <div className="favoriteIconDetails">
-              <span><i className="fa fa-heart"></i> </span>
+              <span>
+                {this.checkIfFav()
+                  ? <i onClick={() => { this.remFavClick(recipeId); }} className='fa fa-heart'></i>
+                  : <i onClick={() => { this.addFavClick(recipeId); }} className='far fa-heart'></i>
+                }
+              </span>
             </div>
           </div>
           <hr className="recipeDivider"></hr>
