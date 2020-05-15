@@ -97,7 +97,6 @@ export default class RecipeDetails extends React.Component {
       const recipeImage = recipe.recipeImage;
       const recipePrepTime = recipe.recipePrepTime;
       const recipeId = recipe.recipeId;
-
       let doneCooking;
       if (this.state.doneCooking === false) {
         doneCooking = null;

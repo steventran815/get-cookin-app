@@ -63,7 +63,7 @@ export default class RecipeList extends React.Component {
               <img className="notEnoughIngredientsImage" src="/images/getCookinFridgeSad.png" />
             </div>
             <h3 className="notEnoughIngredientsMessage">Time to Stock Up!</h3>
-            <Link className="w-100" to='/fridgeList'>
+            <Link className="w-100" to='/'>
               <button className="notEnoughIngredientsButton">GO TO FRIDGE</button>
             </Link>
           </div>
