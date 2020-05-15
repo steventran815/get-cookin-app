@@ -46,7 +46,7 @@ export default class FavoritesList extends React.Component {
   render() {
     const { recipes } = this.state;
     let recipesList = null;
-    if (recipes.error) {
+    if (recipes.error || recipes.length === 0) {
       return (
         <div className="noMoreRecipes">
           <div className="notEnoughIngredientsDiv">
@@ -56,7 +56,6 @@ export default class FavoritesList extends React.Component {
                 <img className="notEnoughIngredientsImage" src="/images/getCookinFridgeNoFavorites.png" />
               </div>
               <h3 className="notEnoughIngredientsMessage">Click a Heart to <br /><strong>Favorite a Recipe!</strong></h3>
-
             </div>
           </div>
         </div>
