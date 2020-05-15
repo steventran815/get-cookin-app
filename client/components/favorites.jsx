@@ -49,7 +49,16 @@ export default class FavoritesList extends React.Component {
     if (recipes.error) {
       return (
         <div className="noMoreRecipes">
-         You do not have any favorite recipes saved
+          <div className="notEnoughIngredientsDiv">
+            <div className="notEnoughIngredientsContent">
+              <h2 className="loading-header">No Favorite Recipes</h2>
+              <div className="notEnoughIngredientsImageDiv">
+                <img className="notEnoughIngredientsImage" src="/images/getCookinFridgeNoFavorites.png" />
+              </div>
+              <h3 className="notEnoughIngredientsMessage">Click a Heart to <br /><strong>Favorite a Recipe!</strong></h3>
+
+            </div>
+          </div>
         </div>
       );
     } else {

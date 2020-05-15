@@ -6,11 +6,25 @@ class HamburgerMenu extends React.Component {
   constructor(props) {
     super(props);
     this.handleLogout = this.handleLogout.bind(this);
+    this.slideIn = this.slideIn.bind(this);
   }
 
   handleLogout() {
     this.context.logout();
     this.props.history.push('/login');
+  }
+
+  componentDidMount() {
+    this.slideInMenu = setInterval(this.slideIn, 0);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.slideInMenu);
+  }
+
+  slideIn() {
+    const menu = document.getElementById('hamburgerMenu');
+    menu.classList.add('hamburgerMenu-clicked');
   }
 
   render() {

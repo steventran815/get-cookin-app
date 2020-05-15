@@ -92,10 +92,6 @@ export default class FridgeList extends React.Component {
   }
 
   render() {
-    if (this.state.isLoading === true) {
-      return <h1>TESTING 123 123 123 123</h1>;
-    }
-
     const { ingredients } = this.state;
     const userIngredients = ingredients.map(ingredient => {
       return (
@@ -109,10 +105,13 @@ export default class FridgeList extends React.Component {
     return (
       <div className="container ingredient-list">
         {this.state.message
-          ? <div className='alert alert-warning flex'>
+          ? <div className='alert alert-warning ingredient-exists flex justify-content-center'>
             <div className="d-flex justify-content-end closeButton">
               <span onClick={this.closeAlert}>&times;</span>
             </div>
+            <center>
+              <img className="ingredients-full-image" src="/images/getCookinFridgeFull.gif"/>
+            </center>
             <h5 className="row p-3 text-center">{this.state.message}</h5>
           </div>
           : <form className="input-group my-3 px-2" onSubmit={this.handleSubmit}>
