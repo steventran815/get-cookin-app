@@ -36,12 +36,13 @@ export default class AddARecipe extends React.Component {
 
   handleClickIngredients() {
     const ingredientValue = document.getElementById('ingredientValue').value.toLowerCase();
+    if (ingredientValue === '') { return; }
     const ingredientsClone = this.state.ingredients.slice();
     ingredientsClone.push(ingredientValue);
     this.setState({
       ingredients: ingredientsClone
     });
-    if (ingredientValue === '') { return; }
+
     const ingredientUl = document.getElementById('addAnIngredientUl');
     const ingredientListItem = document.createElement('li');
     const ingredientTextNode = document.createTextNode(ingredientValue);
@@ -52,6 +53,8 @@ export default class AddARecipe extends React.Component {
   }
 
   handleClickInstructions() {
+    const instructionValue = document.getElementById('instructionValue').value;
+    if (instructionValue === '') { return; }
     const instructionObj = {};
     instructionObj.step = this.state.instructions.length + 1;
     instructionObj.displayText = document.getElementById('instructionValue').value;
@@ -60,9 +63,6 @@ export default class AddARecipe extends React.Component {
     this.setState({
       instructions: instuctionsClone
     });
-
-    const instructionValue = document.getElementById('instructionValue').value;
-    if (instructionValue === '') { return; }
     const instructionUl = document.getElementById('addAnInstructionUl');
     const instructionListItem = document.createElement('li');
     const instructionTextNode = document.createTextNode(instructionValue);
