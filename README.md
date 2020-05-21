@@ -28,7 +28,7 @@ Check out the live site here - [Get Cookin'](https://get-cookin.steventrancodes.
 #### Previews
 
 ##### Create User / Login
-![GC-Login-Create-preview](./server/public/images/readMeGifs/CreateAUser.gif)
+![GC-Login-Create-preview](./server/public/images/readMeGifs/createAUser.gif)
 
 ##### View, Add, and Delete Ingredients
 ![GC-View-Add-Delete-Ingredients-preview](./server/public/images/readMeGifs/viewAddDeleteIngredients.gif)
