@@ -53,23 +53,23 @@ Check out the live site here - [Get Cookin'](https://get-cookin.steventrancodes.
 
 #### Getting Started
 1. Clone the repository and navigate to the directory.
-```shell
-git clone https://github.com/steventran815/get-cookin-app.git
-cd get-cookin-app
-```
+    ```shell
+    git clone https://github.com/steventran815/get-cookin-app.git
+    cd get-cookin-app
+    ```
 2. Install all dependencies with NPM.
-```shell
-npm install
-```
+    ```shell
+    npm install
+    ```
 3. Initialize PostgreSQL server
-```shell
-sudo service postgresql start
-```
+    ```shell
+    sudo service postgresql start
+    ```
 4. Import existing example database.
-```shell
-npm run db:import
-```
+    ```shell
+    npm run db:import
+    ```
 5. Start the project. Once your system finishes compiling, you can view the application by opening http://localhost:3000 in your browser.
-```shell
-npm run dev
-```
+    ```shell
+    npm run dev
+    ```
