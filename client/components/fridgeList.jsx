@@ -72,9 +72,10 @@ export default class FridgeList extends React.Component {
 
   deleteIngredient(ingredientId) {
     const { ingredients } = this.state;
-    const user = this.context.getUser();
+    const { userId } = this.context.getUser();
+
     const deletedIngredient = {
-      userId: user.userId,
+      userId,
       ingredientId
     };
     const req = {
