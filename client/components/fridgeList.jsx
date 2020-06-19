@@ -73,11 +73,19 @@ export default class FridgeList extends React.Component {
   deleteIngredient(ingredientId) {
     const { ingredients } = this.state;
     const user = this.context.getUser();
-
-    const req = {
-      method: 'DELETE'
+    const deletedIngredient = {
+      userId: user.userId,
+      ingredientId
     };
-    fetch(`/api/userIngredients/${user.userId}/${ingredientId}`, req)
+    const req = {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(deletedIngredient)
+    };
+
+    fetch('/api/userIngredients/', req)
       .then(() => {
         const filtered = ingredients.filter(ingredient => ingredient.ingredientId !== ingredientId);
         this.setState({
