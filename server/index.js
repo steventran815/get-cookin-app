@@ -76,9 +76,8 @@ app.get('/api/recipes', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.delete('/api/userIngredients/:userId/:ingredientId', (req, res, next) => {
-  const userId = parseInt(req.params.userId);
-  const ingredientId = parseInt(req.params.ingredientId);
+app.delete('/api/userIngredients/', (req, res, next) => {
+  const { userId, ingredientId } = req.body;
 
   if (isNaN(ingredientId) || ingredientId < 0) {
     return next(new ClientError('"ingredientId" must be a positive integer', 400));
