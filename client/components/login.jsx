@@ -1,6 +1,7 @@
 import React from 'react';
 import CreateUser from './createUser';
 import AppContext from '../lib/context';
+import IntroModal from './introModal.jsx';
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -8,6 +9,7 @@ export default class Login extends React.Component {
     this.state = {
       selectedId: null,
       users: [],
+      introModal: true,
       view: {
         name: 'login'
       }
@@ -15,6 +17,7 @@ export default class Login extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.createNewUser = this.createNewUser.bind(this);
+    this.handleModal = this.handleModal.bind(this);
     this.setView = this.setView.bind(this);
   }
 
@@ -28,6 +31,12 @@ export default class Login extends React.Component {
       .then(data => this.setState({
         users: data
       }));
+  }
+
+  handleModal() {
+    this.setState({
+      introModal: false
+    });
   }
 
   handleChange(event) {
@@ -79,6 +88,12 @@ export default class Login extends React.Component {
   }
 
   render() {
+    let introModal = null;
+    if (this.state.introModal === true) {
+      introModal = <IntroModal handleModalFunction={this.handleModal}/>;
+    } else {
+      introModal = null;
+    }
     const { users, view } = this.state;
     const options = users.map(user => {
       return (
@@ -89,35 +104,38 @@ export default class Login extends React.Component {
     if (view.name === 'create') return <CreateUser createNewUser={this.createNewUser} setView={this.setView}/>;
 
     return (
-      <div className="d-flex align-items-center login-background">
-        <div className="container">
-          <div className="title mb-3 w-100 text-center">
-            <div>
-              <img className="login-logo" src="/images/getCookinLogoWhite.png" alt="get_cookin"/>
-            </div>
-            <h2 className="page-title">
+      <div>
+        {introModal}
+        <div className="d-flex align-items-center login-background">
+          <div className="container">
+            <div className="title mb-3 w-100 text-center">
+              <div>
+                <img className="login-logo" src="/images/getCookinLogoWhite.png" alt="get_cookin"/>
+              </div>
+              <h2 className="page-title">
             GET COOKIN&apos;
-            </h2>
-          </div>
+              </h2>
+            </div>
 
-          <div className="form-input w-100">
-            <form id="usersList" onSubmit={this.handleSubmit}>
-              <select
-                className="form-control select-user"
-                value={this.state.value}
-                onChange={this.handleChange}>
-                <option>Select User</option>
-                {options}
-              </select>
-              <button type="submit" className="btn btn-secondary btn-block mt-2 login-button">LOGIN</button>
-            </form>
+            <div className="form-input w-100">
+              <form id="usersList" onSubmit={this.handleSubmit}>
+                <select
+                  className="form-control select-user"
+                  value={this.state.value}
+                  onChange={this.handleChange}>
+                  <option>Select User</option>
+                  {options}
+                </select>
+                <button type="submit" className="btn btn-secondary btn-block mt-2 login-button">LOGIN</button>
+              </form>
+            </div>
+            <div className="or-div">
+              <hr className="login-hr"></hr>
+              <h5 className="text-center p-3 text-white login-or"> OR </h5>
+              <hr className="login-hr"></hr>
+            </div>
+            <button type="click" className="btn btn-secondary btn-block login-button" onClick={() => this.setView('create')}>CREATE NEW USER</button>
           </div>
-          <div className="or-div">
-            <hr className="login-hr"></hr>
-            <h5 className="text-center p-3 text-white login-or"> OR </h5>
-            <hr className="login-hr"></hr>
-          </div>
-          <button type="click" className="btn btn-secondary btn-block login-button" onClick={() => this.setView('create')}>CREATE NEW USER</button>
         </div>
       </div>
     );
