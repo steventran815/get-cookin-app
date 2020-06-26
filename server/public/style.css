@@ -259,7 +259,30 @@ footer{
   padding: 0;
   background-color:rgba(0, 0, 0, 0.8);
 }
-
+.introModalOpacity{
+  width: 100%;
+  height: 100%;
+  position:fixed;
+  z-index:100;
+  top:0;
+  bottom:0;
+  right:0;
+  left:0;
+  margin: 0;
+  padding: 0;
+  background-color:rgba(0, 0, 0, 0.8);
+}
+.introModal{
+  position: absolute;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+  background-color:white;
+  width:60%;
+  border-radius: 25px;;
+  padding:50px 25px;
+  text-align:center;
+}
 .doneCookingModal{
   position: absolute;
   top:50%;
