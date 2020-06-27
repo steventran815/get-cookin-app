@@ -46,6 +46,14 @@ header{
   max-height:35px
 }
 
+.intro-logo{
+  font-family: oswald ;
+  letter-spacing:0px;
+  color:#FF5758;
+  font-size:1.75rem;
+  font-weight:normal;
+
+}
 .logo{
   font-family: anton;
   color:white;
@@ -278,10 +286,29 @@ footer{
   left:50%;
   transform: translate(-50%,-50%);
   background-color:white;
-  width:60%;
+  width:80%;
   border-radius: 25px;;
-  padding:50px 25px;
+  padding:50px 15px;
   text-align:center;
+}
+
+.intro-modal-title{
+  color:#FF5758;
+  font-weight:500;
+  font-size:1.50rem;
+}
+.intro-divider{
+  border-bottom:5px solid #30B6BE;
+  width:50px;
+  margin:15px;
+}
+.demo-link{
+  color:#FF5758;
+}
+
+.intro-modal-text{
+  margin-top:15px;
+  font-size:1.15rem;
 }
 .doneCookingModal{
   position: absolute;
@@ -702,3 +729,5 @@ input::placeholder {
 .ingredient-exists{
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
 }
+
+.best-viewed-on-mobile
