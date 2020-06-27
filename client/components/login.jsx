@@ -1,6 +1,7 @@
 import React from 'react';
 import CreateUser from './createUser';
 import AppContext from '../lib/context';
+import MobileWarning from './mobileWarning.jsx';
 import IntroModal from './introModal.jsx';
 
 export default class Login extends React.Component {
@@ -9,6 +10,7 @@ export default class Login extends React.Component {
     this.state = {
       selectedId: null,
       users: [],
+      mobileWarning: true,
       introModal: true,
       view: {
         name: 'login'
@@ -19,6 +21,7 @@ export default class Login extends React.Component {
     this.createNewUser = this.createNewUser.bind(this);
     this.handleModal = this.handleModal.bind(this);
     this.setView = this.setView.bind(this);
+    this.handleMobileWarning = this.handleMobileWarning.bind(this);
   }
 
   componentDidMount() {
@@ -36,6 +39,12 @@ export default class Login extends React.Component {
   handleModal() {
     this.setState({
       introModal: false
+    });
+  }
+
+  handleMobileWarning() {
+    this.setState({
+      mobileWarning: false
     });
   }
 
@@ -89,6 +98,12 @@ export default class Login extends React.Component {
 
   render() {
     let introModal = null;
+    let mobileWarning = null;
+    if (this.state.mobileWarning === true) {
+      mobileWarning = <MobileWarning handleMobileWarningFunction={this.handleMobileWarning}/>;
+    } else {
+      mobileWarning = null;
+    }
     if (this.state.introModal === true) {
       introModal = <IntroModal handleModalFunction={this.handleModal}/>;
     } else {
@@ -105,6 +120,7 @@ export default class Login extends React.Component {
 
     return (
       <div>
+        {mobileWarning}
         {introModal}
         <div className="d-flex align-items-center login-background">
           <div className="container">
